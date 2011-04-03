@@ -1,0 +1,86 @@
+DROP TABLE IF EXISTS reflect_bullet;
+CREATE TABLE reflect_bullet (
+	id int UNSIGNED NOT NULL AUTO_INCREMENT,
+	comment_id int UNSIGNED NOT NULL,
+	
+	PRIMARY KEY id (id),
+	KEY (comment_id)
+	#FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE SET NULL ON UPDATE CASCADE
+) TYPE=InnoDB;
+
+DROP TABLE IF EXISTS reflect_bullet_revision;
+CREATE TABLE reflect_bullet_revision (
+  
+	id int UNSIGNED NOT NULL AUTO_INCREMENT,	
+	bullet_id int UNSIGNED NOT NULL,
+	comment_id int UNSIGNED NOT NULL,
+	
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	user tinytext NOT NULL,
+	user_id int, 
+	
+	txt text NOT NULL,
+	active tinyint(4) DEFAULT 1,
+	
+	PRIMARY KEY id (id),
+	KEY (bullet_id),
+	KEY (comment_id)
+	#FOREIGN KEY (bullet_id) REFERENCES reflect_bullet(id) ON DELETE SET NULL ON UPDATE CASCADE,
+	#FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE SET NULL ON UPDATE CASCADE
+) TYPE=InnoDB;
+
+DROP TABLE IF EXISTS reflect_highlight;
+CREATE TABLE reflect_highlight (
+	id int UNSIGNED NOT NULL AUTO_INCREMENT,
+	element_id tinytext NOT NULL,
+	bullet_id int UNSIGNED NOT NULL,
+	bullet_rev int UNSIGNED NOT NULL,
+	
+	PRIMARY KEY id (id),
+	KEY (bullet_id),
+	KEY (bullet_rev)
+	#FOREIGN KEY (bullet_id) REFERENCES reflect_bullet(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	#FOREIGN KEY (bullet_rev) REFERENCES reflect_bullet_revision(id) ON DELETE CASCADE ON UPDATE CASCADE
+	
+) TYPE=InnoDB;
+
+DROP TABLE IF EXISTS reflect_response;
+CREATE TABLE reflect_response(
+	id int UNSIGNED NOT NULL AUTO_INCREMENT,
+	bullet_id int UNSIGNED,
+	comment_id int UNSIGNED,
+	
+	PRIMARY KEY id (id),
+	KEY (bullet_id),
+	KEY (comment_id)
+	#FOREIGN KEY (bullet_id) REFERENCES reflect_bullet(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  #FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE SET NULL ON UPDATE CASCADE	
+) TYPE=InnoDB;
+
+
+DROP TABLE IF EXISTS reflect_response_revision;
+CREATE TABLE reflect_response_revision (
+	id int UNSIGNED NOT NULL AUTO_INCREMENT,
+	response_id int UNSIGNED NOT NULL,
+	bullet_id int UNSIGNED NOT NULL,  
+  comment_id int UNSIGNED NOT NULL, 
+  
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	user tinytext NOT NULL,
+	user_id int,
+	
+	signal int NOT NULL,
+	
+	txt text NOT NULL,
+
+  active tinyint(4) DEFAULT 1,
+
+	PRIMARY KEY id (id),
+	KEY (response_id),
+	KEY (bullet_id),
+	KEY (comment_id)
+	#FOREIGN KEY (response_id) REFERENCES reflect_response(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	#FOREIGN KEY (bullet_id) REFERENCES reflect_bullet(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	#FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE CASCADE ON UPDATE CASCADE
+			 
+) TYPE=InnoDB;

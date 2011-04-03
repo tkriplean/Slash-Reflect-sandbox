@@ -1,0 +1,170 @@
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet {
+	margin-bottom: 6px !important;
+	padding-bottom: 6px;
+	border-bottom: 1px dotted #eee;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt li.count, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt li.count, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt li.count {
+	padding-right: 20px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_text_wrapper {
+	padding-right: 20px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point img {
+	width: 34px;
+	opacity: .85;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt,
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt {
+	padding-left: 40px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_point a.add_bullet .link, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_point a.add_bullet .link, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_point a.add_bullet .link {
+	font-size: 14px;
+
+}
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog {
+	padding-top: 4px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li button {
+	background: none !important;
+	margin-bottom: 0px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper {
+	margin-left: 40px;
+} 
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a {
+	color: #AAAAAA;
+	text-decoration: none;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper {
+	width: 87%;	
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper {
+	top: 0px;
+}
+
+.cl {height: 0;list-style: none;}
+
+#reflected tbody tr:first-child td, #reflected tbody tr:first-child th,
+#reflected tbody tr td, #reflected tbody tr th {
+	border-top: 0px solid transparent;	
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ol, #reflected .rf_comment_wrapper .rf_comment_summary ul, #reflected .rf_comment_wrapper .rf_comment_summary ol li, #reflected .rf_comment_wrapper .rf_comment_summary ul li {
+	margin: 0 !important;	
+}
+
+#reflected .bullet_author.rf_listener_pic {
+	display: none;
+}
+
+#reflected .rf_comment_summary li {
+	clear: none;
+}
+
+#reflected td.new_bullet_text_wrap {
+	padding:0;
+}
+
+#reflected .rf-comment tr td {
+	padding: 0 0 0 0;
+}
+
+#reflected table.new_bullet_wrapper {
+	margin:0;
+}
+
+#reflected .rf_comment_summary td {
+	margin:0;
+	padding:0;
+}
+
+#reflected .rf_comment * {
+	vertical-align: top;
+}
+#reflected .rf_comment table {
+	margin: 0 0 0 0;
+	border: none;
+	border-top: none;
+	border-top-width: 0px;
+
+}
+#reflected .rf_comment_summary table {
+	margin:0;
+	padding:0;
+}
+
+#commentlisting div.full div.commentBody .rf_comment_summary ul li.bullet:hover {
+    background-color: #f3f3f3;
+}
+
+#commentlisting div.full div.commentBody .rf_comment_summary ul li.new_bullet:hover,
+#commentlisting div.full div.commentBody .rf_comment_summary ul li.bullet {
+	background:inherit;
+	list-style:none;
+}
+
+
+
+#reflected .commentBody span.highlight, 
+#reflected .commentBody a.highlight {
+	
+	background-color:#FFFF88;
+}
+
+
+#reflected div.commentBody {
+	overflow:visible;
+}
+
+
+#reflected .rf_comment_summary ul.bullet_list .bullet .bullet_footer_wrapper ul.bullet_footer li {
+	list-style:none outside none;
+	margin:0;
+	padding:0;
+}
+
+
+#reflected div.rf_comment_text_wrapper{
+    width: 65%;
+}
+#reflected div.rf_comment_summary {
+    width: 30%;
+}
+
+#reflected .rf_comment_summary .bullet_main .bullet_main_wrapper li.bullet_text {
+	width: 85%;
+}
+
+#commentlisting div.full div.commentBody ul li.bullet {
+	padding-left: 7px;
+}
+
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a.bullet_submit, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a.bullet_submit, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a.bullet_submit {
+  padding-right: 15px;
+  
+}
