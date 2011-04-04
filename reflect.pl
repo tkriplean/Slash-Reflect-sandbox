@@ -190,9 +190,9 @@ sub create_bullet {
 	}
 		 
 	return {
-			"insert_id" => $bullet_id, 
-			"u" => $user_info->{name}, 
-			"rev_id" => $bullet_rev_id
+		"insert_id" => $bullet_id, 
+		"u" => $user_info->{name}, 
+		"rev_id" => $bullet_rev_id
 	};
 	
 }
@@ -241,9 +241,9 @@ sub update_bullet {
 	}
 		 
 	return {
-			"insert_id"=>$bullet_id, 
-			"u"=>$user_info->{name}, 
-			"rev_id" => $bullet_rev_id
+		"insert_id"=>$bullet_id, 
+		"u"=>$user_info->{name}, 
+		"rev_id" => $bullet_rev_id
 	};
 	
 }

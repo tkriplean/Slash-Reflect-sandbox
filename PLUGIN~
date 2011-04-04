@@ -3,7 +3,6 @@ description="Crowdsourced comment summarization. Helps people listen. Helps ever
 mysql_schema=mysql_schema
 mysql_dump=mysql_dump
 htdoc=reflect.pl
-htdoc=htdocs/images/jquery/ui.dialog.js
 htdoc=htdocs/js/third_party/inheritance.js
 htdoc=htdocs/js/third_party/jquery.highlight.js
 htdoc=htdocs/js/third_party/jquery.hoverintent.js
