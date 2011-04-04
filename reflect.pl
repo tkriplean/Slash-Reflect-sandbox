@@ -252,11 +252,11 @@ sub delete_bullet {
 	my($bullet_id) = @_;
 	my $slashdb = getCurrentDB();	
 	$slashdb->sqlUpdate(
-		'reflect_bullet_revisions',
+		'reflect_bullet_revision',
 		{'active' => 0},
 		'bullet_id=' . $bullet_id
 	);
-	return '';
+	return {};
 }
 
 #######################
@@ -356,7 +356,7 @@ sub delete_response {
 		{'active' => 0},
 		'response_id=' . $response_id
 	);
-	return '';
+	return {};
 }
 
 
