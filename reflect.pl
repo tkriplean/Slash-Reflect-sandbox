@@ -30,37 +30,37 @@ sub __get_user_info {
 # Handles all requests
 
 sub main {
-  my $options = {};
-  my $params = getCurrentForm();
-  
-  my $op = $params->{'op'};
-  my $retval;
-  
-  if ( $op eq 'data' ) {
-    $retval = get_data($params->{'comments'});
-  } elsif ( $op eq 'response' ) {
-    if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
-      $retval = delete_response( $params->{'bullet_id'} );
-    } elsif ( exists $params->{'response_id'} ) {
-      $retval = update_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
-        $params->{'response_id'}, $params->{'text'}, $params->{'signal'} );
-    } else {
-      $retval = create_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
-        $params->{'text'}, $params->{'signal'});
-    }    
-  } elsif ( $op eq 'bullet' ) {
-    if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
-      $retval = delete_bullet( $params->{'bullet_id'} );
-    } elsif ( exists $params->{'bullet_id'} ) {
-      $retval = update_bullet( $params->{'comment_id'}, $params->{'bullet_id'}, 
-        $params->{'text'}, $params->{'highlights'} );
-    } else {
-      $retval = create_bullet( $params->{'comment_id'}, $params->{'text'}, 
-        $params->{'highlights'});
-    }
-  }
-  
-  $options->{content_type} = 'application/json';	
+	my $options = {};
+	my $params = getCurrentForm();
+	
+	my $op = $params->{'op'};
+	my $retval;
+	
+	if ( $op eq 'data' ) {
+		$retval = get_data($params->{'comments'});
+	} elsif ( $op eq 'response' ) {
+		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
+			$retval = delete_response( $params->{'bullet_id'} );
+		} elsif ( exists $params->{'response_id'} ) {
+			$retval = update_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
+				$params->{'response_id'}, $params->{'text'}, $params->{'signal'} );
+		} else {
+			$retval = create_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
+				$params->{'text'}, $params->{'signal'});
+		}		
+	} elsif ( $op eq 'bullet' ) {
+		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
+			$retval = delete_bullet( $params->{'bullet_id'} );
+		} elsif ( exists $params->{'bullet_id'} ) {
+			$retval = update_bullet( $params->{'comment_id'}, $params->{'bullet_id'}, 
+				$params->{'text'}, $params->{'highlights'} );
+		} else {
+			$retval = create_bullet( $params->{'comment_id'}, $params->{'text'}, 
+				$params->{'highlights'});
+		}
+	}
+	
+	$options->{content_type} = 'application/json';	
 	http_send($options);
 	if ($retval && length $retval) {
 		print Data::JavaScript::Anon->anon_dump($retval);
@@ -73,18 +73,18 @@ sub main {
 # @param array $comments
 # @return hash ref
 sub get_data {
-  my $slashdb = getCurrentDB();
-  my($str_comments) = @_;
-  my $data = {};
-  
-  
-  my @comments = ($str_comments =~ /\d+/g); 
-  foreach my $comment_id (@comments) {
+	my $slashdb = getCurrentDB();
+	my($str_comments) = @_;
+	my $data = {};
+	
+	
+	my @comments = ($str_comments =~ /\d+/g); 
+	foreach my $comment_id (@comments) {
 		my $bullets = {};
 		my $db_bullets = $slashdb->sqlSelectAll( 
-		  'bullet_id, id, created, user, txt', 
-		  'reflect_bullet_revision', 
-		  "active=1 AND comment_id=$comment_id"
+			'bullet_id, id, created, user, txt', 
+			'reflect_bullet_revision', 
+			"active=1 AND comment_id=$comment_id"
 		);
 		
 		foreach my $db_bullet (@$db_bullets){
@@ -97,9 +97,9 @@ sub get_data {
 			};
 			
 			my $db_highlights = $slashdb->sqlSelectAll(
-			  'element_id',
-			  'reflect_highlight',
-			  "bullet_rev=" . $bullet->{rev}
+				'element_id',
+				'reflect_highlight',
+				"bullet_rev=" . $bullet->{rev}
 			);
 			
 			my @highlights = ();
@@ -109,14 +109,14 @@ sub get_data {
 			$bullet->{'highlights'} = \@highlights;
 			
 			my $db_responses = $slashdb->sqlSelectAll(
-			  'response_id,id,created,user,txt,signal',
-			  'reflect_response_revision',
-			  'active=1 AND bullet_id=' . $bullet->{id}
+				'response_id,id,created,user,txt,signal',
+				'reflect_response_revision',
+				'active=1 AND bullet_id=' . $bullet->{id}
 			);
 
 			my $responses = {};
 			foreach my $db_response (@$db_responses) {
-			  
+				
 				my $response = {
 					'id' => @$db_response[0],
 					'rev' => @$db_response[1],
@@ -142,20 +142,20 @@ sub get_data {
 
 sub create_bullet {
 	my($comment_id, $text, $str_highlights) = @_;
-  my $slashdb = getCurrentDB();	
+	my $slashdb = getCurrentDB();	
 	my $user_info = __get_user_info();
 	
 	if($text eq '') {
-	  return '';
-  }
-  
+		return '';
+	}
+	
 	my $bullet_params = {
 		'comment_id' => $comment_id
 	};
 	
 	$slashdb->sqlInsert(
-	  'reflect_bullet',
-	  $bullet_params
+		'reflect_bullet',
+		$bullet_params
 	);
 	
 	my $bullet_id = $slashdb->getLastInsertId();
@@ -163,33 +163,33 @@ sub create_bullet {
 	my $bullet_revision_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
-		'txt' => $text,  # need to escape this...
+		'txt' => $text,	# need to escape this...
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'active' => 1
 	};
 	
 	$slashdb->sqlInsert(
-	  'reflect_bullet_revision',
-	  $bullet_revision_params
+		'reflect_bullet_revision',
+		$bullet_revision_params
 	);
 	my $bullet_rev_id = $slashdb->getLastInsertId();
 	
 	my @highlights = ($str_highlights =~ /\d+/g); 
 
-  foreach my $value (@highlights) {
-  	my $highlight_params = { 
-  		'bullet_id' => $bullet_id,
-  		'bullet_rev' => $bullet_rev_id,
+	foreach my $value (@highlights) {
+		my $highlight_params = { 
+			'bullet_id' => $bullet_id,
+			'bullet_rev' => $bullet_rev_id,
 			'element_id' => $value
-	  };
-	  $slashdb->sqlInsert(
-	    'reflect_highlight',
-	    $highlight_params
-	  );
-  }
-     
-  return {
+		};
+		$slashdb->sqlInsert(
+			'reflect_highlight',
+			$highlight_params
+		);
+	}
+		 
+	return {
 			"insert_id" => $bullet_id, 
 			"u" => $user_info->{name}, 
 			"rev_id" => $bullet_rev_id
@@ -198,49 +198,49 @@ sub create_bullet {
 }
 
 sub update_bullet {
-  my($comment_id, $bullet_id, $text, $str_highlights) = @_;
+	my($comment_id, $bullet_id, $text, $str_highlights) = @_;
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
-  
+	
 	if($text eq '') {
-	  return '';
+		return '';
 	}
 	
 	$slashdb->sqlUpdate(
-	  'reflect_bullet_revision',
-	  {'active' => 0},
-	  'bullet_id=' . $bullet_id
+		'reflect_bullet_revision',
+		{'active' => 0},
+		'bullet_id=' . $bullet_id
 	);
 	
 	my $bullet_revision_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
-		'txt' => $text,  # need to escape this..
+		'txt' => $text,	# need to escape this..
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'active' => 1
 	};	
 	
 	$slashdb->sqlInsert(
-	  'reflect_bullet_revision',
-	  $bullet_revision_params
+		'reflect_bullet_revision',
+		$bullet_revision_params
 	);
 	my $bullet_rev_id = $slashdb->getLastInsertId();
 
-  my @highlights = ($str_highlights =~ /\d+/g); 
-  foreach my $value (@highlights) {
-  	my $highlight_params = {
-  		'bullet_id' => $bullet_id,
-  		'bullet_rev'=> $bullet_rev_id,
+	my @highlights = ($str_highlights =~ /\d+/g); 
+	foreach my $value (@highlights) {
+		my $highlight_params = {
+			'bullet_id' => $bullet_id,
+			'bullet_rev'=> $bullet_rev_id,
 			'element_id' => $value
-    };
-    $slashdb->sqlInsert(
-      'reflect_highlight',
-      $highlight_params
-    );
-  }
-     
-  return {
+		};
+		$slashdb->sqlInsert(
+			'reflect_highlight',
+			$highlight_params
+		);
+	}
+		 
+	return {
 			"insert_id"=>$bullet_id, 
 			"u"=>$user_info->{name}, 
 			"rev_id" => $bullet_rev_id
@@ -249,14 +249,14 @@ sub update_bullet {
 }
 
 sub delete_bullet {
-  my($bullet_id) = @_;
-  my $slashdb = getCurrentDB();	
-  $slashdb->sqlUpdate(
-    'reflect_bullet_revisions',
-    {'active' => 0},
-    'bullet_id=' . $bullet_id
-  );
-  return '';
+	my($bullet_id) = @_;
+	my $slashdb = getCurrentDB();	
+	$slashdb->sqlUpdate(
+		'reflect_bullet_revisions',
+		{'active' => 0},
+		'bullet_id=' . $bullet_id
+	);
+	return '';
 }
 
 #######################
@@ -269,17 +269,17 @@ sub create_response {
 	my $slashdb = getCurrentDB();	
 		
 	if($text eq '') {
-	  return '';
-  }
-  
+		return '';
+	}
+	
 	my $response_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id
 	};
 	
 	$slashdb->sqlInsert(
-	  'reflect_response',
-	  $response_params
+		'reflect_response',
+		$response_params
 	);
 	my $response_id = $slashdb->getLastInsertId();
 	
@@ -287,19 +287,19 @@ sub create_response {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
 		'response_id' => $response_id,
-		'txt' => $text,  # need to escape this...
+		'txt' => $text,	# need to escape this...
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
 		'active' => 1
 	};
 	$slashdb->sqlInsert(
-	  'reflect_response_revision',
-	  $response_revision_params
+		'reflect_response_revision',
+		$response_revision_params
 	);
 	my $response_rev_id = $slashdb->getLastInsertId();
-     
-  return {
+		 
+	return {
 		"insert_id"=>$response_id, 
 		"u"=>$user_info->{name}, 
 		"rev_id" => $response_rev_id,
@@ -309,37 +309,37 @@ sub create_response {
 }
 
 sub update_response {
-  my($comment_id, $bullet_id, $response_id, $text, $signal ) = @_;
+	my($comment_id, $bullet_id, $response_id, $text, $signal ) = @_;
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
 	
 	if($text eq '') {
-	  return '';
+		return '';
 	}
 	
 	$slashdb->sqlUpdate(
-	  'reflect_response_revision',
-	  {'active' => 0},
-	  'response_id=' . $response_id
+		'reflect_response_revision',
+		{'active' => 0},
+		'response_id=' . $response_id
 	);
 	
 	my $response_revision_params = {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
 		'response_id' => $response_id,
-		'txt' => $text,  # need to escape this...
+		'txt' => $text,	# need to escape this...
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
 		'active' => 1
 	};	
 	$slashdb->sqlInsert(
-	  'reflect_response_revision',
-	  $response_revision_params
+		'reflect_response_revision',
+		$response_revision_params
 	);
 	my $response_rev_id = $slashdb->getLastInsertId();
-     
-  return {
+		 
+	return {
 		"insert_id"=>$response_id, 
 		"u"=>$user_info->{name}, 
 		"rev_id" => $response_rev_id,
@@ -349,14 +349,14 @@ sub update_response {
 }
 
 sub delete_response {
-  my ($response_id) = @_;
-	my $slashdb = getCurrentDB();	  
+	my ($response_id) = @_;
+	my $slashdb = getCurrentDB();		
 	$slashdb->sqlUpdate(
-	  'reflect_response_revision',
-	  {'active' => 0},
-	  'response_id=' . $response_id
+		'reflect_response_revision',
+		{'active' => 0},
+		'response_id=' . $response_id
 	);
-  return '';
+	return '';
 }
 
 

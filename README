@@ -1,9 +1,4 @@
-Reflect implements an interface change to the comments section that helps people listen, while at the same 
-time producing useful summaries. Instead of a single column of threads, two side-by-side columns are provided. The first column contains 
-the original raw comments that we all know and love. The second column has a list of concise summary bullet points for each respective 
-comment. Other readers and discussants add these bullet points. Commenters can engage with summarizers to make sure that the summarized 
-points accurately portray the points they were trying to make. Adding a summary bullet point is an act of listening somewhere between 
-clicking the "I like this comment" button and responding to a comment.
+Reflect implements an interface change to the comments section that helps people listen, while at the same time producing useful summaries. Instead of a single column of threads, two side-by-side columns are provided. The first column contains the original raw comments that we all know and love. The second column has a list of concise summary bullet points for each respective comment. Other readers and discussants add these bullet points. Commenters can engage with summarizers to make sure that the summarized points accurately portray the points they were trying to make. Adding a summary bullet point is an act of listening somewhere between clicking the "I like this comment" button and responding to a comment.
 
 == Installing Reflect into Slashcode ==
 
