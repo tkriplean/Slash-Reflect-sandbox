@@ -39,7 +39,7 @@ sub main {
   if ( $op eq 'data' ) {
     $retval = get_data($params->{'comments'});
   } elsif ( $op eq 'response' ) {
-    if ( $params->{'delete'} eq 'true' ) { 
+    if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
       $retval = delete_response( $params->{'bullet_id'} );
     } elsif ( exists $params->{'response_id'} ) {
       $retval = update_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
@@ -49,7 +49,7 @@ sub main {
         $params->{'text'}, $params->{'signal'});
     }    
   } elsif ( $op eq 'bullet' ) {
-    if ( $params->{'delete'} eq 'true' ) { 
+    if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
       $retval = delete_bullet( $params->{'bullet_id'} );
     } elsif ( exists $params->{'bullet_id'} ) {
       $retval = update_bullet( $params->{'comment_id'}, $params->{'bullet_id'}, 
@@ -207,8 +207,8 @@ sub update_bullet {
 	}
 	
 	$slashdb->sqlUpdate(
-	  'reflect_bullet_revisions',
-	  'active=0',
+	  'reflect_bullet_revision',
+	  {'active' => 0},
 	  'bullet_id=' . $bullet_id
 	);
 	
@@ -253,7 +253,7 @@ sub delete_bullet {
   my $slashdb = getCurrentDB();	
   $slashdb->sqlUpdate(
     'reflect_bullet_revisions',
-    'active=0',
+    {'active' => 0},
     'bullet_id=' . $bullet_id
   );
   return '';
@@ -319,7 +319,7 @@ sub update_response {
 	
 	$slashdb->sqlUpdate(
 	  'reflect_response_revisions',
-	  'active=0',
+	  {'active' => 0},
 	  'response_id=' . $response_id
 	);
 	
@@ -353,7 +353,7 @@ sub delete_response {
 	my $slashdb = getCurrentDB();	  
 	$slashdb->sqlUpdate(
 	  'reflect_response_revisions',
-	  'active=0',
+	  {'active' => 0},
 	  'response_id=' . $response_id
 	);
   return '';
