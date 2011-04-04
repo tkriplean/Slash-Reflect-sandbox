@@ -318,7 +318,7 @@ sub update_response {
 	}
 	
 	$slashdb->sqlUpdate(
-	  'reflect_response_revisions',
+	  'reflect_response_revision',
 	  {'active' => 0},
 	  'response_id=' . $response_id
 	);
@@ -341,7 +341,7 @@ sub update_response {
      
   return {
 		"insert_id"=>$response_id, 
-		"u"=>$user_info->name, 
+		"u"=>$user_info->{name}, 
 		"rev_id" => $response_rev_id,
 		"sig" => $signal
 	};
@@ -352,7 +352,7 @@ sub delete_response {
   my ($response_id) = @_;
 	my $slashdb = getCurrentDB();	  
 	$slashdb->sqlUpdate(
-	  'reflect_response_revisions',
+	  'reflect_response_revision',
 	  {'active' => 0},
 	  'response_id=' . $response_id
 	);
