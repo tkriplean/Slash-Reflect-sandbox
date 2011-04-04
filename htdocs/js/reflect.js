@@ -1424,7 +1424,7 @@ var Reflect = {
 				}
 				var template_vars = {
 						text : Reflect.utils.escape( this.options.text ),
-						sig : Reflect.utils.escape( this.options.sig ),
+						sig : Reflect.utils.escape( String(this.options.sig) ),
 						user : Reflect.utils.escape( first_name ),
 						media_dir : Reflect.api.server.media_dir
 					};
@@ -1445,7 +1445,7 @@ var Reflect = {
 				var template_vars = {
 						bullet_id : this.bullet.id,
 						text : Reflect.utils.escape( this.options.text ),
-						sig : Reflect.utils.escape( this.options.sig ),
+						sig : Reflect.utils.escape( String(this.options.sig) ),
 						user : Reflect.utils.escape( this.options.user ),
 						media_dir : Reflect.api.server.media_dir
 					};

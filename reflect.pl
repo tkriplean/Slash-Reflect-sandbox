@@ -111,7 +111,7 @@ sub get_data {
 			my $db_responses = $slashdb->sqlSelectAll(
 			  'response_id,id,created,user,txt,signal',
 			  'reflect_response_revision',
-			  'active=1 AND bullet_id='.$bullet->{id}
+			  'active=1 AND bullet_id=' . $bullet->{id}
 			);
 
 			my $responses = {};
@@ -125,7 +125,7 @@ sub get_data {
 					'txt' => @$db_response[4],
 					'u' => @$db_response[3]
 				};
-				my $responses->{$db_response->{response_id}} = $response;
+				$responses->{$response->{id}} = $response;
 			}
 			$bullet->{responses} = $responses;
 			$bullets->{$bullet->{id}} = $bullet;
