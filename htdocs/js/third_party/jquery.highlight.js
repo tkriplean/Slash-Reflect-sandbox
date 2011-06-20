@@ -14,7 +14,7 @@ RegExp.escape = function(str){
 
 jQuery.extend({
     _wrap_sentences: function (node, re, nodeName, className) {
-        if (!node || ( node.className && node.className.indexOf('exclude_from_reflect') > -1 )){ return 0;}
+        if (!node ){ return 0;}
 		  
         if (node.nodeType === 3) {
             var match = node.data.match(re);

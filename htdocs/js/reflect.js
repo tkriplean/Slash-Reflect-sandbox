@@ -1123,7 +1123,13 @@ var Reflect = {
 								+ this.id + '" class="rf_comment_wrapper" />' ) );
 				
 				//so that we don't try to break apart urls into different sentences...
-				comment_text.find('a').addClass('exclude_from_reflect');
+				comment_text.find('a')
+				  .addClass('exclude_from_reflect')
+          .click(function(e){
+  				  if ($(this).parents('.rf_comment').hasClass('highlight_state')) {
+  				    e.preventDefault();
+  				  }
+  				});				  
 
 				this.elements = {
 					bullet_list : comment_text.find( '.bullet_list:first' ),
@@ -1327,6 +1333,7 @@ var Reflect = {
 						} ) );
 
 				this.$elem.addClass('connect');
+				
 				var wrapper = this.$elem.find('.bullet_main_wrapper');
 				var child = $j('<li />').addClass('bullet_dialog').append(highlight);
 				wrapper.append( child );

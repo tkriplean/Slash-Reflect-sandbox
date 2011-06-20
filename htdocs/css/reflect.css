@@ -18,6 +18,7 @@
 
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .bullet_footer_wrapper {
   display: none; }
+#reflected .rf_comment .rf_comment_wrapper .rf_comment_text_wrapper a.exclude_from_reflect .sentence,  
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .sentence {
   cursor: pointer;
   text-decoration: none; }
