@@ -1,3 +1,15 @@
+#reflected .rf_toggle {
+  position: relative;
+  top: -25px;
+  font-size: 11px;
+  color: #777;
+  float: right;
+}
+
+#reflected .rf_toggle:hover {
+  cursor: pointer;
+}
+
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet {
 	margin-bottom: 6px !important;
 	padding-bottom: 6px;

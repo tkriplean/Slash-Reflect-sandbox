@@ -1122,6 +1122,8 @@ var Reflect = {
 						.wrapInner( $j( '<table id="rf_comment_wrapper-' 
 								+ this.id + '" class="rf_comment_wrapper" />' ) );
 				
+				comment_text.before('<div class="rf_toggle state_on">Turn off summaries</div>');
+				
 				//so that we don't try to break apart urls into different sentences...
 				comment_text.find('a')
 				  .addClass('exclude_from_reflect')
@@ -1130,7 +1132,23 @@ var Reflect = {
   				    e.preventDefault();
   				  }
   				});				  
-
+        
+        this.$elem
+          .find( '.rf_toggle' )
+          .click( function() {
+            if ( $(this).hasClass('state_on') ) {
+              $('.rf_comment_summary').hide();
+              $('.rf_comment_text_wrapper').css('width', '100%');
+              $(this).addClass('state_off').removeClass('state_on');
+              $(this).text("Turn on summaries");              
+            } else {
+              $('.rf_comment_summary').show();
+              $('.rf_comment_text_wrapper').css('width', 'inherit');
+              $(this).addClass('state_on').removeClass('state_off');
+              $(this).text("Turn off summaries");              
+            }
+          });
+          
 				this.elements = {
 					bullet_list : comment_text.find( '.bullet_list:first' ),
 					comment_text : this.$elem.find( '.rf_comment_text:first' ),
