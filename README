@@ -10,7 +10,7 @@ Run the installer. Make sure to select the Reflect and Ajax plugins.
 
 Need to add something like the following at an appropriate place in themes/templates/html-header:
 
-	[% IF constants.plugin.Reflect %]
+	[% IF constants.plugin.Reflect && (user.currentPage == "article" || user.currentPage == "comments") %]
 		<script src="/js/third_party/inheritance.js" type="text/javascript"></script>
 		<script src="/js/third_party/json2.js" type="text/javascript"></script>
 		<script src="/js/third_party/jquery.highlight.js" type="text/javascript"></script>
