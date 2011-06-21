@@ -2,3 +2,5 @@ INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, 
 INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, ordernum, ie_cond) VALUES ('stylesheet','text/css','screen, projection','css/reflect.slash.css','','','comments','no','',2,0, '');
 INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, ordernum, ie_cond) VALUES ('stylesheet','text/css','screen, projection','css/reflect.css','','','article','no','',2,0, '');
 INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, ordernum, ie_cond) VALUES ('stylesheet','text/css','screen, projection','css/reflect.slash.css','','','article','no','',2,0, '');
+
+INSERT INTO message_codes (code, type, seclev, send, subscribe, delivery_bvalue) VALUES (100, 'Reflect summary', 1, 'now', 0, 3);

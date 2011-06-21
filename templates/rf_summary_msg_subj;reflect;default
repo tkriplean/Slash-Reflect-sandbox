@@ -1,0 +1,18 @@
+__section__
+default
+__description__
+
+__title__
+
+__page__
+reflect
+__lang__
+en_US
+__name__
+rf_summary_msg_subj
+__template__
+[% summarizer.user_name | strip_literal %] summarized a comment you wrote
+__seclev__
+500
+__version__
+$Id$

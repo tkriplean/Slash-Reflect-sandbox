@@ -1,0 +1,46 @@
+__section__
+default
+__description__
+
+__title__
+
+__page__
+reflect
+__lang__
+en_US
+__name__
+rf_summary_msg
+__template__
+[%
+	IF discussion.section;
+		thisroot = Slash.db.getSection(discussion.section, 'rootdir') || gSkin.rootdir;
+		thisabs = Slash.url2abs(thisroot, absolutedir) || absolutedir;
+	ELSE;
+		thisroot = gSkin.rootdir;
+		thisabs = absolutedir;
+	END;
+%]
+
+[% IF msg.mode == 1 %]
+
+<p>
+[% summarizer.user_name | strip_literal %] believes that you made the made following point:</p>
+<blockquote>
+[% summary.txt | decode_entities %]
+</blockquote>
+<p>To verify whether this accurately captures your point, please visit <a href="[% thisroot %]/comments.pl?sid=[% comment.sid %]&amp;cid=[% comment.cid
+%]">'[% comment.subject %]'</a>, attached to
+<a href="[% discussion.url %]">[% discussion.title %]</a>.</p> 
+
+[% ELSE %]
+
+[% summarizer.nickname | strip_literal %] believes that you made the made following point:
+    [% summary.txt | decode_entities %]
+
+To verify whether this accurately captures your point, please visit [% thisroot %]/comments.pl?sid=[% comment.sid %]&amp;cid=[% comment.cid %]. 
+
+[% END %]
+__seclev__
+500
+__version__
+$Id$

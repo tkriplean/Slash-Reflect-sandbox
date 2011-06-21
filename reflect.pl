@@ -10,6 +10,7 @@ use warnings;
 use Slash;
 use Slash::Display;
 use Slash::Utility;
+use Slash::Messages;
 
 use Data::Dumper;
 
@@ -25,6 +26,37 @@ sub __get_user_info {
 	}
 	return { 'name' => $user_name, 'id' => $uid };
 }
+
+
+sub set_summary_message {
+  my($comment, $summarizer, $summary) = @_;
+
+  my $slashdb = getCurrentDB();
+  my $user = $slashdb->getUser($comment->{uid});
+
+	my $summary_message_code = $slashdb->sqlSelect('code', 'message_codes', "type = 'Reflect summary'");
+  my $messages = getObject('Slash::Messages');
+  if ($messages && $summary_message_code) {
+    my $users = $messages->checkMessageCodes($summary_message_code, [$comment->{uid}]);
+    if (scalar @$users) {
+      my $data  = {
+        template_name   => 'rf_summary_msg',
+        template_page   => 'reflect',
+        subject         => {
+          template_name => 'rf_summary_msg_subj',
+          template_page => 'reflect',
+        },
+        comment     => $comment,
+        summary     => $summary,
+        summarizer  => $summarizer,
+        discussion  => $slashdb->getDiscussion($comment->{sid})
+      };
+      $messages->create($comment->{uid}, $summary_message_code, $data);
+    }
+  }
+}
+
+
 
 ####
 # Handles all requests
@@ -148,14 +180,12 @@ sub create_bullet {
 	if($text eq '') {
 		return '';
 	}
-	
-	my $bullet_params = {
-		'comment_id' => $comment_id
-	};
-	
+		
 	$slashdb->sqlInsert(
 		'reflect_bullet',
-		$bullet_params
+		{
+  		'comment_id' => $comment_id
+  	}
 	);
 	
 	my $bullet_id = $slashdb->getLastInsertId();
@@ -188,7 +218,23 @@ sub create_bullet {
 			$highlight_params
 		);
 	}
-		 
+
+	# send message to commenter that their point was summarized...
+	my($sid, $uid, $subject) = $slashdb->sqlSelect(
+		'sid, uid, subject',
+		'comments',
+		"cid=$comment_id"
+	);
+	
+	my $comment = {
+	  'sid' => $sid,
+	  'cid' => $comment_id,
+	  'uid' => $uid,
+	  'subject' => $subject
+	};
+
+	set_summary_message($comment, $user_info, $bullet_revision_params);	
+	 
 	return {
 		"insert_id" => $bullet_id, 
 		"u" => $user_info->{name}, 
