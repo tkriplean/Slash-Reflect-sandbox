@@ -44,10 +44,10 @@ old_slash = {
       
       
 $j.extend(Reflect.config.contract, {
-	components: [{true:new_slash,false:old_slash}[is_new_slash]]});
+	components: [is_new_slash ? new_slash : old_slash]});
 
 Reflect.Contract = Reflect.Contract.extend({
-	user_name_selector : {true: '#userbio_self-title a:first', false: '#user-info-content > a:first'}[is_new_slash],
+	user_name_selector : is_new_slash ? '#userbio_self-title a:first' : '#user-info-content > a:first',
 	modifier: function(){
     $j('.full .commentBody').each(function(){
         $j(this).children('div:first').addClass('rf-comment');

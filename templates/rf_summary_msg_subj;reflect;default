@@ -11,7 +11,7 @@ en_US
 __name__
 rf_summary_msg_subj
 __template__
-[% summarizer.user_name | strip_literal %] summarized a comment you wrote
+Summary of your comment "[% comment.subject %]" by [% summarizer.name %]
 __seclev__
 500
 __version__

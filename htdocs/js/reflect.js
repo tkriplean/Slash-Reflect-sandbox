@@ -1122,7 +1122,7 @@ var Reflect = {
 						.wrapInner( $j( '<table id="rf_comment_wrapper-' 
 								+ this.id + '" class="rf_comment_wrapper" />' ) );
 				
-				comment_text.before('<div class="rf_toggle state_on">Turn off summaries</div><div style="clear:both"></div>');
+				comment_text.before('<div class="rf_toggle state_on">Turn off summaries</div><div style="clear:both;display:none"></div>');
 				
 				//so that we don't try to break apart urls into different sentences...
 				comment_text.find('a')
