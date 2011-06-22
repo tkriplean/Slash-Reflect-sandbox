@@ -1,3 +1,37 @@
+#reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
+  width: 90%;  
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer li.submit, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer li.submit, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer li.submit {
+  font-size: 14px;
+}
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet div.bullet_main ul.bullet_main_wrapper li.bullet_dialog, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect div.bullet_main ul.bullet_main_wrapper li.bullet_dialog, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify div.bullet_main ul.bullet_main_wrapper li.bullet_dialog {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.count, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.count, 
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.count {
+ color: #aaa; 
+ padding: 0 20px 0 10px;
+}
+
+#reflected .jqueryexample {
+  color: #666;
+}
+
 #reflected .rf_toggle {
   position: relative;
   top: -25px;

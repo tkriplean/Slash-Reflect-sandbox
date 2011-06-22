@@ -92,23 +92,12 @@
 ]]>
 </script>
 
-
-
-
 <script type="text/html" id="reflect_template_new_bullet_dialog">
 <![CDATA[
 	<div class="bullet_main">  
 		<ul class="bullet_main_wrapper">
 		
 			<li class="bullet_point"><img src="<%= this.media_dir %>/listen.png" /></li>
-		   <li class="new_bullet_prompt">
-		      <ul>   
-		         <li class="elicitation">What do you hear <%= this.commenter %> saying?</li>
-		         <li title="Please limit your summary to 140 characters or less." class="count">
-		               <a class="add_qtip"><span class="count"></span></a>
-		         </li>
-		      </ul>
-		   </li>
 			<li class="bullet_dialog">
 			   <table class="new_bullet_wrapper">
 			      <tr>
@@ -125,11 +114,14 @@
 								<li class="submit">
 									<a class="cancel_bullet">cancel</a>
 								</li>
-				            <li class="be_neutral add_qtip">
-				               <a title="Please be concise, accurate, and constructive!">
-				                  don't reply, <span class="big_word">summarize</span>
-				               </a>
-				            </li>                  
+                <li title="Please limit your summary to 140 characters or less." class="count">
+    		               <a class="add_qtip"><span class="count"></span></a>
+    		        </li>								
+				        <li class="be_neutral add_qtip">
+				          <a title="Please be concise, accurate, and constructive!">
+				            don't reply, <span class="big_word">summarize</span>
+				          </a>
+				        </li>                  
 				         </ul>
 			         </td> 
 			      </tr>

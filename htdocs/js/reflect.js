@@ -392,7 +392,11 @@ var Reflect = {
 
 			// wont work in GM
 			try {
-				text_area.focus();
+				// text_area.focus();
+				text_area.example('(optional) Clarify your point to help ' + 
+				  response_obj.bullet.user + ' and others better understand your message.', 
+				  { className : 'jqueryexample' });
+				
 			} catch ( err ) {
 			}
 
@@ -840,7 +844,9 @@ var Reflect = {
 
 			// wont work in Greasemonkey
 			try {
-				text_area.focus();
+				// text_area.focus();
+				text_area.example('Help others better understand and show ' + bullet_obj.comment.user + 
+				  ' that s/he is being heard by restating a point you hear them making.', { className : 'jqueryexample' });
 			} catch ( err ) {
 			}
 
