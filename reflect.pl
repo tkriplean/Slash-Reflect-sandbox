@@ -11,6 +11,7 @@ use Slash;
 use Slash::Display;
 use Slash::Utility;
 use Slash::Messages;
+use Slash::Utility::Data;
 
 use Data::Dumper;
 
@@ -34,7 +35,8 @@ sub set_summary_message {
   my $slashdb = getCurrentDB();
   my $user = $slashdb->getUser($comment->{uid});
 
-	my $summary_message_code = $slashdb->sqlSelect('code', 'message_codes', "type = 'Reflect summary'");
+	my $summary_message_code = $slashdb->sqlSelect(
+	  'code', 'message_codes', "type = 'Reflect summary'");
   my $messages = getObject('Slash::Messages');
   if ($messages && $summary_message_code) {
     my $users = $messages->checkMessageCodes($summary_message_code, [$comment->{uid}]);
@@ -176,16 +178,15 @@ sub create_bullet {
 	my($comment_id, $text, $str_highlights) = @_;
 	my $slashdb = getCurrentDB();	
 	my $user_info = __get_user_info();
-	
-	if($text eq '') {
-		return '';
-	}
 		
+	#server side permission check for this operation...
+	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
+	if($commenter == $user_info->{id} || $text eq '') {
+	  return '';
+	}	
+	
 	$slashdb->sqlInsert(
-		'reflect_bullet',
-		{
-  		'comment_id' => $comment_id
-  	}
+		'reflect_bullet', { 'comment_id' => $comment_id }
 	);
 	
 	my $bullet_id = $slashdb->getLastInsertId();
@@ -193,7 +194,7 @@ sub create_bullet {
 	my $bullet_revision_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
-		'txt' => $text,	# need to escape this...
+		'txt' => strip_nohtml($text),
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'active' => 1
@@ -248,9 +249,13 @@ sub update_bullet {
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
 	
-	if($text eq '') {
-		return '';
-	}
+	#server side permission check for this operation...
+	my $summarizer = $slashdb->sqlSelect(
+	  'user_id', 'reflect_bullet_revision', 
+	  "bullet_id = $bullet_id AND active = 1");
+	if($summarizer != $user_info->{id} || $text eq '') {
+	  return {};
+	}	
 	
 	$slashdb->sqlUpdate(
 		'reflect_bullet_revision',
@@ -261,7 +266,7 @@ sub update_bullet {
 	my $bullet_revision_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
-		'txt' => $text,	# need to escape this..
+		'txt' => strip_nohtml($text),	
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'active' => 1
@@ -297,6 +302,16 @@ sub update_bullet {
 sub delete_bullet {
 	my($bullet_id) = @_;
 	my $slashdb = getCurrentDB();	
+	my $user_info = __get_user_info();
+
+	#server side permission check for this operation...
+	my $summarizer = $slashdb->sqlSelect(
+	  'user_id', 'reflect_bullet_revision', 
+	  "bullet_id = $bullet_id AND active = 1");
+	if($summarizer != $user_info->{id}) {
+	  return {};
+	}
+		
 	$slashdb->sqlUpdate(
 		'reflect_bullet_revision',
 		{'active' => 0},
@@ -314,8 +329,10 @@ sub create_response {
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
 		
-	if($text eq '') {
-		return '';
+	#server side permission check for this operation...
+	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
+	if($commenter != $user_info->{id} || $text eq '') {
+	  return '';
 	}
 	
 	my $response_params = { 
@@ -333,7 +350,7 @@ sub create_response {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
 		'response_id' => $response_id,
-		'txt' => $text,	# need to escape this...
+		'txt' => strip_nohtml($text),
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
@@ -359,8 +376,12 @@ sub update_response {
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
 	
-	if($text eq '') {
-		return '';
+	#server side permission check for this operation...
+	my $responder = $slashdb->sqlSelect(
+	  'user_id', 'reflect_response_revision', 
+	  "response_id = $response_id AND active = 1");
+	if($responder != $user_info->{id} || $text eq '') {
+	  return '';
 	}
 	
 	$slashdb->sqlUpdate(
@@ -373,7 +394,7 @@ sub update_response {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
 		'response_id' => $response_id,
-		'txt' => $text,	# need to escape this...
+		'txt' => strip_nohtml($text),
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
@@ -397,6 +418,16 @@ sub update_response {
 sub delete_response {
 	my ($response_id) = @_;
 	my $slashdb = getCurrentDB();		
+	my $user_info = __get_user_info();
+	
+	#server side permission check for this operation...
+	my $responder = $slashdb->sqlSelect(
+	  'user_id', 'reflect_response_revision', 
+	  "response_id = $response_id AND active = 1");
+	if($responder != $user_info->{id}) {
+	  return '';
+	}
+		
 	$slashdb->sqlUpdate(
 		'reflect_response_revision',
 		{'active' => 0},
