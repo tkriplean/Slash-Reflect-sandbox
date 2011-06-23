@@ -393,8 +393,9 @@ var Reflect = {
 			// wont work in GM
 			try {
 				// text_area.focus();
-				text_area.example('(optional) Clarify your point to help ' + 
-				  response_obj.bullet.user + ' and others better understand your message.', 
+				text_area.example(function() {
+          return $(this).attr('title');
+        }, 
 				  { className : 'jqueryexample' });
 				
 			} catch ( err ) {
@@ -710,11 +711,11 @@ var Reflect = {
 							duration : 50
 						} ).attr( 'disabled', false ).css( 'cursor', 'pointer' );
 				t_obj.data( 'disabled', false );
-			} else if ( char_rem < 140 && $j( t_obj ).data( 'disabled' ) ) {
+			} else if ( char_rem < 140 && t_obj.data( 'disabled' ) ) {
 				t_obj.data( 'disabled', false );
 				t_obj.parents( 'li' ).find( '.submit .bullet_submit' )
 						.attr( 'disabled', false );
-			} else if ( char_rem == 140 ) {
+			} else if ( char_rem == 140 && t_obj.parents('.response_dialog').length == 0 ) {
 				t_obj.data( 'disabled', true );
 				t_obj.parents( 'li' ).find( '.submit .bullet_submit' )
 						.attr( 'disabled', true );
@@ -821,8 +822,10 @@ var Reflect = {
 				canceled : false,
 				bullet_obj : bullet_obj
 			}, function ( event ) {
-				Reflect.transitions.from_bullet( event );
-				Reflect.transitions.to_highlight( event );
+			  if ( $(this).attr('disabled') != 'true') {
+				  Reflect.transitions.from_bullet( event );
+				  Reflect.transitions.to_highlight( event );
+			  }
 			} );
 
 			bullet_obj.$elem.find( '.cancel_bullet' ).bind( 'click', {
@@ -845,8 +848,9 @@ var Reflect = {
 			// wont work in Greasemonkey
 			try {
 				// text_area.focus();
-				text_area.example('Help others better understand and show ' + bullet_obj.comment.user + 
-				  ' that s/he is being heard by restating a point you hear them making.', { className : 'jqueryexample' });
+				text_area.example(function() {
+          return $(this).attr('title');
+        }, { className : 'jqueryexample' });
 			} catch ( err ) {
 			}
 
@@ -975,7 +979,7 @@ var Reflect = {
 			if ( !canceled ) {
 				var accurate_sel = "input[name='accurate-" + 
 					response_obj.bullet.id + "']:checked";
-				params.text = response_obj.elements.new_response_text.val();
+				params.text = response_obj.elements.new_response_text.hasClass('jqueryexample') ? '' : response_obj.elements.new_response_text.val();
 				params.sig = response_obj.$elem.find( accurate_sel ).val();
 				Reflect.api.post_response( response_obj );
 			}
@@ -1478,7 +1482,8 @@ var Reflect = {
 						text : Reflect.utils.escape( this.options.text ),
 						sig : Reflect.utils.escape( String(this.options.sig) ),
 						user : Reflect.utils.escape( this.options.user ),
-						media_dir : Reflect.api.server.media_dir
+						media_dir : Reflect.api.server.media_dir, 
+						summarizer : this.bullet.user
 					};
 				this.$elem.addClass( 'response' ).addClass( 'new' ).html( 
 						$j.jqote( Reflect.templates.response_dialog, template_vars ) );

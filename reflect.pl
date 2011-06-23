@@ -58,8 +58,6 @@ sub set_summary_message {
   }
 }
 
-
-
 ####
 # Handles all requests
 
@@ -331,7 +329,7 @@ sub create_response {
 		
 	#server side permission check for this operation...
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
-	if($commenter != $user_info->{id} || $text eq '') {
+	if($commenter != $user_info->{id}) {
 	  return '';
 	}
 	
@@ -380,7 +378,7 @@ sub update_response {
 	my $responder = $slashdb->sqlSelect(
 	  'user_id', 'reflect_response_revision', 
 	  "response_id = $response_id AND active = 1");
-	if($responder != $user_info->{id} || $text eq '') {
+	if($responder != $user_info->{id}) {
 	  return '';
 	}
 	

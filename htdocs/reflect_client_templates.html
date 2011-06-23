@@ -65,7 +65,7 @@
           <table class="new_bullet_wrapper">
               <tr>
                   <td class="new_bullet_text_wrap">
-                      <textarea class="new_response_text"><% if(this.text) %><%= this.text %></textarea>  
+                      <textarea class="new_response_text" title="(optional) Clarify your point to help <%=this.summarizer %> and others better understand your message."><% if(this.text) %><%= this.text %></textarea>  
                   </td>
               </tr>
               <tr class="submit_footer">
@@ -102,7 +102,7 @@
 			   <table class="new_bullet_wrapper">
 			      <tr>
 			         <td class="new_bullet_text_wrap">
-			            <textarea class="new_bullet_text"><% if (this.txt) %><%= this.txt %></textarea>  
+			            <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
 			         </td>
 			      </tr>
 			      <tr class="submit_footer">
@@ -137,11 +137,11 @@
       <ul class="rebutt_list" >
          <li class="img">
             <% if(this.sig == "2") { %>
-              <span class="response_yes">+</span>
+              <span class="response_yes">&#x2713;</span>
             <% } else if(this.sig == "1") { %>
-                 <span class="response_maybe">!</span> 
+                 <span class="response_maybe">?</span> 
             <% } else if (this.sig == "0"){ %>
-                 <span class="response_no">-</span>
+                 <span class="response_no">!</span>
          <% } %>
       	</li>
          <li class="rebutt_txt"><%= this.text %>   <span class="username"><%= this.user %></span></li>
