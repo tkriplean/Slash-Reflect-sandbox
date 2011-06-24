@@ -16,6 +16,7 @@ Need to add something like the following at an appropriate place in themes/templ
 		<script src="/js/third_party/jquery.highlight.js" type="text/javascript"></script>
 		<script src="/js/third_party/jquery.jqote2.min.js" type="text/javascript"></script>
 		<script src="/js/third_party/jquery.noblecount.min.js" type="text/javascript"></script>
+		<script src="/js/third_party/jquery.example.min.js" type="text/javascript"></script>
 		<script src="/js/reflect.js" type="text/javascript"></script>
 		<script src="/js/reflect.slash.js" type="text/javascript"></script>
 	[% END %]
