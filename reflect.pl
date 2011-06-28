@@ -18,14 +18,14 @@ use Data::Dumper;
 
 sub __get_user_info {
 	my $user = getCurrentUser();
-	#$user->{is_anon}
-
 	my $user_name = $user->{nickname};
+	my $is_anon = !$user_name || $user_name eq ''; 
+
 	my $uid = $user->{uid};
-	if (!$user_name || $user_name eq ''){
+	if ( $is_anon ){
 		my $user_name = 'Anonymous Coward';
 	}
-	return { 'name' => $user_name, 'id' => $uid };
+	return { 'name' => $user_name, 'id' => $uid, 'is_anon' => $is_anon };
 }
 
 
@@ -72,7 +72,7 @@ sub main {
 		$retval = get_data($params->{'comments'});
 	} elsif ( $op eq 'response' ) {
 		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
-			$retval = delete_response( $params->{'bullet_id'} );
+			$retval = delete_response( $params->{'response_id'} );
 		} elsif ( exists $params->{'response_id'} ) {
 			$retval = update_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
 				$params->{'response_id'}, $params->{'text'}, $params->{'signal'} );
@@ -90,6 +90,14 @@ sub main {
 			$retval = create_bullet( $params->{'comment_id'}, $params->{'text'}, 
 				$params->{'highlights'});
 		}
+	} elsif ( $op eq 'bullet_rating' ) {
+		if ( exists $params->{'is_delete'} && $params->{'is_delete'} eq 'true' ) { 
+			$retval = delete_bullet_rating( $params->{'bullet_id'}, 
+			  $params->{'bullet_rev'}, $params->{'rating'} );
+		} elsif ( exists $params->{'bullet_id'} ) {
+			$retval = create_bullet_rating( $params->{'comment_id'}, 
+			  $params->{'bullet_id'}, $params->{'bullet_rev'}, $params->{'rating'} );
+		}	  
 	}
 	
 	$options->{content_type} = 'application/json';	
@@ -336,6 +344,64 @@ sub delete_bullet {
 		'bullet_id=' . $bullet_id
 	);
 	return {};
+}
+
+sub create_bullet_rating {
+	my($comment_id, $bullet_id, $bullet_rev, $rating) = @_;
+	my $slashdb = getCurrentDB();	
+	my $user_info = __get_user_info();
+	my $uid = $user_info->{id};
+	
+	#server side permission check for this operation...
+	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
+	my $summarizer = $slashdb->sqlSelect('user_id', 'reflect_bullet_revision', "id = $bullet_rev");
+	if($commenter == $uid || 
+	   $user_info->{is_anon} || 
+	   $summarizer == $uid ) {
+	  return {};
+	}
+
+	$slashdb->sqlDelete(
+		'reflect_bullet_rating', 
+		"user_id=$uid AND bullet_id=$bullet_id"
+	);
+	
+	$slashdb->sqlInsert(
+		'reflect_bullet_rating', { 
+		  'comment_id' => $comment_id,
+		  'bullet_id' => $bullet_id,
+		  'bullet_rev' => $bullet_rev,
+		  'rating' => $rating,
+		  'user_id' => $user_info->{id}
+		}
+	);
+	
+	return {};
+	
+}
+
+sub delete_bullet_rating {
+	my($comment_id, $bullet_id, $bullet_rev, $rating) = @_;
+	my $slashdb = getCurrentDB();	
+	my $user_info = __get_user_info();
+	my $uid = $user_info->{id};
+	
+	#server side permission check for this operation...
+	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
+	my $summarizer = $slashdb->sqlSelect('uid', 'reflect_bullet_revision', "id = $bullet_rev");
+	if($commenter == $uid || 
+	   $user_info->{is_anon} || 
+	   $summarizer == $uid ) {
+	  return {};
+	}
+	
+	$slashdb->sqlDelete(
+		'reflect_bullet_rating', 
+		"user_id=$uid AND bullet_id=$bullet_id"
+	);
+	
+	return {};
+	
 }
 
 #######################

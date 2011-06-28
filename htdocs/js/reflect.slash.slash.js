@@ -1,9 +1,3 @@
-
-
-
-
-
-
 // _*_ Mode: JavaScript; tab-width: 8; indent-tabs-mode: true _*_
 ; // $Id$
 
@@ -11,7 +5,7 @@
 var $j = jQuery;
 
 Reflect.config.study = false;
-Reflect.config.enable_flagging = false;
+Reflect.config.enable_flagging = true;
 
 var is_new_slash = false;
 
@@ -116,7 +110,23 @@ Reflect.api.DataInterface = Reflect.api.DataInterface.extend({
             }
     	});
     },
-	
+	post_rating: function(settings){
+	  settings.params.op = 'bullet_rating';
+    
+    	$j.ajax({url:this.api_loc,
+            type:'POST',
+            data: settings.params,
+            async: true,
+            error: function(data){
+                var json_data = JSON.parse(data);
+                settings.error(json_data);
+            },
+            success: function(data){
+                var json_data = JSON.parse(data);
+                settings.success(json_data);
+            }
+    	});	  
+	},
 	get_data: function(params, callback){
 	  params.op = 'data';
     

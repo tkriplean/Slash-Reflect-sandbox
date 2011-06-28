@@ -16,7 +16,7 @@
  * 
  * The script can take it from there. 
  * 
- * Current browser compatability:
+ * Browser compatability (out of date):
  * 
  * 	firefox : best
  *		safari : good
@@ -135,6 +135,9 @@ var Reflect = {
 			},
 			post_response : function ( settings ) {
 				throw 'not implemented';
+			},
+			post_rating : function ( settings ) {
+			  throw 'not implemented';
 			},
 			post_survey_bullets : function ( settings ) {
 				throw 'not implemented';
@@ -274,7 +277,47 @@ var Reflect = {
 			};
 
 			Reflect.api.server.post_response( vals );
-		}
+		},
+		
+		post_delete_response : function ( response_obj ) {
+			var params = {
+				'delete' : true,
+				response : true,
+				response_id : response_obj.id,
+				bullet_id : response_obj.bullet.id,
+				bullet_rev : response_obj.bullet.rev,
+				comment_id : response_obj.bullet.comment.id
+			};
+
+			var vals = {
+				success : function ( data ) {
+				},
+				error : function ( data ) {
+				},
+				params : params
+			};
+
+			Reflect.api.server.post_response( vals );		  
+		},
+
+		/* Ajax posting of a bullet rating to Reflect API. */				
+		post_rating : function ( bullet_obj, rating, is_delete ) {
+
+			var params = {
+				bullet_id : bullet_obj.id,
+				comment_id : bullet_obj.comment.id,
+				bullet_rev : bullet_obj.rev,
+				rating : rating,
+				is_delete : is_delete
+			},
+			vals = {
+				params : params,
+				success : function ( data ) {},
+				error : function ( data ) {}
+			};
+
+			Reflect.api.server.post_rating( vals );
+		}		
 
 	},
 
@@ -293,7 +336,7 @@ var Reflect = {
 			var footer = bullet_obj.elements.bullet_footer_wrapper;
 
 			footer
-					.find( '.dispute_operation' )
+					.find( '.rate_bullet' )
 					.hover( Reflect.handle.bullet_problem_mouseover, 
 							Reflect.handle.bullet_problem_mouseout );
 
@@ -316,8 +359,8 @@ var Reflect = {
 
 			// set modify bullet action
 			if ( bullet_obj.user != 'Anonymous' && bullet_obj.user == Reflect.utils.get_logged_in_user() ) {
-				bullet_obj.elements.bullet_text
-						.click( Reflect.transitions.to_bullet );
+				// bullet_obj.elements.bullet_text
+				//		.click( Reflect.transitions.to_bullet );
 				footer.find( '.modify' )
 						.click( Reflect.transitions.to_bullet );
 			}
@@ -331,6 +374,50 @@ var Reflect = {
 			} );
 		},
 
+		/* Establishes dialog state for a bullet */
+		new_bullet : function ( bullet_obj ) {
+			bullet_obj.$elem.find( '.bullet_submit' ).bind( 'click', {
+				canceled : false,
+				bullet_obj : bullet_obj
+			}, function ( event ) {
+			  if ( $(this).attr('disabled') != 'true') {
+				  Reflect.transitions.from_bullet( event );
+				  Reflect.transitions.to_highlight( event );
+			  }
+			} );
+
+			bullet_obj.$elem.find( '.cancel_bullet' ).bind( 'click', {
+				canceled : true,
+				bullet_obj : bullet_obj
+			}, Reflect.transitions.from_bullet );
+
+			bullet_obj.comment.$elem.addClass( 'bullet_state' );
+
+			var settings = {
+				on_negative : Reflect.handle.negative_count,
+				on_positive : Reflect.handle.positive_count,
+				max_chars : 140
+			}, text_area = bullet_obj.$elem.find( 'textarea' );
+
+			var count_sel = '#rf_comment_wrapper-' + 
+					bullet_obj.comment.id + ' .bullet.modify li.count';
+			text_area.NobleCount(count_sel , settings );
+
+			// wont work in Greasemonkey
+			try {
+				// text_area.focus();
+				text_area.example(function() {
+          return $(this).attr('title');
+        }, { className : 'jqueryexample' });
+			} catch ( err ) {
+			}
+
+			cur_text = text_area.text();
+			if ( !cur_text || cur_text.length == 0 ) {
+				bullet_obj.elements.submit_button.attr( 'disabled', 'true' );
+			}		  
+		}, 
+		
 		/* Establishes default state for a response */
 		response : function ( bullet_obj, response_obj ) {
 			response_obj.$elem
@@ -338,7 +425,7 @@ var Reflect = {
 							Reflect.handle.response_mouseout );
 
 			response_obj.$elem
-					.find( '.dispute_operation' )
+					.find( '.rate_bullet' )
 					.hover( Reflect.handle.response_problem_mouseover, 
 							Reflect.handle.response_problem_mouseout );
 
@@ -361,8 +448,8 @@ var Reflect = {
 					.click( Reflect.handle.accurate_clicked );
 
 			if ( response_obj.user == Reflect.utils.get_logged_in_user() ) {
-				response_obj.$elem.find( '.rebutt_txt' )
-						.click( Reflect.transitions.to_response );
+				//response_obj.$elem.find( '.rebutt_txt' )
+				//		.click( Reflect.transitions.to_response );
 				response_obj.$elem.find( '.modify' )
 						.click( Reflect.transitions.to_response );
 			}
@@ -470,44 +557,28 @@ var Reflect = {
 
 			var admin = Reflect.api.server.is_admin();
 
-			if ( user != 'Anonymous' && user == bullet_obj.user ) {
-				footer.find( '.dispute_operation' ).hide();
+			if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
 				footer.find( '.modify_operation' ).show();
 				footer.find( '.delete_operation' ).show();
+				footer.find( '.rate_bullet' ).hide();
 			} else if ( Reflect.api.server.is_admin() ) {
 				footer.find( '.modify_operation' ).hide();
-				if (Reflect.config.enable_flagging) {
-					footer.find('.dispute_operation').show();
-				} else {
-					footer.find('.dispute_operation').hide();
-				}
 				footer.find( '.delete_operation' ).show();
-			} else if ( user == bullet_obj.comment.user ) {
-				if (Reflect.config.enable_flagging) {
-					footer.find('.dispute_operation').show();
-				} else {
-					footer.find('.dispute_operation').hide();
-				}
-				footer.find( '.modify_operation' ).hide();
-				footer.find( '.delete_operation' ).hide();
+				Reflect.config.enable_flagging ? 
+					footer.find('.rate_bullet').show() :
+					footer.find('.rate_bullet').hide();
 			} else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
-				
 				footer.find( '.modify_operation' ).hide();
 				footer.find( '.delete_operation' ).show();
-				if (Reflect.config.enable_flagging) {
-					footer.find('.dispute_operation').show();
-				} else {
-					footer.find('.dispute_operation').hide();
-				}
-			
+				Reflect.config.enable_flagging ?
+					footer.find('.rate_bullet').show() :
+					footer.find('.rate_bullet').hide();
 			} else {
 				footer.find( '.modify_operation' ).hide();
 				footer.find( '.delete_operation' ).hide();
-				if (Reflect.config.enable_flagging) {
-					footer.find('.dispute_operation').show();
-				} else {
-					footer.find('.dispute_operation').hide();
-				}
+				Reflect.config.enable_flagging && user != bullet_obj.user && user != bullet_obj.comment.user ?
+					footer.find('.rate_bullet').show() :
+					footer.find('.rate_bullet').hide();
 			}
 
 			footer.animate( {
@@ -527,8 +598,6 @@ var Reflect = {
 					return color + 8;
 				}
 			}
-			//$j( this ).css( 'background-color', Reflect.utils
-			//		.get_inverted_background_color( $j( this ), color_convert ) );
 
 		},
 
@@ -548,7 +617,6 @@ var Reflect = {
 			$j( this ).find( '.bullet_footer_wrapper' ).hide();
 
 			comment.find( '.highlight' ).removeClass( 'highlight' );
-			//$j( this ).css( 'background-color', 'transparent' );
 		},
 
 		bullet_problem_mouseover : function ( event ) {
@@ -556,16 +624,13 @@ var Reflect = {
 			$j( this ).find( '.bullet_report_problem' ).animate( {
 				opacity : 1
 			}, 300 );
-			$j( this ).find( 'img.hover' ).css( 'display', 'inline' );
-			$j( this ).find( 'img.base' ).hide();
 		},
 
 		bullet_problem_mouseout : function ( event ) {
 			$j( this ).find( '.bullet_report_problem' ).animate( {
 				opacity : 0
 			}, 300 );
-			$j( this ).find( 'img.hover' ).hide();
-			$j( this ).find( 'img.base' ).css( 'display', 'inline' );
+			$j( this ).find( '.bullet_report_problem' ).hide();			
 		},
 
 		bullet_flag : function ( event ) {
@@ -575,49 +640,24 @@ var Reflect = {
 
 			if ( flags[flag] && flags[flag] > 0 ) {
 				flags[flag] = -1;
-				$j( this ).removeClass( 'set' );
 			} else {
 				flags[flag] = 1;
-				$j( this ).addClass( 'set' );
 			}
+			Reflect.api.post_rating( bullet_obj, flag, flags[flag] < 0 );
 
 		},
 		operation_mouseover : function ( event ) {
-			$j( this ).find( 'img.hover' ).css( 'display', 'inline' );
-			$j( this ).find( 'img.base' ).hide();
 		},
 
 		operation_mouseout : function ( event ) {
-			$j( this ).find( 'img.hover' ).hide();
-			$j( this ).find( 'img.base' ).css( 'display', 'inline' );
 		},
 
 		response_delete : function ( event ) {
 			var response_obj = $j.data( $j( this )
 					.parents( '.response' )[0], 'response' );
-
-			// TODO: move this to Reflect.api
-			var params = {
-				'delete' : true,
-				response : true,
-				response_id : response_obj.id,
-				bullet_id : response_obj.bullet.id,
-				bullet_rev : response_obj.bullet.rev,
-				comment_id : response_obj.bullet.comment.id
-			};
-
-			var vals = {
-				success : function ( data ) {
-				},
-				error : function ( data ) {
-				},
-				params : params
-			};
-
-			Reflect.api.server.post_response( vals );
-
+      Reflect.api.post_delete_response( response_obj );
 			response_obj.response_delete();
-			Reflect.bind.new_response( response_obj );
+			Reflect.bind.new_response( response_obj );      
 		},
 
 		response_mouseover : function ( event ) {
@@ -625,14 +665,14 @@ var Reflect = {
 				user = Reflect.utils.get_logged_in_user();
 
 			if ( user == response_obj.user ) {
-				response_obj.$elem.find( '.dispute_operation' ).hide();
+				response_obj.$elem.find( '.rate_bullet' ).hide();
 			} else if ( Reflect.api.server.is_admin() ) {
 				response_obj.$elem.find( '.modify_operation' ).hide();
-				response_obj.$elem.find( '.dispute_operation' ).hide();
+				response_obj.$elem.find( '.rate_bullet' ).hide();
 			} else {
 				response_obj.$elem.find( '.delete_operation' ).hide();
 				response_obj.$elem.find( '.modify_operation' ).hide();
-				response_obj.$elem.find( '.dispute_operation' ).hide();
+				response_obj.$elem.find( '.rate_bullet' ).hide();
 			}
 			response_obj.$elem.find( '.response_footer_wrapper' ).show()
 					.animate( {
@@ -646,8 +686,6 @@ var Reflect = {
 					return color + 8;
 				}
 			}
-			//$j( this ).css( 'background-color', Reflect.utils
-			//	.get_inverted_background_color( $j( this ), color_convert ) );
 		},
 
 		response_mouseout : function ( event ) {
@@ -812,53 +850,11 @@ var Reflect = {
 		},
 
 		to_bullet : function () {
-			// TODO: much of this should be moved to Reflect.bind.new_bullet
-
 			var bullet_obj = $j.data( $j( this )
 					.parents( '.bullet' )[0], 'bullet' );
 
 			bullet_obj.enter_edit_state();
-			bullet_obj.$elem.find( '.bullet_submit' ).bind( 'click', {
-				canceled : false,
-				bullet_obj : bullet_obj
-			}, function ( event ) {
-			  if ( $(this).attr('disabled') != 'true') {
-				  Reflect.transitions.from_bullet( event );
-				  Reflect.transitions.to_highlight( event );
-			  }
-			} );
-
-			bullet_obj.$elem.find( '.cancel_bullet' ).bind( 'click', {
-				canceled : true,
-				bullet_obj : bullet_obj
-			}, Reflect.transitions.from_bullet );
-
-			bullet_obj.comment.$elem.addClass( 'bullet_state' );
-
-			var settings = {
-				on_negative : Reflect.handle.negative_count,
-				on_positive : Reflect.handle.positive_count,
-				max_chars : 140
-			}, text_area = bullet_obj.$elem.find( 'textarea' );
-
-			var count_sel = '#rf_comment_wrapper-' + 
-					bullet_obj.comment.id + ' .bullet.modify li.count';
-			text_area.NobleCount(count_sel , settings );
-
-			// wont work in Greasemonkey
-			try {
-				// text_area.focus();
-				text_area.example(function() {
-          return $(this).attr('title');
-        }, { className : 'jqueryexample' });
-			} catch ( err ) {
-			}
-
-			cur_text = text_area.text();
-			if ( !cur_text || cur_text.length == 0 ) {
-				bullet_obj.elements.submit_button.attr( 'disabled', 'true' );
-			}
-
+			Reflect.bind.new_bullet( bullet_obj );
 		},
 
 		from_bullet : function ( event ) {
@@ -1118,6 +1114,7 @@ var Reflect = {
 						+ '<td id="rf_comment_summary-'
 						+ this.id + '" class="rf_comment_summary">'
 						+ '<div class="summary" id="summary-' + this.id + '">'
+						+ '<div class="reflect_header">Readers hear ' + this.user + ' saying...</div>'
 						+ '<ul class="bullet_list" />' + '</div>' + '</td>' );
 
 				var author_block = $j( '<span class="rf_comment_author">' 
@@ -1132,7 +1129,7 @@ var Reflect = {
 						.wrapInner( $j( '<table id="rf_comment_wrapper-' 
 								+ this.id + '" class="rf_comment_wrapper" />' ) );
 				
-				comment_text.before('<div class="rf_toggle state_on">Turn off summaries</div><div style="clear:both;display:none"></div>');
+				comment_text.before('<a class="rf_toggle state_on">[hide summaries]</a><div class="cl"></div>');
 				
 				//so that we don't try to break apart urls into different sentences...
 				comment_text.find('a')
@@ -1149,13 +1146,13 @@ var Reflect = {
             if ( $(this).hasClass('state_on') ) {
               $('.rf_comment_summary').hide();
               $('.rf_comment_text_wrapper').css('width', '100%');
-              $(this).addClass('state_off').removeClass('state_on');
-              $(this).text("Turn on summaries");              
+              $('.rf_toggle').addClass('state_off').removeClass('state_on');
+              $('.rf_toggle').text("[show summaries]");              
             } else {
               $('.rf_comment_summary').show();
               $('.rf_comment_text_wrapper').css('width', 'inherit');
-              $(this).addClass('state_on').removeClass('state_off');
-              $(this).text("Turn off summaries");              
+              $('.rf_toggle').addClass('state_on').removeClass('state_off');
+              $('.rf_toggle').text("[hide summaries]");              
             }
           });
           
@@ -1259,7 +1256,8 @@ var Reflect = {
 					commenter : Reflect.utils.escape( this.options.commenter ),
 					listener_pic : this.options.listener_pic,
 					uses_profile_pic : Reflect.config.uses_profile_pic,
-					uses_user_name : Reflect.config.uses_user_name	
+					uses_user_name : Reflect.config.uses_user_name,
+					id : this.id
 				}; 	
 				this.$elem
 						.addClass( 'bullet' )
@@ -1454,7 +1452,7 @@ var Reflect = {
 			},
 			_build : function () {
 				var first_name = this.options.user;
-				if (first_name.indexOf(' ')){
+				if (first_name.indexOf(' ') > -1){
 					first_name = first_name.substring(0, first_name.indexOf(' '));
 				}
 				var template_vars = {

@@ -1,6 +1,5 @@
 .cl {
-  clear: both !important;
-  height: 0; }
+  clear: both !important; }
 
 .fr {
   float: right; }
@@ -19,6 +18,7 @@
 
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .bullet_footer_wrapper {
   display: none; }
+#reflected .rf_comment .rf_comment_wrapper .rf_comment_text_wrapper a.exclude_from_reflect .sentence,  
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .sentence {
   cursor: pointer;
   text-decoration: none; }
@@ -37,8 +37,6 @@
 
 #reflected .rf_comment_wrapper .rf_comment_text_wrapper {
   width: 50%; }
-  #reflected .rf_comment_wrapper .rf_comment_text_wrapper .rf_comment_text .exclude_from_reflect .sentence {
-    cursor: pointer; }
   #reflected .rf_comment_wrapper .rf_comment_text_wrapper .rf_comment_text .sentence {
     text-decoration: none;
     color: inherit;
@@ -56,9 +54,6 @@
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
   width: 42%; }
-  #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
-    padding-bottom: 5px;
-    font-style: italic; }
   #reflected .rf_comment_wrapper .rf_comment_summary .username {
     font-size: 75%;
     margin-left: 4px;
@@ -75,87 +70,80 @@
       display: list-item;
       position: relative;
       margin-bottom: 6px;
-      line-height: 1.3em;
-      font-size: 90%; }
+      line-height: 1.3em; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
         position: relative; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point {
-          /* margin: 0 5px 0 5px
-           * position: absolute
-           * left: -22px */
-          float: left; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point img {
-            width: 35px; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_text {
-          overflow: hidden;
-          word-wrap: break-word;
-          width: 80%;
-          float: left;
-          padding-left: 8px; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_author.rf_listener_pic {
-          max-width: 30px;
-          overflow: hidden;
-          float: right;
-          margin: 0 4px;
-          height: 30px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_author.rf_listener_pic img {
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper {
+          min-height: 32px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point {
+            /* margin: 0 5px 0 5px
+             * position: absolute
+             * left: -22px */
+            float: left; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point img {
+              width: 35px;
+              opacity: 0.75; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_text {
+            font-size: 105%;
+            overflow: hidden;
+            word-wrap: break-word;
+            width: 80%;
+            float: left;
+            padding-left: 8px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_author.rf_listener_pic {
+            max-width: 30px;
+            overflow: hidden;
+            float: right;
+            margin: 0 4px;
             height: 30px; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper {
-          padding-left: 8px;
-          float: right; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations {
-            margin-left: 8px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations .bullet_operation {
-              color: #777777;
-              cursor: pointer;
-              font-size: 85%;
-              padding-right: 3px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li {
-              display: static; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet {
-                cursor: pointer; }
-                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_prompt_problem img.selector_arrow {
-                  padding-top: 6px; }
-                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem {
-                  display: none;
-                  opacity: 0;
-                  z-index: 99;
-                  background-color: white;
-                  position: absolute;
-                  width: 215px;
-                  right: 0px;
-                  border: 1px solid #bbbbbb;
-                  padding: 5px; }
-                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .rate_header {
-                    font-size: 90%; }
-                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag {
-                    border: 0px solid #bbbbbb;
-                    display: block;
-                    width: 100%;
-                    background-color: white; }
-                    #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag:hover {
-                      background-color: #eeeeee; }
-                    #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label {
-                      display: inline;
-                      font-size: 85%;
-                      color: #777777;
-                      font-weight: normal;
-                      padding-right: 100px;
-                      cursor: pointer; }
-                      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class {
-                        padding-right: 8px;
-                        font-weight: bold;
-                        float: right; }
-                        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class.zen {
-                          color: #026c07; }
-                        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class.gold {
-                          color: #b39421; }
-                        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class.student {
-                          color: #3c57b3; }
-                        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class.troll {
-                          color: #b33327; }
-                        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class.graffiti {
-                          color: #9b5eb3; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_author.rf_listener_pic img {
+              height: 30px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper {
+            width: 15px;
+            position: absolute;
+            right: 0px;
+            top: 2px; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations {
+              margin-left: 6px; }
+              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li {
+                display: static; }
+                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li img {
+                  width: 15px; }
+                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li img.hover {
+                    display: none; }
+                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation {
+                  cursor: pointer; }
+                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation .bullet_prompt_problem {
+                    text-decoration: underline;
+                    color: #777777;
+                    cursor: pointer;
+                    font-size: 85%;
+                    padding-right: 3px; }
+                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation ul.bullet_report_problem {
+                    display: none;
+                    opacity: none;
+                    z-index: 99;
+                    background-color: white;
+                    position: absolute;
+                    width: auto;
+                    right: 0px; }
+                    #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation ul.bullet_report_problem li.flag {
+                      padding: 5px;
+                      border: 1px solid #bbbbbb;
+                      display: block;
+                      width: 100%; }
+                      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation ul.bullet_report_problem li.flag.set {
+                        background-color: #333333;
+                        color: #cccccc; }
+                      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation ul.bullet_report_problem li.flag:hover {
+                        background-color: #eeeeee; }
+                      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li.dispute_operation ul.bullet_report_problem li.flag a.user:hover {
+                        text-decoration: none; }
+                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_footer_wrapper ul.bullet_operations > li button {
+                  border: none;
+                  background-color: transparent;
+                  padding: 0;
+                  cursor: pointer; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify {
         height: auto; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main {
@@ -243,68 +231,75 @@
 
 #reflected .responses {
   margin: 1px 0 4px 30px;
-  padding: 0px 0 5px 20px; }
-  #reflected .responses > ul li.response {
-    font-size: 80%; }
-    #reflected .responses > ul li.response ul.rebutt_list {
-      color: #666666;
-      float: left; }
-      #reflected .responses > ul li.response ul.rebutt_list > li {
-        display: inline; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_yes {
-          color: #013603; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_no {
-          color: #2f0500; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_maybe {
-          color: #626206; }
-    #reflected .responses > ul li.response ul.response_footer_wrapper {
-      width: 20%;
-      height: 15px;
-      position: absolute;
-      right: -40px;
-      margin-left: 6px; }
-      #reflected .responses > ul li.response ul.response_footer_wrapper > li {
-        display: inline; }
-        #reflected .responses > ul li.response ul.response_footer_wrapper > li button {
-          border: none;
-          background-color: transparent;
-          padding: 0;
-          cursor: pointer; }
-        #reflected .responses > ul li.response ul.response_footer_wrapper > li img {
-          width: 15px; }
-          #reflected .responses > ul li.response ul.response_footer_wrapper > li img.hover {
-            display: none; }
-    #reflected .responses > ul li.response.new ul.response_def li.response_prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt {
-      background-color: #ffe5e5; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_prompt label.prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt label.prompt {
-        padding: 5px;
-        font-weight: bold; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li {
-        display: inline;
-        margin-right: 3px;
+  padding: 0px 0 5px 10px; }
+  #reflected .responses > ul li.response ul.rebutt_list {
+    color: #666666;
+    float: left; }
+    #reflected .responses > ul li.response ul.rebutt_list > li {
+      display: inline; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.img img {
+        padding: 2px 2px 0 0px;
+        width: 12px; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.img .response_yes {
+        color: green; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.img .response_no {
+        color: red; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.img .response_maybe {
+        color: goldenRod; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.img .response_yes, #reflected .responses > ul li.response ul.rebutt_list > li.img .response_no, #reflected .responses > ul li.response ul.rebutt_list > li.img .response_maybe {
+        font-size: 125%; }
+      #reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt {
         font-size: 85%; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li input, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li input {
-          margin: 5px 2px; }
-    #reflected .responses > ul li.response.new ul.response_def li.response_dialog, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog {
-      display: none; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
-        position: relative; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text {
-          height: 60px;
-          padding: 4px 2px;
-          width: 100%;
-          overflow: auto; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer {
-          width: 100%;
-          padding-bottom: 5px; }
-          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a {
+        #reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt .username {
+          font-size: 90%; }
+  #reflected .responses > ul li.response ul.response_footer_wrapper {
+    width: 20%;
+    height: 15px;
+    position: absolute;
+    right: -40px;
+    margin-left: 6px; }
+    #reflected .responses > ul li.response ul.response_footer_wrapper > li {
+      display: inline; }
+      #reflected .responses > ul li.response ul.response_footer_wrapper > li button {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        cursor: pointer; }
+      #reflected .responses > ul li.response ul.response_footer_wrapper > li img {
+        width: 15px; }
+        #reflected .responses > ul li.response ul.response_footer_wrapper > li img.hover {
+          display: none; }
+  #reflected .responses > ul li.response.new ul.response_def li.response_prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt {
+    background-color: #ffe5e5; }
+    #reflected .responses > ul li.response.new ul.response_def li.response_prompt label.prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt label.prompt {
+      padding: 5px;
+      font-weight: bold; }
+    #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li {
+      display: inline;
+      margin-right: 3px;
+      font-size: 85%; }
+      #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li input, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li input {
+        margin: 5px 2px; }
+  #reflected .responses > ul li.response.new ul.response_def li.response_dialog, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog {
+    display: none; }
+    #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
+      position: relative; }
+      #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text {
+        height: 60px;
+        padding: 4px 2px;
+        width: 100%;
+        overflow: auto; }
+      #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer {
+        width: 100%;
+        padding-bottom: 5px; }
+        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a {
+          color: inherit; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover {
+            background-color: inherit;
             color: inherit; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover {
-              background-color: inherit;
-              color: inherit; }
-          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li {
-            display: inline-block; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit {
-              margin-right: 15px; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral {
-              float: right; }
+        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li {
+          display: inline-block; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit {
+            margin-right: 15px; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral {
+            float: right; }

@@ -2,49 +2,74 @@
 <![CDATA[
       <div class="bullet_main">        
 
-         <ul class="bullet_main_wrapper">
-	         <li class="bullet_point">
-				   <img src="<%= this.media_dir %>/listen.png"/>
-			   </li>
-            <li class="bullet_text">
-                 <%= this.bullet_text %> <span class="username"><a class="user"><%= this.user %></a></span>
-            </li>
-					
-            <li class="bullet_footer_wrapper">
-                <ul class="bullet_operations">
-                    <li class="modify_operation">
-                        <button title="Edit this summary bullet point" class="modify">
-                            <a>
-                                <img class="base" src="<%= this.media_dir %>/edit.png"></img> 
-                                <img class="hover" src="<%= this.media_dir %>/edit_hover.png"></img> 
-                            </a>
-                        </button>
-                    </li>
-                    <li title="Delete this summary bullet point" class="delete_operation">
-                        <a class="delete"> 
-                            <img class="base" src="<%= this.media_dir %>/delete_gray.png"></img> 
-                            <img class="hover" src="<%= this.media_dir %>/delete_red.png"></img> 
-                        </a>
-                    </li>
-                    <li class="dispute_operation">
-                        <span class="bullet_prompt_problem">
-                            <img class="base" src="<%= this.media_dir %>/comment-flag.png"></img> 
-                            <img class="hover" src="<%= this.media_dir %>/comment-flag-hover.png"></img> 
-                        </span>
-                        <ul class="bullet_report_problem">
-                            <li class="flag" name="input">not a summary</li>
-                            <li class="flag" name="neutral">not written neutrally</li>
-                            <li class="flag" name="accurate"><a class=user><%= this.commenter %></a> didn't say this</li>
-                            <li class="flag" name="duplicate">duplicate bullet</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-	         <li class="bullet_author rf_listener_pic">
-				   <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
-			   </li>		
-				<li class="cl"></li>
-         </ul>
+        <ul class="bullet_main_wrapper">
+          <li class="bullet_point">
+            <img src="<%= this.media_dir %>/listen.png"/>
+          </li>
+          <li class="bullet_text">
+            <%= this.bullet_text %> <span class="username"><a class="user"><%= this.user %></a></span>
+          </li>
+          
+          <li class="bullet_footer_wrapper">
+            <ul class="bullet_operations">
+                <li class="modify_operation" title="Edit this summary bullet point">
+                  <a class="modify bullet_operation">
+                    edit
+                  </a>
+                </li>
+                <li title="Delete this summary bullet point" class="delete_operation">
+                  <a class="delete bullet_operation"> 
+                    delete 
+                  </a>
+                </li>
+                <li class="rate_bullet">
+                    <span class="bullet_prompt_problem bullet_operation">
+                        rate 
+                        <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
+                    </span>
+                    <form name="rate_bullet" class="bullet_report_problem">
+                      <div class="rate_header">
+                        This summary is...
+                      </div>                    
+                      <span class="flag">
+                        <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
+                        <label for="rating_zen_<%= this.id %>">
+                          an elegant synthesis <span class="rating_class zen">zen-master</span>
+                        </label>
+                      </span>
+                      <span class="flag">
+                        <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
+                        <label for="rating_gold_<%= this.id %>">
+                          highlighting a good point <span class="rating_class gold">gold-sifter</span>
+                        </label>
+                      </span>
+                      <span class="flag">
+                        <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
+                        <label for="rating_student_<%= this.id %>">                          
+                          somewhat on target <span class="rating_class student">student</span>
+                        </label>
+                      </span>
+                      <span class="flag">
+                        <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
+                        <label for="rating_troll_<%= this.id %>">
+                          overly antagonizing <span class="rating_class troll">troll</span>
+                        </label>
+                      </span>
+                      <span class="flag">
+                        <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
+                        <label for="rating_graffiti_<%= this.id %>">
+                          not actually a summary <span class="rating_class graffiti">graffiti</span>
+                        </label>
+                      </span>                                                                              
+                    </form>
+                </li>
+            </ul>
+        </li>
+        <li class="bullet_author rf_listener_pic">
+          <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
+        </li>    
+        <li class="cl"></li>
+      </ul>
      </div>
      <div class="responses"><ul /></div>
 ]]>
@@ -74,13 +99,13 @@
                          <li class="submit">
                             <button class="bullet_submit">Done</button>
                          </li>
-								 <li class="submit">
-									  <a class="cancel_bullet">cancel</a>
-								 </li>								 
+                 <li class="submit">
+                    <a class="cancel_bullet">cancel</a>
+                 </li>                 
                          <li title="Please limit your response to 140 characters or less." class="count">
                            <a>
-                           	<span class="count"></span>
-                        	</a>
+                             <span class="count"></span>
+                          </a>
                           </li>
                        </ul>
                </td>
@@ -94,82 +119,75 @@
 
 <script type="text/html" id="reflect_template_new_bullet_dialog">
 <![CDATA[
-	<div class="bullet_main">  
-		<ul class="bullet_main_wrapper">
-		
-			<li class="bullet_point"><img src="<%= this.media_dir %>/listen.png" /></li>
-			<li class="bullet_dialog">
-			   <table class="new_bullet_wrapper">
-			      <tr>
-			         <td class="new_bullet_text_wrap">
-			            <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
-			         </td>
-			      </tr>
-			      <tr class="submit_footer">
-			         <td> 
-				         <ul>
-				            <li class="submit">
-				               <a class="bullet_submit">Done</button>
-				            </li>
-								<li class="submit">
-									<a class="cancel_bullet">cancel</a>
-								</li>
+  <div class="bullet_main">  
+    <ul class="bullet_main_wrapper">
+    
+      <li class="bullet_point"><img src="<%= this.media_dir %>/listen.png" /></li>
+      <li class="bullet_dialog">
+         <table class="new_bullet_wrapper">
+            <tr>
+               <td class="new_bullet_text_wrap">
+                  <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
+               </td>
+            </tr>
+            <tr class="submit_footer">
+               <td> 
+                 <ul>
+                    <li class="submit">
+                       <a class="bullet_submit">Done</button>
+                    </li>
+                <li class="submit">
+                  <a class="cancel_bullet">cancel</a>
+                </li>
                 <li title="Please limit your summary to 140 characters or less." class="count">
-    		               <a class="add_qtip"><span class="count"></span></a>
-    		        </li>								
-				        <li class="be_neutral add_qtip">
-				          <a title="Please be concise, accurate, and constructive!">
-				            don't reply, <span class="big_word">summarize</span>
-				          </a>
-				        </li>                  
-				         </ul>
-			         </td> 
-			      </tr>
-			   </table> 
-			</li>
-		</ul>  
-	</div>
+                       <a class="add_qtip"><span class="count"></span></a>
+                </li>                
+                <li class="be_neutral add_qtip">
+                  <a title="Please be concise, accurate, and constructive!">
+                    <span class="big_word">summaries</span>, not replies 
+                  </a>
+                </li>                  
+                 </ul>
+               </td> 
+            </tr>
+         </table> 
+      </li>
+    </ul>  
+  </div>
 ]]>
 </script>
 
 <script type="text/html" id="reflect_template_new_response">
 <![CDATA[
       <ul class="rebutt_list" >
-         <li class="img">
+         <li>
             <% if(this.sig == "2") { %>
-              <span class="response_yes">&#x2713;</span>
+              <span class="response_yes"><%= this.user %> confirms</span>
             <% } else if(this.sig == "1") { %>
-                 <span class="response_maybe">?</span> 
+                 <span class="response_maybe"><%= this.user %> clarifies</span> 
             <% } else if (this.sig == "0"){ %>
-                 <span class="response_no">!</span>
+                 <span class="response_no"><%= this.user %> disputes</span>
          <% } %>
-      	</li>
-         <li class="rebutt_txt"><%= this.text %>   <span class="username"><%= this.user %></span></li>
+        </li>
+         <li class="rebutt_txt">
+            <% if(this.sig == "2" && this.text == '') { %>
+              &#x2713;
+            <% } else { %>
+              : <%= this.text %>
+            <% } %>
+         </li>
       </ul>
       <ul class="response_footer_wrapper">
-	       <li class="modify_operation">
-	           <button class="modify">
-	           		<a title="modify">
-			            <img class="base" src="<%= this.media_dir %>/edit.png">
-			            <img title="Modify" class="hover" src="<%= this.media_dir %>/edit_hover.png">
-			         </a>
-	           </button>
-	       </li>
-	       <li class="delete_operation">
-	           <a class="delete">
-	               <img class="base" src="<%= this.media_dir %>/delete_gray.png">
-	         		<img title="Delete" class="hover" src="<%= this.media_dir %>/delete_red.png">
-	           </a>
-	       </li>
-	       <li class="dispute_operation">
-	           <span class="base">
-			         <img class="base" src="<%= this.media_dir %>/comment-flag.png">
-			         <img class=hover src="<%= this.media_dir %>/comment-flag-hover.png">
-	      	  </span>
-	           <ul class="bullet_report_problem">
-	               <li>not written neutrally</li>
-	           </ul>
-	       </li>
+         <li class="modify_operation">
+                 <a title="modify" class="modify">
+                  edit
+               </a>
+         </li>
+         <li class="delete_operation">
+             <a class="delete">
+                 delete
+             </a>
+         </li>
       </ul>
       <div style="clear:both"></div>   
 ]]>
@@ -181,9 +199,9 @@
    <tbody>
       <tr>
          <td class="new_bullet_text_wrap connect_directions">
-				<div class="arrow"><img src="<%= this.media_dir %>/arrow-left.png" /></div>
-				Please click the relevant sentences
-			</td>
+        <div class="arrow"><img src="<%= this.media_dir %>/arrow-left.png" /></div>
+        Please click the relevant sentences
+      </td>
       </tr>
       <tr class="submit_footer">
          <td>
@@ -191,9 +209,9 @@
                <li class="submit">
                   <a class="bullet_submit">Done</button>
                </li>
-					<li class="submit">
-						<a class="cancel_bullet">cancel</a>
-					</li>					
+          <li class="submit">
+            <a class="cancel_bullet">cancel</a>
+          </li>          
             </ul>
          </td>
       </tr>
@@ -207,17 +225,17 @@
 
 <script type="text/html" id="reflect_template_new_bullet_prompt">
 <![CDATA[
-	<div class="bullet_main">   
-		<ul class="bullet_main_wrapper">	
-			<li class="bullet_point">
-			 	<a class="add_bullet add_qtip" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">
-		         <img align="left" src="<%= this.media_dir %>/listen.png"/>
-					<div class="link">Tell us what you hear <%= this.commenter %> saying</div>
-		    	</a>
-			</li>
-			<li class="cl"></li>
-		</ul>
-	</div>
+  <div class="bullet_main">   
+    <ul class="bullet_main_wrapper">  
+      <li class="bullet_point">
+         <a class="add_bullet add_qtip" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">
+             <img align="left" src="<%= this.media_dir %>/listen.png"/>
+          <div class="link">What do you hear <%= this.commenter %> saying?</div>
+          </a>
+      </li>
+      <li class="cl"></li>
+    </ul>
+  </div>
 ]]>
 </script>
 
