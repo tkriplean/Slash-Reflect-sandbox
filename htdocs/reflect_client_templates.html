@@ -31,36 +31,36 @@
                       <div class="rate_header">
                         This summary is...
                       </div>                    
-                      <span class="flag">
+                      <div class="flag">
                         <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
                         <label for="rating_zen_<%= this.id %>">
                           an elegant synthesis <span class="rating_class zen">zen-master</span>
                         </label>
-                      </span>
-                      <span class="flag">
+                      </div>
+                      <div class="flag">
                         <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
                         <label for="rating_gold_<%= this.id %>">
                           highlighting a good point <span class="rating_class gold">gold-sifter</span>
                         </label>
-                      </span>
-                      <span class="flag">
+                      </div>
+                      <div class="flag">
                         <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
                         <label for="rating_student_<%= this.id %>">                          
                           somewhat on target <span class="rating_class student">student</span>
                         </label>
-                      </span>
-                      <span class="flag">
+                      </div>
+                      <div class="flag">
                         <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
                         <label for="rating_troll_<%= this.id %>">
                           overly antagonizing <span class="rating_class troll">troll</span>
                         </label>
-                      </span>
-                      <span class="flag">
+                      </div>
+                      <div class="flag">
                         <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
                         <label for="rating_graffiti_<%= this.id %>">
                           not actually a summary <span class="rating_class graffiti">graffiti</span>
                         </label>
-                      </span>                                                                              
+                      </div>                                                                              
                     </form>
                 </li>
             </ul>
@@ -97,11 +97,11 @@
                   <td>
                      <ul>
                          <li class="submit">
-                            <button class="bullet_submit">Done</button>
+                            <a class="bullet_submit">Done</a>
                          </li>
-                 <li class="submit">
-                    <a class="cancel_bullet">cancel</a>
-                 </li>                 
+                         <li class="submit">
+                          <a class="cancel_bullet">cancel</a>
+                         </li>                 
                          <li title="Please limit your response to 140 characters or less." class="count">
                            <a>
                              <span class="count"></span>
@@ -134,19 +134,19 @@
                <td> 
                  <ul>
                     <li class="submit">
-                       <a class="bullet_submit">Done</button>
+                       <a class="bullet_submit">Done</a>
                     </li>
-                <li class="submit">
-                  <a class="cancel_bullet">cancel</a>
-                </li>
-                <li title="Please limit your summary to 140 characters or less." class="count">
+                    <li class="submit">
+                      <a class="cancel_bullet">cancel</a>
+                    </li>
+                    <li title="Please limit your summary to 140 characters or less." class="count">
                        <a class="add_qtip"><span class="count"></span></a>
-                </li>                
-                <li class="be_neutral add_qtip">
-                  <a title="Please be concise, accurate, and constructive!">
-                    <span class="big_word">summaries</span>, not replies 
-                  </a>
-                </li>                  
+                    </li>                
+                    <li class="be_neutral add_qtip">
+                      <a title="Please be concise, accurate, and constructive!">
+                        <span class="big_word">summaries</span>, not replies 
+                      </a>
+                    </li>                  
                  </ul>
                </td> 
             </tr>

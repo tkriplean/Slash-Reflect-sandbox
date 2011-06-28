@@ -56,9 +56,14 @@
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
   width: 42%; }
+  #reflected .rf_comment_wrapper .rf_comment_summary label {
+    padding: 0;
+    margin: 0; }
   #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
-    padding-bottom: 5px;
-    font-style: italic; }
+    padding-bottom: 10px; }
+    #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header span {
+      border-bottom: 1px dotted #777777;
+      font-variant: small-caps; }
   #reflected .rf_comment_wrapper .rf_comment_summary .username {
     font-size: 75%;
     margin-left: 4px;
@@ -191,7 +196,6 @@
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog {
           width: 100%; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper {
-            padding-left: 5px;
             width: 90%; }
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr td.new_bullet_text_wrap textarea.new_bullet_text, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr td.new_bullet_text_wrap textarea.new_bullet_text, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr td.new_bullet_text_wrap textarea.new_bullet_text {
               height: 60px;
@@ -243,7 +247,7 @@
 
 #reflected .responses {
   margin: 1px 0 4px 30px;
-  padding: 0px 0 5px 20px; }
+  padding: 0px 0 0px 20px; }
   #reflected .responses > ul li.response {
     font-size: 80%; }
     #reflected .responses > ul li.response ul.rebutt_list {

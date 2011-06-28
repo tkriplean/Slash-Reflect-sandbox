@@ -405,10 +405,10 @@ var Reflect = {
 
 			// wont work in Greasemonkey
 			try {
-				// text_area.focus();
-				text_area.example(function() {
-          return $(this).attr('title');
-        }, { className : 'jqueryexample' });
+				text_area.focus();
+				//text_area.example(function() {
+        //  return $(this).attr('title');
+        //}, { className : 'jqueryexample' });
 			} catch ( err ) {
 			}
 
@@ -479,11 +479,11 @@ var Reflect = {
 
 			// wont work in GM
 			try {
-				// text_area.focus();
-				text_area.example(function() {
-          return $(this).attr('title');
-        }, 
-				  { className : 'jqueryexample' });
+				text_area.focus();
+				//text_area.example(function() {
+        //  return $(this).attr('title');
+        //}, 
+				//  { className : 'jqueryexample' });
 				
 			} catch ( err ) {
 			}
@@ -1114,7 +1114,7 @@ var Reflect = {
 						+ '<td id="rf_comment_summary-'
 						+ this.id + '" class="rf_comment_summary">'
 						+ '<div class="summary" id="summary-' + this.id + '">'
-						+ '<div class="reflect_header">Readers hear ' + this.user + ' saying...</div>'
+						+ '<div class="reflect_header"><span>Readers hear ' + this.user + ' saying...</span></div>'
 						+ '<ul class="bullet_list" />' + '</div>' + '</td>' );
 
 				var author_block = $j( '<span class="rf_comment_author">' 
