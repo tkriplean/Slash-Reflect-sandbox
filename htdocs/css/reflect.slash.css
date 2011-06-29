@@ -56,6 +56,7 @@
 
 #reflected .rf_comment_wrapper .rf_comment_text_wrapper {
 	padding-right: 20px;
+	width: inherit;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point img {
@@ -196,8 +197,8 @@
     width: 30%;
 }
 
-#reflected .rf_comment_summary .bullet_main .bullet_main_wrapper li.bullet_text {
-	width: 240px;
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_text {
+	width: 230px;
 }
 
 #commentlisting div.full div.commentBody ul li.bullet {
