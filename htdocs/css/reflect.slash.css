@@ -2,6 +2,14 @@
   width: 310px;
 }
 
+#reflected .responses{
+  width: 255px;
+}
+
+#reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt {
+  width: 215px;
+}
+
 #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
   width: 90%;  
 }

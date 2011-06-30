@@ -58,7 +58,8 @@
   width: 42%; }
   #reflected .rf_comment_wrapper .rf_comment_summary label {
     padding: 0;
-    margin: 0; }
+    margin: 0;
+    display: inline; }
   #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
     padding-bottom: 10px; }
     #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header span {
@@ -80,8 +81,10 @@
       display: list-item;
       position: relative;
       margin-bottom: 6px;
-      line-height: 1.3em;
+      line-height: 1.2em;
       font-size: 90%; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self {
+        min-height: 35px; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
         position: relative; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point {
@@ -248,67 +251,59 @@
 #reflected .responses {
   margin: 1px 0 4px 30px;
   padding: 0px 0 0px 20px; }
+  #reflected .responses .response_yes {
+    color: #013603; }
+  #reflected .responses .response_no {
+    color: #2f0500; }
+  #reflected .responses .response_maybe {
+    color: #626206; }
   #reflected .responses > ul li.response {
     font-size: 80%; }
     #reflected .responses > ul li.response ul.rebutt_list {
       color: #666666;
       float: left; }
       #reflected .responses > ul li.response ul.rebutt_list > li {
+        float: left;
+        display: block; }
+    #reflected .responses > ul li.response .response_footer_wrapper {
+      padding-left: 12px; }
+      #reflected .responses > ul li.response .response_footer_wrapper .response_operations > li {
         display: inline; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_yes {
-          color: #013603; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_no {
-          color: #2f0500; }
-        #reflected .responses > ul li.response ul.rebutt_list > li .response_maybe {
-          color: #626206; }
-    #reflected .responses > ul li.response ul.response_footer_wrapper {
-      width: 20%;
-      height: 15px;
-      position: absolute;
-      right: -40px;
-      margin-left: 6px; }
-      #reflected .responses > ul li.response ul.response_footer_wrapper > li {
-        display: inline; }
-        #reflected .responses > ul li.response ul.response_footer_wrapper > li button {
-          border: none;
-          background-color: transparent;
-          padding: 0;
-          cursor: pointer; }
-        #reflected .responses > ul li.response ul.response_footer_wrapper > li img {
-          width: 15px; }
-          #reflected .responses > ul li.response ul.response_footer_wrapper > li img.hover {
-            display: none; }
-    #reflected .responses > ul li.response.new ul.response_def li.response_prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt {
+        #reflected .responses > ul li.response .response_footer_wrapper .response_operations > li .modify {
+          color: #444444;
+          cursor: pointer;
+          padding-right: 3px; }
+    #reflected .responses > ul li.response.new ul.response_def, #reflected .responses > ul li.response.modify ul.response_def {
       background-color: #ffe5e5; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_prompt label.prompt, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt label.prompt {
+      #reflected .responses > ul li.response.new ul.response_def label.prompt, #reflected .responses > ul li.response.modify ul.response_def label.prompt {
         padding: 5px;
         font-weight: bold; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li {
-        display: inline;
-        margin-right: 3px;
-        font-size: 85%; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li input, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li input {
-          margin: 5px 2px; }
-    #reflected .responses > ul li.response.new ul.response_def li.response_dialog, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog {
-      display: none; }
-      #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
-        position: relative; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text {
-          height: 60px;
-          padding: 4px 2px;
-          width: 100%;
-          overflow: auto; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer {
-          width: 100%;
-          padding-bottom: 5px; }
-          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a {
-            color: inherit; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover {
-              background-color: inherit;
+      #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval {
+        padding-left: 12px; }
+        #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li {
+          display: inline;
+          padding-right: 6px; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li input, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li input {
+            margin: 5px 2px; }
+      #reflected .responses > ul li.response.new ul.response_def li.response_dialog, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog {
+        display: none; }
+        #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
+          position: relative;
+          padding-left: 12px; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper td.new_bullet_text_wrap textarea.new_response_text {
+            height: 60px;
+            padding: 4px 2px;
+            width: 100%;
+            overflow: auto; }
+          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer {
+            width: 100%;
+            padding-bottom: 5px; }
+            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a {
               color: inherit; }
-          #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li {
-            display: inline-block; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit {
-              margin-right: 15px; }
-            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.be_neutral {
-              float: right; }
+              #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer a:hover {
+                background-color: inherit;
+                color: inherit; }
+            #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li {
+              display: inline-block; }
+              #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper tr.submit_footer li.submit {
+                padding-right: 15px; }

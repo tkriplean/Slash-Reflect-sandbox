@@ -227,6 +227,29 @@ var Reflect = {
 			Reflect.transitions.to_base( bullet_obj.comment.id );
 		},
 		
+		post_delete_bullet : function ( bullet_obj ) {
+			var params = {
+				'delete' : true,
+				comment_id : bullet_obj.comment.id,
+				bullet_id : bullet_obj.id,
+				bullet_rev : bullet_obj.rev,
+				this_session : bullet_obj.added_this_session
+			};
+			var call = {
+				params : params,
+				success : function ( data ) {
+				},
+				error : function ( data ) {
+				}
+			};
+
+			Reflect.api.server.post_bullet( call );
+
+			bullet_obj.comment.elements.comment_text.find( '.highlight' )
+					.removeClass( 'highlight' );
+			bullet_obj.$elem.remove();		  
+		},
+		
 		/* Ajax posting of a response to Reflect API. */				
 		post_response : function ( response_obj ) {
 
@@ -512,27 +535,7 @@ var Reflect = {
 				title : 'Do you really want to delete this bullet?',
 				buttons : {
 					'Yes' : function () {
-						// TODO: this call should be moved to Reflect.api
-						var params = {
-							'delete' : true,
-							comment_id : bullet_obj.comment.id,
-							bullet_id : bullet_obj.id,
-							bullet_rev : bullet_obj.rev,
-							this_session : bullet_obj.added_this_session
-						};
-						var call = {
-							params : params,
-							success : function ( data ) {
-							},
-							error : function ( data ) {
-							}
-						};
-
-						Reflect.api.server.post_bullet( call );
-
-						bullet_obj.comment.elements.comment_text.find( '.highlight' )
-								.removeClass( 'highlight' );
-						bullet_obj.$elem.remove();
+						Reflect.api.post_delete_bullet( bullet_obj );
 						$j( this ).dialog( 'close' );
 					},
 					'No' : function () {
@@ -663,29 +666,13 @@ var Reflect = {
 		response_mouseover : function ( event ) {
 			var response_obj = $j.data( this, 'response' ), 
 				user = Reflect.utils.get_logged_in_user();
-
-			if ( user == response_obj.user ) {
-				response_obj.$elem.find( '.rate_bullet' ).hide();
-			} else if ( Reflect.api.server.is_admin() ) {
-				response_obj.$elem.find( '.modify_operation' ).hide();
-				response_obj.$elem.find( '.rate_bullet' ).hide();
-			} else {
-				response_obj.$elem.find( '.delete_operation' ).hide();
-				response_obj.$elem.find( '.modify_operation' ).hide();
-				response_obj.$elem.find( '.rate_bullet' ).hide();
-			}
-			response_obj.$elem.find( '.response_footer_wrapper' ).show()
+      if ( user != response_obj.user ) {
+        return;
+      } 
+      response_obj.$elem.find( '.response_footer_wrapper' ).show()
 					.animate( {
 						opacity : 1
 					}, 300 );
-
-			function color_convert ( color ) {
-				if ( color > 128 ) {
-					return color - 8;
-				} else {
-					return color + 8;
-				}
-			}
 		},
 
 		response_mouseout : function ( event ) {
@@ -695,7 +682,6 @@ var Reflect = {
 			}, 300, function () {
 			} );
 			footer_wrapper.hide();
-			//$j( this ).css( 'background', 'transparent' );
 		},
 
 		response_problem_mouseover : function ( event ) {
@@ -789,38 +775,9 @@ var Reflect = {
 			var response_obj = $j.data( $j( this )
 					.parents( '.response' )[0], 'response' );
 
-			response_obj.$elem.find( '.response_dialog' ).slideDown();
-			var accurate_sel = 'input[name=\'accurate-' 
-					+ response_obj.bullet.id 
-					+ '\']:checked',
-				val = response_obj.$elem.find( accurate_sel ).val();
+			response_obj.$elem.find( '.response_dialog' ).slideDown('slow',
+			  function(){ $(this).find('textarea').focus();});
 			response_obj.$elem.find( '.submit .bullet_submit' ).removeAttr( 'disabled' );
-
-			var ta = response_obj.$elem.find( 'textarea' ),
-				txt = ta.val();
-			if ( txt == '' 
-					|| txt == "I actually meant..."
-					|| txt == "Correct!"
-					|| txt == "Close, but..." ) 
-			{
-				switch ( val ) {
-				case "0":
-					ta.val( "I actually meant..." );
-					break;
-				case "1":
-					ta.val( "Close, but..." );
-					break;
-				case "2":
-					ta.val( "Correct!" );
-					break;
-				}
-
-				// doesn't work in GM
-				try {
-					ta.trigger( 'change' );
-				} catch ( err ) {
-				}
-			}
 		}
 
 	},
@@ -1262,11 +1219,11 @@ var Reflect = {
 				this.$elem
 						.addClass( 'bullet' )
 						.html( $j.jqote( Reflect.templates.bullet, template_vars ) );
-						/*.css( {
-							'background' : 'url(' 
-								+ Reflect.api.server.media_dir 
-								+ 'small_listener_trans.png) -10px 0px no-repeat'
-						} );*/
+				
+				if ( this.user == Reflect.utils.get_logged_in_user() ) {
+				  this.$elem
+				    .addClass( 'self' );
+				}
 
 				if ( this.id ) {
 					this.set_id( this.id, this.rev );
@@ -1465,6 +1422,12 @@ var Reflect = {
 						.addClass( 'response' )
 						.addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no'}[this.options.sig]).html( 
 						$j.jqote( Reflect.templates.new_response, template_vars ) );
+						
+				if ( this.user == Reflect.utils.get_logged_in_user() ) {
+				  this.$elem
+				    .addClass( 'self' );
+				}
+    										
 				if ( this.id ) {
 					this.set_id( this.id, this.rev );
 				}
@@ -1506,13 +1469,16 @@ var Reflect = {
 				}
 			},
 			enter_edit_state : function () {
-				var text = '', modify = this.id;
+				var modify = this.id;
 
 				if ( modify ) {
-					var text = this.elements.response_text.html();
-					this.options.text = $j.trim( text.substring( 0, text
-							.toLowerCase()
-							.indexOf( "<span class=" ) ) );
+					var text = this.elements.response_text.html(), split = text.indexOf( '</span>');
+					if ( split > -1 ) {
+					  this.options.text = $j.trim( text.substring( split + 7, text.length ) );
+					} else {
+					  this.options.text = '';
+					}
+					
 				}
 
 				this._build_prompt();
