@@ -11,7 +11,9 @@
 var $j = jQuery;
 
 Reflect.config.study = false;
-Reflect.config.enable_flagging = false;
+Reflect.config.view.enable_rating = true;
+Reflect.config.view.images.added_bullet = '';
+Reflect.config.view.images.bullet_prompt = '';
 
 $j.extend(Reflect.config.contract, {
 	components: [{

@@ -5,7 +5,9 @@
 var $j = jQuery;
 
 Reflect.config.study = false;
-Reflect.config.enable_flagging = true;
+Reflect.config.view.enable_rating = true;
+Reflect.config.view.images.added_bullet = '';
+Reflect.config.view.images.bullet_prompt = '';
 
 var is_new_slash = false;
 
@@ -40,11 +42,8 @@ old_slash = {
                       }
             };
       
-      
-      
 $j.extend(Reflect.config.contract, {
 	components: [{true:new_slash,false:old_slash}[is_new_slash]]});
-
 
 Reflect.Contract = Reflect.Contract.extend({
 	user_name_selector : {true: '#userbio_self-title a:first', false: '#user-info-content > a:first'}[is_new_slash],

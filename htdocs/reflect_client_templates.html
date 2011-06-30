@@ -4,68 +4,71 @@
 
         <ul class="bullet_main_wrapper">
           <li class="bullet_point">
-            <img src="<%= this.media_dir %>/<%= this.bullet_image %>"/>
+            <% if (this.bullet_image != '') { %>
+              <img src="<%= this.media_dir %>/<%= this.bullet_image %>"/>
+            <% } else { %>
+              <span class="point">&#8250;</span>
+            <% } %>                               
           </li>
           <li class="bullet_text">
-            
-            <%= this.bullet_text %><span class="username"><a class="user"><%= this.user %></a></span>
+            <div class="username">
+              <a class="user">by <%= this.user %></a>
+              <ul class="bullet_operations">
+                  <li class="modify_operation" title="Edit this summary bullet point">
+                    <a class="modify bullet_operation">
+                      edit
+                    </a>
+                  </li>
+                  <li title="Delete this summary bullet point" class="delete_operation">
+                    <a class="delete bullet_operation"> 
+                      &#8231; delete 
+                    </a>
+                  </li>
+                  <li class="rate_bullet">
+                      <span class="bullet_prompt_problem bullet_operation">
+                          rate 
+                          <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
+                      </span>
+                      <form name="rate_bullet" class="bullet_report_problem">
+                        <div class="rate_header">
+                          This summary is...
+                        </div>                    
+                        <div class="flag">
+                          <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
+                          <label for="rating_zen_<%= this.id %>">
+                            an elegant synthesis <span class="rating_class zen">zen-master</span>
+                          </label>
+                        </div>
+                        <div class="flag">
+                          <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
+                          <label for="rating_gold_<%= this.id %>">
+                            highlighting a good point <span class="rating_class gold">gold-sifter</span>
+                          </label>
+                        </div>
+                        <div class="flag">
+                          <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
+                          <label for="rating_student_<%= this.id %>">                          
+                            somewhat on target <span class="rating_class student">student</span>
+                          </label>
+                        </div>
+                        <div class="flag">
+                          <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
+                          <label for="rating_troll_<%= this.id %>">
+                            overly antagonizing <span class="rating_class troll">troll</span>
+                          </label>
+                        </div>
+                        <div class="flag">
+                          <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
+                          <label for="rating_graffiti_<%= this.id %>">
+                            not actually a summary <span class="rating_class graffiti">graffiti</span>
+                          </label>
+                        </div>                                                                              
+                      </form>
+                  </li>
+              </ul>              
+            </div>
+            <%= this.bullet_text %>
           </li>
-          
-          <li class="bullet_footer_wrapper">
-            <ul class="bullet_operations">
-                <li class="modify_operation" title="Edit this summary bullet point">
-                  <a class="modify bullet_operation">
-                    edit
-                  </a>
-                </li>
-                <li title="Delete this summary bullet point" class="delete_operation">
-                  <a class="delete bullet_operation"> 
-                    delete 
-                  </a>
-                </li>
-                <li class="rate_bullet">
-                    <span class="bullet_prompt_problem bullet_operation">
-                        rate 
-                        <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
-                    </span>
-                    <form name="rate_bullet" class="bullet_report_problem">
-                      <div class="rate_header">
-                        This summary is...
-                      </div>                    
-                      <div class="flag">
-                        <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
-                        <label for="rating_zen_<%= this.id %>">
-                          an elegant synthesis <span class="rating_class zen">zen-master</span>
-                        </label>
-                      </div>
-                      <div class="flag">
-                        <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
-                        <label for="rating_gold_<%= this.id %>">
-                          highlighting a good point <span class="rating_class gold">gold-sifter</span>
-                        </label>
-                      </div>
-                      <div class="flag">
-                        <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
-                        <label for="rating_student_<%= this.id %>">                          
-                          somewhat on target <span class="rating_class student">student</span>
-                        </label>
-                      </div>
-                      <div class="flag">
-                        <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
-                        <label for="rating_troll_<%= this.id %>">
-                          overly antagonizing <span class="rating_class troll">troll</span>
-                        </label>
-                      </div>
-                      <div class="flag">
-                        <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
-                        <label for="rating_graffiti_<%= this.id %>">
-                          not actually a summary <span class="rating_class graffiti">graffiti</span>
-                        </label>
-                      </div>                                                                              
-                    </form>
-                </li>
-            </ul>
-        </li>
         <li class="bullet_author rf_listener_pic">
           <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
         </li>    
@@ -80,9 +83,13 @@
 <![CDATA[
   <div class="bullet_main">   
     <ul class="bullet_main_wrapper">  
-      <li class="bullet_point">
+      <li class="bullet_point prompt">
          <a class="add_bullet" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">
-             <img align="left" src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>"/>
+            <% if (this.bullet_prompt_image != '') { %>
+              <img align="left" src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>"/>
+            <% } else { %>
+              <span class="point">&#8250;</span>
+            <% } %>         
           <div class="link"><%= this.bullet_prompt %></div>
           </a>
       </li>
@@ -97,7 +104,13 @@
   <div class="bullet_main">  
     <ul class="bullet_main_wrapper">
     
-      <li class="bullet_point"><img src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>" /></li>
+      <li class="bullet_point">
+        <% if (this.bullet_prompt_image != '') { %>
+          <img src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>"/>
+        <% } else { %>
+          <span class="point">&#8250;</span>
+        <% } %>
+      </li>
       <li class="bullet_dialog">
          <table class="new_bullet_wrapper">
             <tr>
@@ -160,13 +173,19 @@
 <script type="text/html" id="reflect_template_response">
 <![CDATA[
       <ul class="rebutt_list" >
+        <li class="enjoinder">
+          &#9151;
+        </li>
         <li class="rebutt_txt">
+          <div class="username">
+            <a class="user">by <%= this.user %></a>
+          </div
             <% if(this.sig == "2") { %>
-              <span class="response_yes"><%= this.user %> responds "accurate". </span>
+              <span class="response_yes">This is accurate. </span>
             <% } else if(this.sig == "1") { %>
-              <span class="response_maybe"><%= this.user %> responds "almost correct". </span> 
+              <span class="response_maybe">This is almost correct. </span> 
             <% } else if (this.sig == "0"){ %>
-              <span class="response_no"><%= this.user %> responds "inaccurate". </span>
+              <span class="response_no">This is inaccurate. </span>
             <% } %>
             <%= this.text %>
          </li>

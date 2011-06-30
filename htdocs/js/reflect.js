@@ -391,8 +391,12 @@ Reflect = {
 					.hover( Reflect.handle.bullet_mouseover, 
 							Reflect.handle.bullet_mouseout );
 
-			var footer = bullet_obj.elements.bullet_footer_wrapper;
-
+			bullet_obj.$elem
+					.hover( Reflect.handle.full_bullet_mouseover, 
+							Reflect.handle.full_bullet_mouseout );
+        							            
+			var footer = bullet_obj.elements.bullet_operations;
+      
 			footer
 					.find( '.rate_bullet' )
 					.hover( Reflect.handle.bullet_problem_mouseover, 
@@ -579,6 +583,23 @@ Reflect = {
 				}
 			} );
 		},
+		
+    full_bullet_mouseover : function ( event ) {
+			/*var bullet_obj = $j
+					.data( $j( this )[0], 'bullet' );
+      bullet_obj.$elem
+        .find('.bullet_point span')
+          .hide();*/      
+    },
+        
+    full_bullet_mouseout : function ( event ) {
+			/*var bullet_obj = $j
+					.data( $j( this )[0], 'bullet' );
+      bullet_obj.$elem
+        .find('.bullet_point span')
+          .show();      */
+    },
+    		
 		bullet_mouseover : function ( event ) {
 
 			var bullet_obj = $j
@@ -591,7 +612,7 @@ Reflect = {
 			}
 
 			var user = Reflect.utils.get_logged_in_user(), 
-				footer = bullet_obj.elements.bullet_footer_wrapper;
+				footer = bullet_obj.elements.bullet_operations;
 
 			var admin = Reflect.api.server.is_admin();
 
@@ -622,7 +643,7 @@ Reflect = {
 			footer.animate( {
 				opacity : 1
 			}, 300 ).show();
-
+      
 			for ( var h in bullet_obj.highlights) {
 				bullet_obj.comment.elements.comment_text
 						.find( '#sentence-' + bullet_obj.highlights[h].eid )
@@ -638,8 +659,11 @@ Reflect = {
 			}
 
 		},
-
+    
 		bullet_mouseout : function ( event ) {
+			var bullet_obj = $j
+					.data( $j( this ).parents( '.bullet' )[0], 'bullet' );
+		  
 			var comment = $j( this ).parents( '.rf_comment_wrapper' );
 			if ( comment.hasClass( 'highlight_state' )
 					|| comment.hasClass( 'bullet_state' ) ) {
@@ -647,12 +671,12 @@ Reflect = {
 				return;
 			}
 
-			$j( this ).find( '.bullet_footer_wrapper' ).animate( {
+			$j( this ).find( '.bullet_operations' ).animate( {
 				opacity : 0
 			}, 300, function () {
 			} );
 
-			$j( this ).find( '.bullet_footer_wrapper' ).hide();
+			$j( this ).find( '.bullet_operations' ).hide();
 
 			comment.find( '.highlight' ).removeClass( 'highlight' );
 		},
@@ -815,7 +839,7 @@ Reflect = {
 			response_obj.$elem.find( '.submit .bullet_submit' ).removeAttr( 'disabled' );
 		},
 		toggle_bullets_pagination : function ( event ) {
-		  $j( this ).parent().siblings().fadeIn();
+		  $j( this ).parents('.summary').find('.bullet_list').children().fadeIn();
 		  $j( this ).hide();		  
  		}		
 
@@ -908,17 +932,6 @@ Reflect = {
 			if ( bullet_obj.comment.elements.comment_text.find( '.highlight' ).length == 0 ) {
 				bullet_obj.elements.submit_button.attr( 'disabled', true );
 			}
-
-			var ctext = bullet_obj.comment.elements.comment_text;
-
-			function cc ( color ) {
-				if ( color > 128 ) {
-					return color - 60;
-				} else {
-					return color + 60;
-				}
-			}
-
 		},
 		from_highlight : function ( bullet_obj, canceled ) {
 			var comment = bullet_obj.comment, 
@@ -1125,7 +1138,7 @@ Reflect = {
 						.wrapInner( $j( '<table id="rf_comment_wrapper-' 
 								+ this.id + '" class="rf_comment_wrapper" />' ) );
 				
-				comment_text.before('<a class="rf_toggle state_on">[hide summaries]</a><div class="cl"></div>');
+				comment_text.before('<a class="rf_toggle state_on">[hide summaries]</a>');
 				
 				//so that we don't try to break apart urls into different sentences...
 				comment_text.find('a')
@@ -1205,13 +1218,13 @@ Reflect = {
 						.removeClass( 'highlight' );
 			},
 			hide_excessive_bullets : function() {
-			  if ( this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
+			  if ( this.bullets.length > 1 && this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
 			    var i = this.bullets.length - 1;
 			    while (  i > 0 && this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
 			      this.bullets[i].$elem.hide();
 			      i -= 1;
 			    }
-			    this.elements.bullet_list.prepend('<li><a class="rf_toggle_paginate">Show all ' + this.bullets.length + ' summaries &raquo;</a></li>');
+			    this.$elem.find('.reflect_header').append('<a class="rf_toggle_paginate">show all</a>');
 			    this.$elem.find('.rf_toggle_paginate').bind (
 			      "click", Reflect.handle.toggle_bullets_pagination
 			    );
@@ -1273,7 +1286,6 @@ Reflect = {
 				}; 	
 				this.$elem
 						.addClass( 'bullet' )
-						.addClass( 'full_bullet' )
 						.html( $j.jqote( Reflect.templates.bullet, template_vars ) );
 				
 				if ( this.user == Reflect.utils.get_logged_in_user() ) {
@@ -1283,14 +1295,15 @@ Reflect = {
 
 				if ( this.id ) {
 					this.set_id( this.id, this.rev );
+					this.$elem.addClass( 'full_bullet' )
 				}
 
 				this.elements = {
 					response_list : this.$elem.find( '.responses ul' ),
 					bullet_text : this.$elem.find( '.bullet_text' ),
 					bullet_main : this.$elem.find( '.bullet_main' ),
-					bullet_footer_wrapper : this.$elem
-							.find( '.bullet_footer_wrapper' )
+					bullet_operations : this.$elem
+							.find( '.bullet_operations' )
 				};
 			},
 			_build_prompt : function () {
