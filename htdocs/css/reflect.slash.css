@@ -216,7 +216,7 @@
 }
 
 #commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet {
-    border-left: 2px solid transparent;
+    border-left: 2px solid #f4f4f4;
 }
 
 #commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet:hover {

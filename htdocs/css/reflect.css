@@ -258,15 +258,13 @@
     color: #2f0500; }
   #reflected .responses .response_maybe {
     color: #626206; }
-  #reflected .responses > ul li.response ul.rebutt_list {
-    float: left; }
-    #reflected .responses > ul li.response ul.rebutt_list > li {
-      float: left;
-      display: block; }
+  #reflected .responses > ul li.response ul.rebutt_list > li {
+    float: left;
+    display: block; }
   #reflected .responses > ul li.response .response_operations > li {
     display: inline; }
     #reflected .responses > ul li.response .response_operations > li .modify {
-      color: #444444;
+      color: #777777;
       cursor: pointer;
       padding-right: 3px; }
   #reflected .responses > ul li.response.new ul.response_def, #reflected .responses > ul li.response.modify ul.response_def {
