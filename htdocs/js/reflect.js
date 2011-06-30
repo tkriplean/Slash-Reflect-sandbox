@@ -6,7 +6,7 @@
  * 
  * The core Reflect engine.
  * 
- * Powers implementations of Reflect for Wordpress, Greasemonkey, and 
+ * Powers implementations of Reflect for Wordpress, Greasemonkey, Drupal, Slashcode and 
  * Mediawiki (with LiquidThreads).
  * 
  * Applications need to define the DOM elements that Reflect needs to know about
@@ -28,6 +28,10 @@
  * 
  */
 
+var Reflect;
+
+(function($) {
+  
 //var $j = jQuery.noConflict();
 var $j = jQuery;
 
@@ -47,7 +51,7 @@ var $j = jQuery;
 *    .utils : misc methods used throughout
 */		
 
-var Reflect = {
+Reflect = {
 		
 	/**
 	* Basic settings. Usually overriden per implementation.
@@ -73,10 +77,41 @@ var Reflect = {
 			 */				
 			components : []
 		},
-		study : false,
-		enable_flagging : false,
-		uses_profile_pic : false,
-		uses_user_name : false
+ 		view : {
+   		/* Enables client side community moderation of Reflect bullets */
+   		enable_rating : false,
+   		/* If the bullet summaries have a picture of the listener. Note that this also requires
+   		   the definition of Reflect.api.server.get_current_user_pic(), as well as having the 
+   		   server return u_pic (a url to the user's pic) for each bullet. */
+   		uses_profile_pic : false,
+   		/* If the bullet summaries list the listener's name. */
+   		uses_user_name : false,
+   		/* Defines the icons to be used, relative path from Reflect.config.api.media_dir. */
+   		images : {
+   		  /* The image shown to the left of the prompt to add a new summary bullet point. 
+   		     Will get scaled to ~30px. */
+   		  bullet_prompt: 'listen.png',
+   		  /* The image shown to the left of existing bullet points. Probably best if it looks 
+   		     like a bullet in a bulleted list. Will get scaled to ~30px. */
+   		  added_bullet: 'listen.png'
+   		},  
+       /* Textual prompts */
+   		text : {
+   		  //bullet_prompt: 'Tell us what you hear {{COMMENTER}} saying', 
+   		  //bullet_prompt: 'Summarize what you hear {{COMMENTER}} saying', 
+         //bullet_prompt: 'Summarize {{COMMENTER}}'s point', 
+         //bullet_prompt: 'Add a point that {{COMMENTER}} makes',
+         //bullet_prompt: 'Restate something {{COMMENTER}} says',
+         //bullet_prompt: 'What is {{COMMENTER}}'s point?',
+         //bullet_prompt: 'What point is {{COMMENTER}} making?',            
+   		  bullet_prompt: 'What do you hear {{COMMENTER}} saying?',
+   		  //response_prompt: 'Did {{LISTENER}} hear you accurately?'
+   		  response_prompt: 'Is this an accurate summary?'
+   		}
+   				  
+ 		},
+		
+		study : false
 	},
 
 	/**
@@ -567,19 +602,19 @@ var Reflect = {
 			} else if ( Reflect.api.server.is_admin() ) {
 				footer.find( '.modify_operation' ).hide();
 				footer.find( '.delete_operation' ).show();
-				Reflect.config.enable_flagging ? 
+				 Reflect.config.view.enable_rating ? 
 					footer.find('.rate_bullet').show() :
 					footer.find('.rate_bullet').hide();
 			} else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
 				footer.find( '.modify_operation' ).hide();
 				footer.find( '.delete_operation' ).show();
-				Reflect.config.enable_flagging ?
+				 Reflect.config.view.enable_rating ?
 					footer.find('.rate_bullet').show() :
 					footer.find('.rate_bullet').hide();
 			} else {
 				footer.find( '.modify_operation' ).hide();
 				footer.find( '.delete_operation' ).hide();
-				Reflect.config.enable_flagging && user != bullet_obj.user && user != bullet_obj.comment.user ?
+				 Reflect.config.view.enable_rating && user != bullet_obj.user && user != bullet_obj.comment.user ?
 					footer.find('.rate_bullet').show() :
 					footer.find('.rate_bullet').hide();
 			}
@@ -778,7 +813,11 @@ var Reflect = {
 			response_obj.$elem.find( '.response_dialog' ).slideDown('slow',
 			  function(){ $(this).find('textarea').focus();});
 			response_obj.$elem.find( '.submit .bullet_submit' ).removeAttr( 'disabled' );
-		}
+		},
+		toggle_bullets_pagination : function ( event ) {
+		  $j( this ).parent().siblings().fadeIn();
+		  $j( this ).hide();		  
+ 		}		
 
 	},
 
@@ -1116,7 +1155,8 @@ var Reflect = {
 				this.elements = {
 					bullet_list : comment_text.find( '.bullet_list:first' ),
 					comment_text : this.$elem.find( '.rf_comment_text:first' ),
-					text_wrapper : this.$elem.find( '.rf_comment_text_wrapper:first' )
+					text_wrapper : this.$elem.find( '.rf_comment_text_wrapper:first' ),
+					summary : this.$elem.find( '.rf_comment_summary' )					
 				};
 
 			},
@@ -1163,7 +1203,21 @@ var Reflect = {
 			clear_text : function () {
 				this.elements.text_wrapper.unbind().find( '.highlight' )
 						.removeClass( 'highlight' );
-			}
+			},
+			hide_excessive_bullets : function() {
+			  if ( this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
+			    var i = this.bullets.length - 1;
+			    while (  i > 0 && this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
+			      this.bullets[i].$elem.hide();
+			      i -= 1;
+			    }
+			    this.elements.bullet_list.prepend('<li><a class="rf_toggle_paginate">Show all ' + this.bullets.length + ' summaries &raquo;</a></li>');
+			    this.$elem.find('.rf_toggle_paginate').bind (
+			      "click", Reflect.handle.toggle_bullets_pagination
+			    );
+			    this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top')) - 20);
+			  }
+ 			}			
 
 		},
 
@@ -1208,16 +1262,18 @@ var Reflect = {
 			_build : function () {
 				var template_vars = {
 					bullet_text : Reflect.utils.escape( this.options.bullet_text ),
+					bullet_image : Reflect.config.view.images.added_bullet,
 					user : Reflect.utils.escape( this.options.user ),
 					media_dir : Reflect.config.api.media_dir,
 					commenter : Reflect.utils.escape( this.options.commenter ),
 					listener_pic : this.options.listener_pic,
-					uses_profile_pic : Reflect.config.uses_profile_pic,
-					uses_user_name : Reflect.config.uses_user_name,
+					uses_profile_pic : Reflect.config.view.uses_profile_pic,
+					uses_user_name : Reflect.config.view.uses_user_name,
 					id : this.id
 				}; 	
 				this.$elem
 						.addClass( 'bullet' )
+						.addClass( 'full_bullet' )
 						.html( $j.jqote( Reflect.templates.bullet, template_vars ) );
 				
 				if ( this.user == Reflect.utils.get_logged_in_user() ) {
@@ -1238,9 +1294,12 @@ var Reflect = {
 				};
 			},
 			_build_prompt : function () {
+			  var commenter = Reflect.utils.escape( this.options.commenter );
 				var template_vars = {
-					commenter : Reflect.utils.escape( this.options.commenter ),
-					media_dir : Reflect.config.api.media_dir
+					commenter : commenter,
+					media_dir : Reflect.config.api.media_dir,
+					bullet_prompt : Reflect.config.view.text.bullet_prompt.replace('{{COMMENTER}}', commenter),
+					bullet_prompt_image : Reflect.config.view.images.bullet_prompt
 				};
 				
 				var template = Reflect.templates.new_bullet_prompt;
@@ -1279,7 +1338,8 @@ var Reflect = {
 					media_dir : Reflect.api.server.media_dir,
 					bullet_id : this.id,
 					txt : Reflect.utils.escape( text ),
-					commenter : this.comment.user_short
+					commenter : this.comment.user_short,
+					bullet_prompt_image : Reflect.config.view.images.bullet_prompt					
 				};
 				this.$elem.addClass( 'modify' ).unbind( 'click' )
 					.unbind( 'mouseover' ).unbind( 'mouseout' )
@@ -1328,16 +1388,17 @@ var Reflect = {
 				if ( canceled && !this.id ) {
 					this.$elem
 						.removeClass( 'modify' )
-						.removeClass('connect');
+						.removeClass( 'connect' );
 					this._build_prompt();
 				} else {
 					this.$elem
 						.removeClass( 'new_bullet' )
+						.addClass( 'full_bullet' );
 					var me = this;
 					this.$elem.find( '.new_bullet_wrapper' ).fadeOut(200, function(){
 						me.$elem
 							.removeClass( 'modify' )
-							.removeClass('connect');
+							.removeClass( 'connect' );
 												
 						
 					});
@@ -1421,7 +1482,7 @@ var Reflect = {
 				this.$elem
 						.addClass( 'response' )
 						.addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no'}[this.options.sig]).html( 
-						$j.jqote( Reflect.templates.new_response, template_vars ) );
+						$j.jqote( Reflect.templates.response, template_vars ) );
 						
 				if ( this.user == Reflect.utils.get_logged_in_user() ) {
 				  this.$elem
@@ -1444,7 +1505,8 @@ var Reflect = {
 						sig : Reflect.utils.escape( String(this.options.sig) ),
 						user : Reflect.utils.escape( this.options.user ),
 						media_dir : Reflect.api.server.media_dir, 
-						summarizer : this.bullet.user
+						summarizer : this.bullet.user,
+						response_prompt : Reflect.config.view.text.response_prompt.replace('{{LISTENER}}', this.bullet.user)						
 					};
 				this.$elem.addClass( 'response' ).addClass( 'new' ).html( 
 						$j.jqote( Reflect.templates.response_dialog, template_vars ) );
@@ -1514,12 +1576,12 @@ var Reflect = {
 			$j( 'body' ).append( templates_from_server );
 
 			$j.extend( Reflect.templates, {
-				new_bullet_dialog : $j.jqotec( '#reflect_template_new_bullet_dialog' ),
-				new_response : $j.jqotec( '#reflect_template_new_response' ),
-				new_bullet_prompt : $j.jqotec( '#reflect_template_new_bullet_prompt' ),
-				response_dialog : $j.jqotec( '#reflect_template_response' ),
 				bullet : $j.jqotec( '#reflect_template_bullet' ),
-				bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' )
+				new_bullet_prompt : $j.jqotec( '#reflect_template_new_bullet_prompt' ),
+				new_bullet_dialog : $j.jqotec( '#reflect_template_new_bullet_dialog' ),
+				bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
+				response : $j.jqotec( '#reflect_template_response' ),
+				response_dialog : $j.jqotec( '#reflect_template_response_prompt' )
 			} );
 		}
 	},
@@ -1604,7 +1666,7 @@ var Reflect = {
 							Reflect.bind.bullet( bullet );
 
 						});
-
+            comment.hide_excessive_bullets();
 					}
 					
 					// segment sentences we can index them during highlighting
@@ -1631,19 +1693,19 @@ var Reflect = {
 		$j.plugin( 'bullet', Reflect.entities.Bullet );
 		$j.plugin( 'comment', Reflect.entities.Comment );
 		$j.plugin( 'response', Reflect.entities.Response );
-		// ////////
+		//////////
 	
 		// instantiate the classes that may have been overridden
 		Reflect.contract = new Reflect.Contract( Reflect.config.contract );
 		Reflect.api.server = new Reflect.api.DataInterface( Reflect.config.api );
-		// ////////
+		//////////
 	
 		// handle additional refactoring required for Reflect contract
 		Reflect.contract.add_css();
 		Reflect.contract.modifier();
-		// ////////
+		//////////
 	
-		// ////////
+		//////////
 		// figure out which comments are present on the page so that we
 		// can ask the server for the respective bullets
 		var loaded_comments = [];
@@ -1656,27 +1718,38 @@ var Reflect = {
 			} );
 		}
 		loaded_comments = JSON.stringify( loaded_comments );
-		// //////////////////
-	
-		Reflect.api.server.get_templates(
-			// TODO: fetch data & templates @ the same time
-			function ( data ) {
-				Reflect.templates.init( data );
+		////////////////////
 
-				Reflect.api.server.get_data( {
-					comments : loaded_comments
-				}, 
-				function ( data ) {
-					Reflect.data = data;
-					Reflect.enforce_contract();
-					Reflect.contract.post_process();
-					
-					if ( Reflect.config.study ) {
-						Reflect.study.load_surveys();
-						Reflect.study.instrument_mousehovers();
-					}
-				} );
-			} );
+	  function get_data_callback ( data ) {
+    	Reflect.data = data;
+			Reflect.enforce_contract();
+			Reflect.contract.post_process();
+				
+			if ( Reflect.config.study ) {
+				Reflect.study.load_surveys();
+				Reflect.study.instrument_mousehovers();
+			}	    
+	  }
+	  
+	  function get_templates_callback ( data ) {
+	    Reflect.templates.init( data );
+	    Reflect.api.server.get_data( {
+	        comments : loaded_comments
+	      },
+	      get_data_callback
+	    );
+	  }
+	  
+	  // check if templates.html has already been loaded...
+	  if ( $j('#reflect_templates_present').length ) {
+	    // this is currently untested...
+	    get_templates_callback( $j('#reflect_templates_present').html() );
+	  } else {
+	    // if it hasn't been tested, fetch templates from server
+  		Reflect.api.server.get_templates(
+  			get_templates_callback );	    
+	  }	
+
 	}
 };
 
@@ -1686,3 +1759,4 @@ $j( document ).ready( function () {
 	Reflect.init();
 } );
 
+})(jQuery);

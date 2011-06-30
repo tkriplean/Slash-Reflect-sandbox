@@ -4,7 +4,7 @@
 
         <ul class="bullet_main_wrapper">
           <li class="bullet_point">
-            <img src="<%= this.media_dir %>/listen.png"/>
+            <img src="<%= this.media_dir %>/<%= this.bullet_image %>"/>
           </li>
           <li class="bullet_text">
             
@@ -76,11 +76,120 @@
 ]]>
 </script>
 
+<script type="text/html" id="reflect_template_new_bullet_prompt">
+<![CDATA[
+  <div class="bullet_main">   
+    <ul class="bullet_main_wrapper">  
+      <li class="bullet_point">
+         <a class="add_bullet" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">
+             <img align="left" src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>"/>
+          <div class="link"><%= this.bullet_prompt %></div>
+          </a>
+      </li>
+      <li class="cl"></li>
+    </ul>
+  </div>
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_new_bullet_dialog">
+<![CDATA[
+  <div class="bullet_main">  
+    <ul class="bullet_main_wrapper">
+    
+      <li class="bullet_point"><img src="<%= this.media_dir %>/<%= this.bullet_prompt_image %>" /></li>
+      <li class="bullet_dialog">
+         <table class="new_bullet_wrapper">
+            <tr>
+               <td class="new_bullet_text_wrap">
+                  <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
+               </td>
+            </tr>
+            <tr class="submit_footer">
+               <td> 
+                 <ul>
+                    <li class="submit">
+                       <a class="bullet_submit">Done</a>
+                    </li>
+                    <li class="submit">
+                      <a class="cancel_bullet">cancel</a>
+                    </li>
+                    <li title="Please limit your summary to 140 characters or less." class="count">
+                       <a><span class="count"></span></a>
+                    </li>                
+                    <li class="be_neutral">
+                      <a title="Please be concise, accurate, and constructive!">
+                        <span class="big_word">summaries</span>, not replies 
+                      </a>
+                    </li>                  
+                 </ul>
+               </td> 
+            </tr>
+         </table> 
+      </li>
+    </ul>  
+  </div>
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_bullet_highlight">
+<![CDATA[
+   <tbody>
+      <tr>
+         <td class="new_bullet_text_wrap connect_directions">
+        <div class="arrow"><img src="<%= this.media_dir %>/arrow-left.png" /></div>
+        Please click the relevant sentences
+      </td>
+      </tr>
+      <tr class="submit_footer">
+         <td>
+            <ul>
+               <li class="submit">
+                  <a class="bullet_submit">Done</button>
+               </li>
+          <li class="submit">
+            <a class="cancel_bullet">cancel</a>
+          </li>          
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+]]>
+</script>
+
 <script type="text/html" id="reflect_template_response">
+<![CDATA[
+      <ul class="rebutt_list" >
+        <li class="rebutt_txt">
+            <% if(this.sig == "2") { %>
+              <span class="response_yes"><%= this.user %> responds "accurate". </span>
+            <% } else if(this.sig == "1") { %>
+              <span class="response_maybe"><%= this.user %> responds "almost correct". </span> 
+            <% } else if (this.sig == "0"){ %>
+              <span class="response_no"><%= this.user %> responds "inaccurate". </span>
+            <% } %>
+            <%= this.text %>
+         </li>
+         <li class="response_footer_wrapper">
+           <ul class="response_operations">
+              <li class="modify_operation">
+                      <a title="modify" class="modify">
+                       edit
+                    </a>
+              </li>
+           </ul>
+         </li>   
+         <li class="cl"></li>      
+      </ul>
+      <div class="cl"></div>
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_response_prompt">
 <![CDATA[
    <ul class="response_def">
       <li class="response_prompt">
-         <label class="prompt">Is this an accurate summary?</label>
+         <label class="prompt"><%= this.response_prompt %></label>
          <ul class="response_eval">
             <li><input type="radio" id="accurate-yes-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="2" <% if(this.sig == "2"){ %> CHECKED <% } %>><label for="accurate-yes-<%=this.bullet_id %>" class="response_yes">Yes</label></li>
             <li><input type="radio" id="accurate-maybe-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="1" <% if(this.sig == "1"){ %> CHECKED <% } %>><label for="accurate-maybe-<%=this.bullet_id %>" class="response_maybe">Kind of...</label></li>
@@ -118,120 +227,8 @@
 
 ]]>
 </script>
+<div id="reflect_templates_present"></div>
 
-<script type="text/html" id="reflect_template_new_bullet_dialog">
-<![CDATA[
-  <div class="bullet_main">  
-    <ul class="bullet_main_wrapper">
-    
-      <li class="bullet_point"><img src="<%= this.media_dir %>/listen.png" /></li>
-      <li class="bullet_dialog">
-         <table class="new_bullet_wrapper">
-            <tr>
-               <td class="new_bullet_text_wrap">
-                  <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
-               </td>
-            </tr>
-            <tr class="submit_footer">
-               <td> 
-                 <ul>
-                    <li class="submit">
-                       <a class="bullet_submit">Done</a>
-                    </li>
-                    <li class="submit">
-                      <a class="cancel_bullet">cancel</a>
-                    </li>
-                    <li title="Please limit your summary to 140 characters or less." class="count">
-                       <a class="add_qtip"><span class="count"></span></a>
-                    </li>                
-                    <li class="be_neutral add_qtip">
-                      <a title="Please be concise, accurate, and constructive!">
-                        <span class="big_word">summaries</span>, not replies 
-                      </a>
-                    </li>                  
-                 </ul>
-               </td> 
-            </tr>
-         </table> 
-      </li>
-    </ul>  
-  </div>
-]]>
-</script>
-
-<script type="text/html" id="reflect_template_new_response">
-<![CDATA[
-      <ul class="rebutt_list" >
-        <li class="rebutt_txt">
-            <% if(this.sig == "2") { %>
-              <span class="response_yes"><%= this.user %> responds "accurate". </span>
-            <% } else if(this.sig == "1") { %>
-              <span class="response_maybe"><%= this.user %> responds "almost correct". </span> 
-            <% } else if (this.sig == "0"){ %>
-              <span class="response_no"><%= this.user %> responds "inaccurate". </span>
-            <% } %>
-            <%= this.text %>
-         </li>
-         <li class="response_footer_wrapper">
-           <ul class="response_operations">
-              <li class="modify_operation">
-                      <a title="modify" class="modify">
-                       edit
-                    </a>
-              </li>
-           </ul>
-         </li>   
-         <li class="cl"></li>      
-      </ul>
-      <div class="cl"></div>
-]]>
-</script>
-
-
-<script type="text/html" id="reflect_template_bullet_highlight">
-<![CDATA[
-   <tbody>
-      <tr>
-         <td class="new_bullet_text_wrap connect_directions">
-        <div class="arrow"><img src="<%= this.media_dir %>/arrow-left.png" /></div>
-        Please click the relevant sentences
-      </td>
-      </tr>
-      <tr class="submit_footer">
-         <td>
-            <ul>
-               <li class="submit">
-                  <a class="bullet_submit">Done</button>
-               </li>
-          <li class="submit">
-            <a class="cancel_bullet">cancel</a>
-          </li>          
-            </ul>
-         </td>
-      </tr>
-   </tbody>
-]]>
-</script>
-
-
-
-
-
-<script type="text/html" id="reflect_template_new_bullet_prompt">
-<![CDATA[
-  <div class="bullet_main">   
-    <ul class="bullet_main_wrapper">  
-      <li class="bullet_point">
-         <a class="add_bullet add_qtip" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">
-             <img align="left" src="<%= this.media_dir %>/listen.png"/>
-          <div class="link">What do you hear <%= this.commenter %> saying?</div>
-          </a>
-      </li>
-      <li class="cl"></li>
-    </ul>
-  </div>
-]]>
-</script>
 
 
 
