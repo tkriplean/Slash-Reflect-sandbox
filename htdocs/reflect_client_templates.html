@@ -179,6 +179,13 @@
         <li class="rebutt_txt">
           <div class="username">
             <a class="user">by <%= this.user %></a>
+            <ul class="response_operations">
+                <li class="modify_operation">
+                        <a title="modify" class="modify">
+                         edit
+                      </a>
+                </li>
+             </ul>            
           </div
             <% if(this.sig == "2") { %>
               <span class="response_yes">This is accurate. </span>
@@ -189,16 +196,6 @@
             <% } %>
             <%= this.text %>
          </li>
-         <li class="response_footer_wrapper">
-           <ul class="response_operations">
-              <li class="modify_operation">
-                      <a title="modify" class="modify">
-                       edit
-                    </a>
-              </li>
-           </ul>
-         </li>   
-         <li class="cl"></li>      
       </ul>
       <div class="cl"></div>
 ]]>

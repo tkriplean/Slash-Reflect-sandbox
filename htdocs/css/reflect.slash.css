@@ -2,6 +2,11 @@
   float: right;
 }
 
+#reflected .rf_comment_wrapper .rf_comment_summary .responses ul.response_operations {
+  float: right;
+}
+
+
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main ul.bullet_main_wrapper li.bullet_point {
   padding-top: 13px;
   width: 0px;
@@ -27,16 +32,15 @@
 }
 
 #reflected .responses{
-  margin: 0px 0 4px 16px;
+  margin: 0px 0 4px 10px;
   padding: 0px 0 0px 0px;
 }
 
 #reflected .responses > ul li.response ul.rebutt_list > li.enjoinder {
-  opacity: .5;
+  opacity: .25;
 }
 
 #reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt {
-  width: 215px;
   padding-left: 6px;
   padding-top: 5px;
 }
@@ -129,7 +133,6 @@
 	font-size: inherit;
 	display: inline;
 	font-family: inherit;
-	text-decoration: none;
   margin-left: 9px;
   padding-top: 0px;
 }
@@ -137,11 +140,6 @@
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog, 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog {
 	padding-top: 4px;
-}
-
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li button {
-	background: none !important;
-	margin-bottom: 0px;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper, 

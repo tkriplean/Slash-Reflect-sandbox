@@ -387,13 +387,9 @@ Reflect = {
 		/* Establishes default state for a bullet */
 		bullet : function ( bullet_obj ) {
 
-			bullet_obj.elements.bullet_main
+			bullet_obj.$elem
 					.hover( Reflect.handle.bullet_mouseover, 
 							Reflect.handle.bullet_mouseout );
-
-			bullet_obj.$elem
-					.hover( Reflect.handle.full_bullet_mouseover, 
-							Reflect.handle.full_bullet_mouseout );
         							            
 			var footer = bullet_obj.elements.bullet_operations;
       
@@ -499,7 +495,7 @@ Reflect = {
 			response_obj.$elem.find( '.delete' )
 					.bind( 'click', Reflect.handle.response_delete );
 
-			response_obj.$elem.find( '.response_footer_wrapper' ).css( {
+			response_obj.$elem.find( '.response_operations' ).css( {
 				opacity : 0,
 				display : 'none'
 			} );
@@ -583,27 +579,11 @@ Reflect = {
 				}
 			} );
 		},
-		
-    full_bullet_mouseover : function ( event ) {
-			/*var bullet_obj = $j
-					.data( $j( this )[0], 'bullet' );
-      bullet_obj.$elem
-        .find('.bullet_point span')
-          .hide();*/      
-    },
-        
-    full_bullet_mouseout : function ( event ) {
-			/*var bullet_obj = $j
-					.data( $j( this )[0], 'bullet' );
-      bullet_obj.$elem
-        .find('.bullet_point span')
-          .show();      */
-    },
     		
 		bullet_mouseover : function ( event ) {
 
 			var bullet_obj = $j
-					.data( $j( this ).parents( '.bullet' )[0], 'bullet' );
+					.data( $j( this )[0], 'bullet' );
 
 			if ( bullet_obj.comment.$elem.hasClass( 'highlight_state' )
 					|| bullet_obj.comment.$elem.hasClass( 'bullet_state' ) ) {
@@ -642,7 +622,7 @@ Reflect = {
 
 			footer.animate( {
 				opacity : 1
-			}, 300 ).show();
+			}, 800 ).show();
       
 			for ( var h in bullet_obj.highlights) {
 				bullet_obj.comment.elements.comment_text
@@ -650,19 +630,11 @@ Reflect = {
 						.addClass( 'highlight' );
 			}
 
-			function color_convert ( color ) {
-				if ( color > 128 ) {
-					return color - 8;
-				} else {
-					return color + 8;
-				}
-			}
-
 		},
     
 		bullet_mouseout : function ( event ) {
 			var bullet_obj = $j
-					.data( $j( this ).parents( '.bullet' )[0], 'bullet' );
+					.data( $j( this ), 'bullet' );
 		  
 			var comment = $j( this ).parents( '.rf_comment_wrapper' );
 			if ( comment.hasClass( 'highlight_state' )
@@ -728,14 +700,14 @@ Reflect = {
       if ( user != response_obj.user ) {
         return;
       } 
-      response_obj.$elem.find( '.response_footer_wrapper' ).show()
+      response_obj.$elem.find( '.response_operations' ).show()
 					.animate( {
 						opacity : 1
 					}, 300 );
 		},
 
 		response_mouseout : function ( event ) {
-			var footer_wrapper = $j( this ).find( '.response_footer_wrapper' );
+			var footer_wrapper = $j( this ).find( '.response_operations' );
 			footer_wrapper.animate( {
 				opacity : 0
 			}, 300, function () {
