@@ -100,8 +100,10 @@ sub main {
 	
 	$options->{content_type} = 'application/json';	
 	http_send($options);
-	if ($retval && length $retval) {
+	if ($op eq 'data') {
 		print Data::JavaScript::Anon->anon_dump($retval);
+	} else {
+	  print $retval;
 	}
 }
 
@@ -124,6 +126,12 @@ sub get_data {
 			'reflect_bullet_revision', 
 			"active=1 AND comment_id=$comment_id"
 		);
+
+		my $db_ratings = $slashdb->sqlSelectAll( 
+			'bullet_id, rating', 
+			'reflect_bullet_rating', 
+			"comment_id=$comment_id"
+		);
 		
 		foreach my $db_bullet (@$db_bullets){
 			my $bullet = {
@@ -134,6 +142,11 @@ sub get_data {
 				'txt' => @$db_bullet[4],
 				'score' => @$db_bullet[5]
 			};
+			foreach my $db_rating (@$db_ratings){
+			  if (@$db_rating[0] == @$db_bullet[0]) {
+			    $bullet->{'my_rating'} = @$db_rating[1];
+			  }
+			}
 			
 			my $db_highlights = $slashdb->sqlSelectAll(
 				'element_id',
@@ -240,12 +253,8 @@ sub create_bullet {
 	};
 
 	set_summary_message($comment, $user_info, $bullet_revision_params);	
-	 
-	return {
-		"insert_id" => $bullet_id, 
-		"u" => $user_info->{name}, 
-		"rev_id" => $bullet_rev_id
-	};
+	my $name = $user_info->{name};
+	return "{\"insert_id\":$bullet_id, \"u\":\"$name\", \"rev_id\": $bullet_rev_id}";
 	
 }
 
@@ -259,7 +268,7 @@ sub update_bullet {
 	  'user_id', 'reflect_bullet_revision', 
 	  "bullet_id = $bullet_id AND active = 1");
 	if($summarizer != $user_info->{id} || $text eq '') {
-	  return {};
+	  return "{}";
 	}	
 	
 	$slashdb->sqlUpdate(
@@ -295,13 +304,8 @@ sub update_bullet {
 			$highlight_params
 		);
 	}
-		 
-	return {
-		"insert_id"=>$bullet_id, 
-		"u"=>$user_info->{name}, 
-		"rev_id" => $bullet_rev_id
-	};
-	
+	my $name = $user_info->{name};
+	return "{\"insert_id\":$bullet_id,\"u\":\"$name\",\"rev_id\":$bullet_rev_id}";	
 }
 
 sub delete_bullet {
@@ -314,7 +318,7 @@ sub delete_bullet {
 	  'user_id', 'reflect_bullet_revision', 
 	  "bullet_id = $bullet_id AND active = 1");
 	if($summarizer != $user_info->{id}) {
-	  return {};
+	  return "{}";
 	}
 
   # attempt to remove any web-messages alerting the commenter that this bullet was created	
@@ -342,7 +346,7 @@ sub delete_bullet {
 		{'active' => 0},
 		"bullet_id=$bullet_id"
 	);
-	return {};
+	return "{}";
 }
 
 sub create_bullet_rating {
@@ -357,7 +361,7 @@ sub create_bullet_rating {
 	if($commenter == $uid || 
 	   $user_info->{is_anon} || 
 	   $summarizer == $uid ) {
-	  return {};
+	  return "{}";
 	}
 
 	$slashdb->sqlDelete(
@@ -385,9 +389,10 @@ sub create_bullet_rating {
 		"bullet_id=$bullet_id"
 	);
 	
+	my $score = 0;
 	if ( $total_count > 0 ) {
 	  # TODO: combine these SQL calls...
-  	my $score = $total_score / $total_count;
+  	$score = $total_score / $total_count;
 	  $slashdb->sqlUpdate(
 	    'reflect_bullet_revision',
 	    {'score' => $score},
@@ -401,10 +406,8 @@ sub create_bullet_rating {
   	  );
   	}
 	}
-	
-	#TODO: return updated score
-	
-	return {};
+		
+	return "{\"updated_score\":$score}";
 	
 }
 
@@ -449,13 +452,8 @@ sub create_response {
 		$response_revision_params
 	);
 	my $response_rev_id = $slashdb->getLastInsertId();
-		 
-	return {
-		"insert_id"=>$response_id, 
-		"u"=>$user_info->{name}, 
-		"rev_id" => $response_rev_id,
-		"sig" => $signal
-	};
+	my $name = $user_info->{name};	 
+	return "{\"insert_id\":$response_id,\"u\":\"$name\",\"rev_id\":$response_rev_id,\"sig\":$signal}";
 	
 }
 
@@ -493,14 +491,10 @@ sub update_response {
 		$response_revision_params
 	);
 	my $response_rev_id = $slashdb->getLastInsertId();
-		 
-	return {
-		"insert_id"=>$response_id, 
-		"u"=>$user_info->{name}, 
-		"rev_id" => $response_rev_id,
-		"sig" => $signal
-	};
-	
+
+	my $name = $user_info->{name};	 
+	return "{\"insert_id\":$response_id,\"u\":\"$name\",\"rev_id\":$response_rev_id,\"sig\":$signal}";
+		 	
 }
 
 sub delete_response {
@@ -521,7 +515,7 @@ sub delete_response {
 		{'active' => 0},
 		'response_id=' . $response_id
 	);
-	return {};
+	return "{}";
 }
 
 

@@ -54,7 +54,8 @@
   #reflected .rf_comment_wrapper .rf_comment_summary label {
     padding: 0;
     margin: 0;
-    display: inline; }
+    display: inline;
+    font-weight: normal; }
   #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
     margin-bottom: 10px;
     border-bottom: 1px dotted #777777; }
@@ -127,7 +128,6 @@
                 padding-top: 6px; }
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem {
                 display: none;
-                opacity: 0;
                 z-index: 99;
                 background-color: white;
                 position: absolute;
@@ -254,12 +254,6 @@
 #reflected .responses {
   margin: 1px 0 4px 30px;
   padding: 0px 0 0px 20px; }
-  #reflected .responses .response_yes {
-    color: #013603; }
-  #reflected .responses .response_no {
-    color: #2f0500; }
-  #reflected .responses .response_maybe {
-    color: #626206; }
   #reflected .responses > ul li.response ul.rebutt_list > li {
     float: left;
     display: block; }
@@ -270,17 +264,16 @@
       cursor: pointer;
       padding-right: 3px; }
   #reflected .responses > ul li.response.new ul.response_def, #reflected .responses > ul li.response.modify ul.response_def {
-    background-color: #ffe5e5; }
+    background-color: #ffe5e5;
+    padding: 5px; }
     #reflected .responses > ul li.response.new ul.response_def label.prompt, #reflected .responses > ul li.response.modify ul.response_def label.prompt {
       padding: 5px;
       font-weight: bold; }
     #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval {
-      padding-left: 12px; }
+      padding: 5px 0 8px 12px; }
       #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li {
         display: inline;
         padding-right: 6px; }
-        #reflected .responses > ul li.response.new ul.response_def li.response_prompt ul.response_eval li input, #reflected .responses > ul li.response.modify ul.response_def li.response_prompt ul.response_eval li input {
-          margin: 5px 2px; }
     #reflected .responses > ul li.response.new ul.response_def li.response_dialog, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog {
       display: none; }
       #reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {

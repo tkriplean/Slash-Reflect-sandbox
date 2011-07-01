@@ -13,7 +13,7 @@
           <li class="bullet_text">
             <div class="username">
               <a class="user">by <%= this.user %></a>  
-              <% if (this.score != '') { %> <span class='rf_score'>&#8231; score: <%= this.score %></span> <% } %>
+              <% if (this.score != '') { %> <span class='rf_score'>&#8231; score: <span><%= this.score %></span></span> <% } %>
               <ul class="bullet_operations">
                   <li class="modify_operation" title="Edit this summary bullet point">
                     <a class="modify bullet_operation">
@@ -35,31 +35,31 @@
                           This summary is...
                         </div>                    
                         <div class="flag">
-                          <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
+                          <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen" <% if(this.rating == "zen"){ %> CHECKED <% } %>   >
                           <label for="rating_zen_<%= this.id %>">
                             an elegant synthesis <span class="rating_class zen">zen-master (+3)</span>
                           </label>
                         </div>
                         <div class="flag">
-                          <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
+                          <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold" <% if(this.rating == "gold"){ %> CHECKED <% } %>>
                           <label for="rating_gold_<%= this.id %>">
                             highlighting a good point <span class="rating_class gold">gold-sifter (+2)</span>
                           </label>
                         </div>
                         <div class="flag">
-                          <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
+                          <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student" <% if(this.rating == "student"){ %> CHECKED <% } %>>
                           <label for="rating_student_<%= this.id %>">                          
                             somewhat on target <span class="rating_class student">student (+1)</span>
                           </label>
                         </div>
                         <div class="flag">
-                          <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
+                          <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll" <% if(this.rating == "troll"){ %> CHECKED <% } %>>
                           <label for="rating_troll_<%= this.id %>">
                             overly antagonizing <span class="rating_class troll">troll (-3)</span>
                           </label>
                         </div>
                         <div class="flag">
-                          <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
+                          <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti" <% if(this.rating == "graffiti"){ %> CHECKED <% } %>>
                           <label for="rating_graffiti_<%= this.id %>">
                             not actually a summary <span class="rating_class graffiti">graffiti (-3)</span>
                           </label>
@@ -187,13 +187,15 @@
                       </a>
                 </li>
              </ul>            
-          </div
+          </div>
             <% if(this.sig == "2") { %>
               <span class="response_yes">This is accurate. </span>
             <% } else if(this.sig == "1") { %>
               <span class="response_maybe">This is almost correct. </span> 
             <% } else if (this.sig == "0"){ %>
               <span class="response_no">This is inaccurate. </span>
+            <% } else if (this.sig == "-1"){ %>
+              <span class="response_no">This is not a summary. </span>              
             <% } %>
             <%= this.text %>
          </li>
@@ -209,8 +211,10 @@
          <label class="prompt"><%= this.response_prompt %></label>
          <ul class="response_eval">
             <li><input type="radio" id="accurate-yes-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="2" <% if(this.sig == "2"){ %> CHECKED <% } %>><label for="accurate-yes-<%=this.bullet_id %>" class="response_yes">Yes</label></li>
-            <li><input type="radio" id="accurate-maybe-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="1" <% if(this.sig == "1"){ %> CHECKED <% } %>><label for="accurate-maybe-<%=this.bullet_id %>" class="response_maybe">Kind of...</label></li>
+            <li><input type="radio" id="accurate-maybe-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="1" <% if(this.sig == "1"){ %> CHECKED <% } %>><label for="accurate-maybe-<%=this.bullet_id %>" class="response_maybe">Kind of</label></li>
             <li><input type="radio" id="accurate-no-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="0" <% if(this.sig == "0"){ %> CHECKED <% } %>><label for="accurate-no-<%=this.bullet_id %>" class="response_no">No</label></li>
+            <li><input type="radio" id="accurate-not-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="-1" <% if(this.sig == "-1"){ %> CHECKED <% } %>><label for="accurate-not-<%=this.bullet_id %>" class="response_not_summary">Not a summary</label></li>
+            
          </ul>
       </li>
       <li class=response_dialog>
