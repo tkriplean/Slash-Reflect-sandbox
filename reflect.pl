@@ -91,12 +91,10 @@ sub main {
 				$params->{'highlights'});
 		}
 	} elsif ( $op eq 'bullet_rating' ) {
-		if ( exists $params->{'is_delete'} && $params->{'is_delete'} eq 'true' ) { 
-			$retval = delete_bullet_rating( $params->{'bullet_id'}, 
-			  $params->{'bullet_rev'}, $params->{'rating'} );
-		} elsif ( exists $params->{'bullet_id'} ) {
+	  my $is_delete = exists $params->{'is_delete'} && $params->{'is_delete'} eq 'true';	  
+		if ( exists $params->{'bullet_id'} ) {
 			$retval = create_bullet_rating( $params->{'comment_id'}, 
-			  $params->{'bullet_id'}, $params->{'bullet_rev'}, $params->{'rating'} );
+			  $params->{'bullet_id'}, $params->{'bullet_rev'}, $params->{'rating'}, $is_delete );
 		}	  
 	}
 	
@@ -122,7 +120,7 @@ sub get_data {
 	foreach my $comment_id (@comments) {
 		my $bullets = {};
 		my $db_bullets = $slashdb->sqlSelectAll( 
-			'bullet_id, id, created, user, txt', 
+			'bullet_id, id, created, user, txt, score', 
 			'reflect_bullet_revision', 
 			"active=1 AND comment_id=$comment_id"
 		);
@@ -133,7 +131,8 @@ sub get_data {
 				'rev' => @$db_bullet[1],
 				'ts' => @$db_bullet[2],
 				'u' => @$db_bullet[3],
-				'txt' => @$db_bullet[4]
+				'txt' => @$db_bullet[4],
+				'score' => @$db_bullet[5]
 			};
 			
 			my $db_highlights = $slashdb->sqlSelectAll(
@@ -341,13 +340,13 @@ sub delete_bullet {
 	$slashdb->sqlUpdate(
 		'reflect_bullet_revision',
 		{'active' => 0},
-		'bullet_id=' . $bullet_id
+		"bullet_id=$bullet_id"
 	);
 	return {};
 }
 
 sub create_bullet_rating {
-	my($comment_id, $bullet_id, $bullet_rev, $rating) = @_;
+	my($comment_id, $bullet_id, $bullet_rev, $rating, $is_delete) = @_;
 	my $slashdb = getCurrentDB();	
 	my $user_info = __get_user_info();
 	my $uid = $user_info->{id};
@@ -366,39 +365,44 @@ sub create_bullet_rating {
 		"user_id=$uid AND bullet_id=$bullet_id"
 	);
 	
-	$slashdb->sqlInsert(
-		'reflect_bullet_rating', { 
-		  'comment_id' => $comment_id,
-		  'bullet_id' => $bullet_id,
-		  'bullet_rev' => $bullet_rev,
-		  'rating' => $rating,
-		  'user_id' => $user_info->{id}
-		}
-	);
-	
-	return {};
-	
-}
-
-sub delete_bullet_rating {
-	my($comment_id, $bullet_id, $bullet_rev, $rating) = @_;
-	my $slashdb = getCurrentDB();	
-	my $user_info = __get_user_info();
-	my $uid = $user_info->{id};
-	
-	#server side permission check for this operation...
-	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
-	my $summarizer = $slashdb->sqlSelect('uid', 'reflect_bullet_revision', "id = $bullet_rev");
-	if($commenter == $uid || 
-	   $user_info->{is_anon} || 
-	   $summarizer == $uid ) {
-	  return {};
+	if(!$is_delete) {
+    my %scores = ('zen' => 3, 'gold' => 2, 'student' => 1, 'troll' => -3, 'graffiti' => -3);
+    $slashdb->sqlInsert(
+    	'reflect_bullet_rating', { 
+    	  'comment_id' => $comment_id,
+    	  'bullet_id' => $bullet_id,
+    	  'bullet_rev' => $bullet_rev,
+    	  'rating' => $rating,
+    	  'score' => %scores->{$rating},
+    	  'user_id' => $user_info->{id}
+    	}
+    );
 	}
 	
-	$slashdb->sqlDelete(
+	my ($total_count, $total_score) = $slashdb->sqlSelect( 
+		'count(score), sum(score)', 
 		'reflect_bullet_rating', 
-		"user_id=$uid AND bullet_id=$bullet_id"
+		"bullet_id=$bullet_id"
 	);
+	
+	if ( $total_count > 0 ) {
+	  # TODO: combine these SQL calls...
+  	my $score = $total_score / $total_count;
+	  $slashdb->sqlUpdate(
+	    'reflect_bullet_revision',
+	    {'score' => $score},
+	    "bullet_id=$bullet_id AND active=1"
+	  );  	
+  	if($total_count >= 3 && $score < 0) {
+  	  $slashdb->sqlUpdate(
+  	    'reflect_bullet_revision',
+  	    {'active' => 0},
+  	    "bullet_id=$bullet_id AND active=1"
+  	  );
+  	}
+	}
+	
+	#TODO: return updated score
 	
 	return {};
 	

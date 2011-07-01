@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS reflect_bullet;
 CREATE TABLE reflect_bullet (
 	id int UNSIGNED NOT NULL AUTO_INCREMENT,
 	comment_id int UNSIGNED NOT NULL,
-	
+
 	PRIMARY KEY id (id),
 	KEY (comment_id)
 	#FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE SET NULL ON UPDATE CASCADE
@@ -21,6 +21,7 @@ CREATE TABLE reflect_bullet_revision (
 	
 	txt text NOT NULL,
 	active tinyint(4) DEFAULT 1,
+	score tinyint(4) DEFAULT 0,
 	
 	PRIMARY KEY id (id),
 	KEY (bullet_id),
@@ -29,7 +30,7 @@ CREATE TABLE reflect_bullet_revision (
 	#FOREIGN KEY (comment_id) REFERENCES comments(cid) ON DELETE SET NULL ON UPDATE CASCADE
 ) TYPE=InnoDB;
 
-DROP TABLE IF EXISTS reflect_bullet_flag;
+DROP TABLE IF EXISTS reflect_bullet_rating;
 CREATE TABLE reflect_bullet_rating (
 	id int UNSIGNED NOT NULL AUTO_INCREMENT,	
 	bullet_rev int UNSIGNED NOT NULL,
@@ -40,6 +41,7 @@ CREATE TABLE reflect_bullet_rating (
 	user_id int, 
 	
 	rating text NOT NULL,
+	score tinyint(4),
 	
 	PRIMARY KEY id (id),
 	KEY (bullet_id),

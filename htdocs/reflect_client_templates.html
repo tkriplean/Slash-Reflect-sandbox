@@ -8,11 +8,12 @@
               <img src="<%= this.media_dir %>/<%= this.bullet_image %>"/>
             <% } else { %>
               <span class="point">&#8250;</span>
-            <% } %>                               
+            <% } %>
           </li>
           <li class="bullet_text">
             <div class="username">
-              <a class="user">by <%= this.user %></a>
+              <a class="user">by <%= this.user %></a>  
+              <% if (this.score != '') { %> <span class='rf_score'>&#8231; score: <%= this.score %></span> <% } %>
               <ul class="bullet_operations">
                   <li class="modify_operation" title="Edit this summary bullet point">
                     <a class="modify bullet_operation">
@@ -36,31 +37,31 @@
                         <div class="flag">
                           <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen">
                           <label for="rating_zen_<%= this.id %>">
-                            an elegant synthesis <span class="rating_class zen">zen-master</span>
+                            an elegant synthesis <span class="rating_class zen">zen-master (+3)</span>
                           </label>
                         </div>
                         <div class="flag">
                           <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold">
                           <label for="rating_gold_<%= this.id %>">
-                            highlighting a good point <span class="rating_class gold">gold-sifter</span>
+                            highlighting a good point <span class="rating_class gold">gold-sifter (+2)</span>
                           </label>
                         </div>
                         <div class="flag">
                           <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student">
                           <label for="rating_student_<%= this.id %>">                          
-                            somewhat on target <span class="rating_class student">student</span>
+                            somewhat on target <span class="rating_class student">student (+1)</span>
                           </label>
                         </div>
                         <div class="flag">
                           <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll">
                           <label for="rating_troll_<%= this.id %>">
-                            overly antagonizing <span class="rating_class troll">troll</span>
+                            overly antagonizing <span class="rating_class troll">troll (-3)</span>
                           </label>
                         </div>
                         <div class="flag">
                           <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti">
                           <label for="rating_graffiti_<%= this.id %>">
-                            not actually a summary <span class="rating_class graffiti">graffiti</span>
+                            not actually a summary <span class="rating_class graffiti">graffiti (-3)</span>
                           </label>
                         </div>                                                                              
                       </form>

@@ -670,14 +670,11 @@ Reflect = {
 		bullet_flag : function ( event ) {
 			var bullet_obj = $j.data( $j( this ).parents( '.bullet' )[0], 'bullet' ),
 				flags = bullet_obj.flags,
-				flag = $j( this ).attr( 'name' );
+				flag = $j( this ).find( 'input' ).attr( 'value' ),
+				is_delete = flag in flags && flags[flag] < 0;
 
-			if ( flags[flag] && flags[flag] > 0 ) {
-				flags[flag] = -1;
-			} else {
-				flags[flag] = 1;
-			}
-			Reflect.api.post_rating( bullet_obj, flag, flags[flag] < 0 );
+			flags[flag] = is_delete ? -1 : 1;
+			Reflect.api.post_rating( bullet_obj, flag, is_delete );
 
 		},
 		operation_mouseover : function ( event ) {
@@ -1171,7 +1168,8 @@ Reflect = {
 					responses : responses,
 					comment : this,
 					highlights : bullet_info.highlights,
-					listener_pic : bullet_info.u_pic
+					listener_pic : bullet_info.u_pic,
+					score : bullet_info.score
 				};
 				return this._add_bullet( params );
 			},
@@ -1256,6 +1254,11 @@ Reflect = {
 					uses_user_name : Reflect.config.view.uses_user_name,
 					id : this.id
 				}; 	
+				
+				if ( Reflect.config.view.enable_rating ) {
+				  template_vars.score = this.options.score;
+				}
+				
 				this.$elem
 						.addClass( 'bullet' )
 						.html( $j.jqote( Reflect.templates.bullet, template_vars ) );
