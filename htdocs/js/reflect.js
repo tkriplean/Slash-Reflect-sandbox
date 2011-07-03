@@ -1480,7 +1480,7 @@ Reflect = {
                  text: false
               },
               position : { corner: {
-                       target: 'bottomLeft',
+                       target: 'bottomRight',
                        tooltip: 'topRight'
                     }},              
               style: 'blue'
