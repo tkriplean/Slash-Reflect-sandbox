@@ -71,7 +71,8 @@
     margin-left: 4px;
     font-size: 90%;
     line-height: 1em;
-    font-variant: small-caps; }
+    font-variant: small-caps;
+    text-transform: lowercase; }
     #reflected .rf_comment_wrapper .rf_comment_summary .username a {
       color: #aaaaaa; }
   #reflected .rf_comment_wrapper .rf_comment_summary ol, #reflected .rf_comment_wrapper .rf_comment_summary ul, #reflected .rf_comment_wrapper .rf_comment_summary ol li, #reflected .rf_comment_wrapper .rf_comment_summary ul li {
