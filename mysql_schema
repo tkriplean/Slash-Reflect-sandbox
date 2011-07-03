@@ -21,7 +21,7 @@ CREATE TABLE reflect_bullet_revision (
 	
 	txt text NOT NULL,
 	active tinyint(4) DEFAULT 1,
-	score tinyint(4) DEFAULT 0,
+	score tinyint(4),
 	
 	PRIMARY KEY id (id),
 	KEY (bullet_id),

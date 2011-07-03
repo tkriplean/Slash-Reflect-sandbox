@@ -1212,11 +1212,16 @@ Reflect = {
           uses_profile_pic : Reflect.config.view.uses_profile_pic,
           uses_user_name : Reflect.config.view.uses_user_name,
           id : this.id,
-          rating : this.my_rating
+          rating : this.my_rating,
+          enable_rating : Reflect.config.view.enable_rating
         };   
         
         if ( Reflect.config.view.enable_rating ) {
-          template_vars.score = this.options.score;
+          if ( this.options.score ) {
+            template_vars.score = this.options.score;
+          } else {
+            template_vars.score = '-';
+          }
         }
         
         this.$elem

@@ -16,7 +16,7 @@
             </div>
             <span class="rf_bullet_text"><%= this.bullet_text %></span>
             <div class="username">
-            <% if (this.score != '') { %> <span class='rf_score'>score: <span><%= this.score %></span></span> <% } %>
+            <% if (this.enable_rating) { %> <span class='rf_score'>score: <span><%= this.score %></span></span> <% } %>
             <ul class="bullet_operations">
                 <li class="modify_operation" title="Edit this summary bullet point">
                   <a class="modify bullet_operation">
