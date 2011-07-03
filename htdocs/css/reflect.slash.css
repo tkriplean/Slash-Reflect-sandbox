@@ -19,7 +19,7 @@
 }
 
 #reflected .responses .response.accurate_yes {
-  background-color: #E4E7E7;
+  background-color: #D0E7D2;
 }
 
 #reflected .responses .response.accurate_somewhat {
@@ -270,11 +270,11 @@
 	padding:0;
 }
 
-#commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet {
+#commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet .bullet_main {
     border-left: 2px solid #f4f4f4;
 }
 
-#commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet:hover {
+#commentlisting div.full div.commentBody .rf_comment_summary ul .full_bullet:hover .bullet_main {
     border-left: 2px solid #ccc;
 }
 

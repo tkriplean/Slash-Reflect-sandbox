@@ -105,8 +105,9 @@ Reflect = {
          //bullet_prompt: 'What is {{COMMENTER}}'s point?',
          //bullet_prompt: 'What point is {{COMMENTER}} making?',            
          bullet_prompt: 'What do you hear {{COMMENTER}} saying?',
-         //response_prompt: 'Did {{LISTENER}} hear you accurately?'
-         response_prompt: 'Is this an accurate summary?'
+         response_prompt: 'Did {{LISTENER}} hear you accurately?'
+         //response_prompt: 'Is this an accurate summary?',
+         //response_prompt: 'Is this an accurate summary?'
        }
              
      },
@@ -389,7 +390,7 @@ Reflect = {
     /* Establishes default state for a bullet */
     bullet : function ( bullet_obj ) {
 
-      bullet_obj.$elem
+      bullet_obj.$elem.find('.bullet_main')
           .hover( Reflect.handle.bullet_mouseover, 
               Reflect.handle.bullet_mouseout );
                                   
@@ -602,7 +603,7 @@ Reflect = {
     bullet_mouseover : function ( event ) {
 
       var bullet_obj = $j
-          .data( $j( this )[0], 'bullet' );
+          .data( $j( this ).parents('.bullet')[0], 'bullet' );
 
       if ( bullet_obj.comment.$elem.hasClass( 'highlight_state' )
           || bullet_obj.comment.$elem.hasClass( 'bullet_state' ) ) {
@@ -620,7 +621,7 @@ Reflect = {
     
     bullet_mouseout : function ( event ) {
       var bullet_obj = $j
-          .data( $j( this ), 'bullet' );
+          .data( $j( this ).parents('.bullet'), 'bullet' );
       
       var comment = $j( this ).parents( '.rf_comment_wrapper' );
       if ( comment.hasClass( 'highlight_state' )
