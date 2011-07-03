@@ -3,7 +3,7 @@
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_prompt_problem img.selector_arrow {
-  display: none;
+
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.has_response .bullet_main{
@@ -42,7 +42,6 @@
 
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations {
-  display: inline;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary .responses ul.response_operations {
@@ -73,7 +72,7 @@
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
   width: 350px;
-}
+  }
 
 #reflected .responses{
   margin: 0px 0 4px 10px;
@@ -319,4 +318,8 @@
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper tr.submit_footer a.bullet_submit {
   padding-right: 15px;
   
+}
+
+#frame .commentBody {
+  padding: 1em;
 }

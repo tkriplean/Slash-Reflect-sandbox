@@ -12,26 +12,31 @@
           </li>
           <li class="bullet_text">
             <div class="username">
-              <a class="user">by <%= this.user %></a>             
+              <a class="user">by <%= this.user %></a>          
+              <ul class="bullet_operations">
+                  <li class="modify_operation" title="Edit this summary bullet point">
+                    &#8231; 
+                    <a class="modify bullet_operation op">
+                      edit
+                    </a>
+                  </li>
+                  <li title="Delete this summary bullet point" class="delete_operation">
+                    &#8231;
+                    <a class="delete bullet_operation op"> 
+                      delete
+                    </a>
+                  </li>
+              </ul>                 
             </div>
-            <span class="rf_bullet_text"><%= this.bullet_text %></span>
+            <div class="rf_bullet_text"><%= this.bullet_text %></div>
             <div class="username">
-            <% if (this.enable_rating) { %> <span class='rf_score'>score: <span><%= this.score %></span></span> <% } %>
             <ul class="bullet_operations">
-                <li class="modify_operation" title="Edit this summary bullet point">
-                  <a class="modify bullet_operation">
-                    <a class="op">edit</a>
-                  </a>
-                </li>
-                <li title="Delete this summary bullet point" class="delete_operation">
-                  <a class="delete bullet_operation"> 
-                    &#8231; <a class="op">delete</a>
-                  </a>
-                </li>
+                <% if (this.enable_rating) { %> <span class='rf_score'>score: <span><%= this.score %></span></span> <% } %>
+            
                 <li class="rate_bullet">
                     <span class="bullet_prompt_problem bullet_operation">
-                        &#8231; <a class="op">rate</a>
-                        <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
+                        <a class="op">rate <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img></a>
+                         
                     </span>
                     <form name="rate_bullet" class="bullet_report_problem">
                       <div class="rate_header">
@@ -74,6 +79,7 @@
                     </form>
                 </li>
             </ul>            
+
             </div>
           </li>
         <li class="bullet_author rf_listener_pic">
@@ -104,6 +110,7 @@
       <li class="cl"></li>
     </ul>
   </div>
+  <div class="cl"></div>
 ]]>
 </script>
 
@@ -150,6 +157,7 @@
       </li>
     </ul>  
   </div>
+  <div class="cl"></div>
 ]]>
 </script>
 
@@ -189,19 +197,23 @@
             <a class="user" style="display: none">by <%= this.user %></a>            
           </div>
             <% if(this.sig == "2") { %>
-              <div class="response_yes">Accurate</div>
+              <div class="response_yes">accurate</div>
             <% } else if(this.sig == "1") { %>
-              <div class="response_maybe">Almost correct</div> 
+              <div class="response_maybe">almost correct</div> 
             <% } else if (this.sig == "0"){ %>
-              <div class="response_no">Inaccurate</div>
+              <div class="response_no">inaccurate</div>
             <% } else if (this.sig == "-1"){ %>
-              <div class="response_not">Not a summary</div>              
+              <div class="response_not">not a summary</div>              
             <% } %>
-            <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'><%= this.user %>'s response</a>      
+            <% if(this.text && this.text != '') { %>
+              <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'>full response</a>                    
+            <% } else { %>
+              <span class="responder">&ndash; <%= this.user %></span>
+            <% } %> 
             <ul class="response_operations">
                 <li class="modify_operation">
-                  <a title="modify" class="modify">
-                     <a class="op">edit</a>
+                  <a title="modify" class="modify op">
+                     edit
                   </a>
                 </li>
              </ul>                  

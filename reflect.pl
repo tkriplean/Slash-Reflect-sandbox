@@ -360,7 +360,7 @@ sub create_bullet_rating {
 	my $summarizer = $slashdb->sqlSelect('user_id', 'reflect_bullet_revision', "id = $bullet_rev");
 	if($commenter == $uid || 
 	   $user_info->{is_anon} || 
-	   $summarizer == $uid ) {
+	   ($uid != 0 && $summarizer == $uid) ) {
 	  return "{}";
 	}
 

@@ -909,6 +909,7 @@ Reflect = {
         var accurate_sel = "input[name='accurate-" + 
           response_obj.bullet.id + "']:checked";
         params.text = response_obj.elements.new_response_text.hasClass('jqueryexample') ? '' : response_obj.elements.new_response_text.val();
+        response_obj.text = params.text;
         params.sig = response_obj.$elem.find( accurate_sel ).val();
         Reflect.api.post_response( response_obj );
       }
@@ -1279,12 +1280,12 @@ Reflect = {
           modify = this.id;
 
         if ( modify ) {
-          text = $j.trim(this.elements.bullet_text.html());
-          if ( text.indexOf( "<span class=" ) > -1 ) {
+          text = $j.trim(this.elements.bullet_text.find('.rf_bullet_text').html());
+          /*if ( text.indexOf( "<span class=" ) > -1 ) {
             text =  text.substring( 0, text
                 .toLowerCase()
                 .indexOf( "<span class=" ) );
-          }
+          }*/
         }
 
         var template_vars = {
@@ -1421,6 +1422,7 @@ Reflect = {
         this.rev = parseInt(this.options.rev);
         this.bullet = this.options.bullet;
         this.user = this.options.user;
+        this.text = Reflect.utils.escape( this.options.text );
       },
       _build : function () {
         var first_name = this.options.user;
@@ -1428,7 +1430,7 @@ Reflect = {
           first_name = first_name.substring(0, first_name.indexOf(' '));
         }
         var template_vars = {
-            text : Reflect.utils.escape( this.options.text ),
+            text : this.text,
             sig : Reflect.utils.escape( String(this.options.sig) ),
             user : Reflect.utils.escape( first_name ),
             media_dir : Reflect.api.server.media_dir
@@ -1466,7 +1468,7 @@ Reflect = {
       _build_prompt : function () {
         var template_vars = {
             bullet_id : this.bullet.id,
-            text : Reflect.utils.escape( this.options.text ),
+            text : this.text,
             sig : Reflect.utils.escape( String(this.options.sig) ),
             user : Reflect.utils.escape( this.options.user ),
             media_dir : Reflect.api.server.media_dir, 
@@ -1496,18 +1498,6 @@ Reflect = {
         }
       },
       enter_edit_state : function () {
-        var modify = this.id;
-
-        if ( modify ) {
-          var text = this.elements.response_text.html(), split = text.indexOf( '</span>');
-          if ( split > -1 ) {
-            this.options.text = $j.trim( text.substring( split + 7, text.length ) );
-          } else {
-            this.options.text = '';
-          }
-          
-        }
-
         this._build_prompt();
 
         this.elements = {
