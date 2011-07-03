@@ -394,8 +394,9 @@ Reflect = {
               Reflect.handle.bullet_mouseout );
                                   
       var footer = bullet_obj.elements.bullet_operations,
-        user = Reflect.utils.get_logged_in_user();
-      
+        user = Reflect.utils.get_logged_in_user(),
+        admin = Reflect.api.server.is_admin();
+        
       footer
           .find( '.rate_bullet .op' )
           .click( Reflect.handle.bullet_problem_mouseover); 
@@ -405,9 +406,13 @@ Reflect = {
           .find( '.delete' )
           .bind( 'click', Reflect.handle.bullet_delete );
 
-      footer.find( '.bullet_report_problem .flag' )
+      footer.find( '.bullet_report_problem .submit' )
           .bind( 'click', Reflect.handle.bullet_flag );
-
+      footer.find( '.bullet_report_problem .cancel' )
+          .bind( 'click', function(){
+            $j( this ).parents( '.bullet_report_problem' ).fadeOut();
+          });
+          
       if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
         footer.find( '.modify_operation' ).show();
         footer.find( '.delete_operation' ).show();
@@ -604,40 +609,6 @@ Reflect = {
         // if a different bullet is in highlight state, don't do anything...
         return;
       }
-
-      var user = Reflect.utils.get_logged_in_user(), 
-        footer = bullet_obj.elements.bullet_operations;
-
-      var admin = Reflect.api.server.is_admin();
-
-      /*if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
-        footer.find( '.modify_operation' ).show();
-        footer.find( '.delete_operation' ).show();
-        footer.find( '.rate_bullet' ).hide();
-      } else if ( Reflect.api.server.is_admin() ) {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).show();
-         Reflect.config.view.enable_rating ? 
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
-      } else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).show();
-         Reflect.config.view.enable_rating ?
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
-      } else {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).hide();
-         Reflect.config.view.enable_rating && user != bullet_obj.user && user != bullet_obj.comment.user ?
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
-      } */
-
-      //footer.fadeIn('fast');
-      /*footer.animate( {
-        opacity : 1
-      }, 800 ).show();*/
       
       for ( var h in bullet_obj.highlights) {
         bullet_obj.comment.elements.comment_text
@@ -669,7 +640,7 @@ Reflect = {
     },
 
     bullet_problem_mouseover : function ( event ) {
-      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).slideDown();
+      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).fadeIn();
       //$j( this ).find( '.bullet_report_problem' ).animate( {
       //  opacity : 1
       //}, 300 );
@@ -678,14 +649,14 @@ Reflect = {
     bullet_flag : function ( event ) {
       var bullet_obj = $j.data( $j( this ).parents( '.bullet' )[0], 'bullet' ),
         flags = bullet_obj.flags,
-        flag = $j( this ).find( 'input' ).attr( 'value' ),
+        flag = $j( this ).parents('.bullet_report_problem').find( 'input:checked' ).attr( 'value' ),
         is_delete = flag in flags && flags[flag] < 0;
       if ( !is_delete ) {
         bullet_obj.my_rating = flag;
       }
       flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      $j( this ).parents( '.bullet_report_problem' ).slideUp();      
+      $j( this ).parents( '.bullet_report_problem' ).fadeOut();      
     },
 
     response_delete : function ( event ) {
