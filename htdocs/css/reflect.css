@@ -51,6 +51,8 @@
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
   width: 42%; }
+  #reflected .rf_comment_wrapper .rf_comment_summary a.op:hover {
+    text-decoration: underline; }
   #reflected .rf_comment_wrapper .rf_comment_summary label {
     padding: 0;
     margin: 0;
@@ -96,7 +98,6 @@
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_point img {
             width: 34px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper li.bullet_text {
-          overflow: hidden;
           word-wrap: break-word;
           width: 80%;
           float: left;
@@ -151,7 +152,6 @@
                     font-size: 85%;
                     color: #777777;
                     font-weight: normal;
-                    padding-right: 100px;
                     cursor: pointer; }
                     #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem .flag label .rating_class {
                       padding-right: 8px;
@@ -254,6 +254,11 @@
 #reflected .responses {
   margin: 1px 0 4px 30px;
   padding: 0px 0 0px 20px; }
+  #reflected .responses .response_yes,
+  #reflected .responses .response_no,
+  #reflected .responses .response_maybe,
+  #reflected .responses .response_not {
+    font-size: 80%; }
   #reflected .responses > ul li.response ul.rebutt_list > li {
     float: left;
     display: block; }

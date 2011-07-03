@@ -199,10 +199,10 @@ Reflect = {
       
       var bullet_obj = $j.data( $j( this )
           .parents( '.bullet' )[0], 'bullet' ), 
-        text = $j.trim(bullet_obj.elements.bullet_text.html()), 
+        text = $j.trim(bullet_obj.elements.bullet_text.find('.rf_bullet_text').html()), 
         highlights = new Array(), 
         modify = bullet_obj.id;
-
+      
       if ( !modify ) {
         bullet_obj.added_this_session = true
       }
@@ -393,17 +393,13 @@ Reflect = {
           .hover( Reflect.handle.bullet_mouseover, 
               Reflect.handle.bullet_mouseout );
                                   
-      var footer = bullet_obj.elements.bullet_operations;
+      var footer = bullet_obj.elements.bullet_operations,
+        user = Reflect.utils.get_logged_in_user();
       
       footer
-          .find( '.rate_bullet' )
-          .hover( Reflect.handle.bullet_problem_mouseover, 
-              Reflect.handle.bullet_problem_mouseout );
-
-      footer
-          .find( '.delete,.modify' )
-          .hover( Reflect.handle.operation_mouseover, 
-              Reflect.handle.operation_mouseout );
+          .find( '.rate_bullet .op' )
+          .click( Reflect.handle.bullet_problem_mouseover); 
+          //    Reflect.handle.bullet_problem_mouseout );
 
       footer
           .find( '.delete' )
@@ -412,9 +408,34 @@ Reflect = {
       footer.find( '.bullet_report_problem .flag' )
           .bind( 'click', Reflect.handle.bullet_flag );
 
-      footer.css( {
+      if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
+        footer.find( '.modify_operation' ).show();
+        footer.find( '.delete_operation' ).show();
+        footer.find( '.rate_bullet' ).hide();
+      } else if ( Reflect.api.server.is_admin() ) {
+        footer.find( '.modify_operation' ).hide();
+        footer.find( '.delete_operation' ).show();
+         Reflect.config.view.enable_rating ? 
+          footer.find('.rate_bullet').show() :
+          footer.find('.rate_bullet').hide();
+      } else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
+        footer.find( '.modify_operation' ).hide();
+        footer.find( '.delete_operation' ).show();
+         Reflect.config.view.enable_rating ?
+          footer.find('.rate_bullet').show() :
+          footer.find('.rate_bullet').hide();
+      } else {
+        footer.find( '.modify_operation' ).hide();
+        footer.find( '.delete_operation' ).hide();
+         Reflect.config.view.enable_rating && user != bullet_obj.user && user != bullet_obj.comment.user ?
+          footer.find('.rate_bullet').show() :
+          footer.find('.rate_bullet').hide();
+      }
+
+
+      /*footer.css( {
         display : 'none'
-      } );
+      } ); */
 
       // set modify bullet action
       if ( bullet_obj.user != 'Anonymous' && bullet_obj.user == Reflect.utils.get_logged_in_user() ) {
@@ -479,27 +500,19 @@ Reflect = {
     
     /* Establishes default state for a response */
     response : function ( bullet_obj, response_obj ) {
-      response_obj.$elem
-          .hover( Reflect.handle.response_mouseover, 
-              Reflect.handle.response_mouseout );
-
-      response_obj.$elem
-          .find( '.rate_bullet' )
-          .hover( Reflect.handle.response_problem_mouseover, 
-              Reflect.handle.response_problem_mouseout );
-
-      response_obj.$elem
-          .find( '.delete,.modify' )
-          .hover( Reflect.handle.operation_mouseover, 
-              Reflect.handle.operation_mouseout );
+      
+      var user = Reflect.utils.get_logged_in_user();
+      if ( user != response_obj.user ) {
+        response_obj.$elem.find( '.response_operations' ).hide();
+      }
 
       response_obj.$elem.find( '.delete' )
           .bind( 'click', Reflect.handle.response_delete );
 
-      response_obj.$elem.find( '.response_operations' ).css( {
+      /*response_obj.$elem.find( '.response_operations' ).css( {
         opacity : 0,
         display : 'none'
-      } );
+      } );*/
 
       var accurate_sel = 'input[name="accurate-' + response_obj.bullet.id + '"]';
       response_obj.$elem
@@ -597,7 +610,7 @@ Reflect = {
 
       var admin = Reflect.api.server.is_admin();
 
-      if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
+      /*if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
         footer.find( '.modify_operation' ).show();
         footer.find( '.delete_operation' ).show();
         footer.find( '.rate_bullet' ).hide();
@@ -619,9 +632,9 @@ Reflect = {
          Reflect.config.view.enable_rating && user != bullet_obj.user && user != bullet_obj.comment.user ?
           footer.find('.rate_bullet').show() :
           footer.find('.rate_bullet').hide();
-      }
+      } */
 
-      footer.fadeIn();
+      //footer.fadeIn('fast');
       /*footer.animate( {
         opacity : 1
       }, 800 ).show();*/
@@ -650,23 +663,16 @@ Reflect = {
       }, 300, function () {
       } );*/
 
-      $j( this ).find( '.bullet_operations' ).fadeOut();
+      //$j( this ).find( '.bullet_operations' ).fadeOut('fast');
 
       comment.find( '.highlight' ).removeClass( 'highlight' );
     },
 
     bullet_problem_mouseover : function ( event ) {
-      $j( this ).find( '.bullet_report_problem' ).slideDown();
+      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).slideDown();
       //$j( this ).find( '.bullet_report_problem' ).animate( {
       //  opacity : 1
       //}, 300 );
-    },
-
-    bullet_problem_mouseout : function ( event ) {
-      //$j( this ).find( '.bullet_report_problem' ).animate( {
-      //  opacity : 0
-      //}, 300 );
-      $j( this ).find( '.bullet_report_problem' ).slideUp();      
     },
 
     bullet_flag : function ( event ) {
@@ -679,12 +685,7 @@ Reflect = {
       }
       flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      $j( this ).parents( '.rate_bullet' ).trigger('mouseout');
-    },
-    operation_mouseover : function ( event ) {
-    },
-
-    operation_mouseout : function ( event ) {
+      $j( this ).parents( '.bullet_report_problem' ).slideUp();      
     },
 
     response_delete : function ( event ) {
@@ -693,27 +694,6 @@ Reflect = {
       Reflect.api.post_delete_response( response_obj );
       response_obj.response_delete();
       Reflect.bind.new_response( response_obj );      
-    },
-
-    response_mouseover : function ( event ) {
-      var response_obj = $j.data( this, 'response' ), 
-        user = Reflect.utils.get_logged_in_user();
-      if ( user != response_obj.user ) {
-        return;
-      } 
-      response_obj.$elem.find( '.response_operations' ).show()
-          .animate( {
-            opacity : 1
-          }, 300 );
-    },
-
-    response_mouseout : function ( event ) {
-      var footer_wrapper = $j( this ).find( '.response_operations' );
-      footer_wrapper.animate( {
-        opacity : 0
-      }, 300, function () {
-      } );
-      footer_wrapper.hide();
     },
 
     response_problem_mouseover : function ( event ) {
@@ -1407,6 +1387,7 @@ Reflect = {
         var response = $j( '<li />' ).response( params );
         this.elements.response_list.append( response );
         this.responses.push( response );
+        this.$elem.addClass('has_response');
         return $j.data( response[0], 'response' );
       },
       add_response : function ( response_info ) {
@@ -1478,7 +1459,7 @@ Reflect = {
           };
         this.$elem
             .addClass( 'response' )
-            .addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no'}[this.options.sig]).html( 
+            .addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no', '-1':'not'}[this.options.sig]).html( 
             $j.jqote( Reflect.templates.response, template_vars ) );
             
         if ( this.user == Reflect.utils.get_logged_in_user() ) {
@@ -1491,8 +1472,19 @@ Reflect = {
         }
 
         this.elements = {
-          response_text : this.$elem.find( '.rebutt_txt' )
+          response_text : this.$elem.find( '.rebutt_txt' ),
+          response_link : this.$elem.find( 'a.response_link')
         };
+        this.elements.response_link.qtip({
+              content: {
+                 text: false
+              },
+              position : { corner: {
+                       target: 'bottomLeft',
+                       tooltip: 'topRight'
+                    }},              
+              style: 'blue'
+           });
 
       },
       _build_prompt : function () {
@@ -1569,9 +1561,9 @@ Reflect = {
   * Reflect.templates stores compiled HTML templates at the ready. 
   */      
   templates : {
-    init : function ( templates_from_server ) {
+    init : function ( templates_from_server ) {      
       $j( 'body' ).append( templates_from_server );
-
+      
       $j.extend( Reflect.templates, {
         bullet : $j.jqotec( '#reflect_template_bullet' ),
         new_bullet_prompt : $j.jqotec( '#reflect_template_new_bullet_prompt' ),
@@ -1579,7 +1571,7 @@ Reflect = {
         bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
         response : $j.jqotec( '#reflect_template_response' ),
         response_dialog : $j.jqotec( '#reflect_template_response_prompt' )
-      } );
+      } );      
     }
   },
   
@@ -1594,7 +1586,7 @@ Reflect = {
     var user = null;
     if ( Reflect.contract.user_name_selector ) {
         if ( typeof Reflect.contract.user_name_selector == 'function' ) {
-          user = $j(Reflect.contract.user_name_selector()).text();
+          user = Reflect.contract.user_name_selector();
         }
         else {
           user = $j(Reflect.contract.user_name_selector).text();
@@ -1728,7 +1720,7 @@ Reflect = {
       }      
     }
     
-    function get_templates_callback ( data ) {
+    function get_templates_callback ( data ) {      
       Reflect.templates.init( data );
       Reflect.api.server.get_data( {
           comments : loaded_comments

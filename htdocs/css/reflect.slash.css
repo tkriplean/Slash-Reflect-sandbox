@@ -1,9 +1,52 @@
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_prompt_problem img.selector_arrow {
+  display: none;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.has_response .bullet_main{
+  width: 200px;
+}
+
+#reflected .responses {
+  position: absolute; 
+  left: 200px; 
+  top: 0; 
+  width: 100px; 
+  height: 100%; 
+}
+
+#reflected .responses .response {
+
+}
+
+#reflected .responses .response.accurate_yes {
+  background-color: #E4E7E7;
+}
+
+#reflected .responses .response.accurate_somewhat {
+  background-color: #FCF6EA;
+}
+
+#reflected .responses .response.accurate_no {
+  background-color: #FCDEE0;
+}
+
+#reflected .responses .response.accurate_not {
+  background-color: #FFD695;
+}
+
+
+
+#reflected table.rf_comment_wrapper td.rf_comment_summary a {
+           text-decoration: none;
+}
+
+
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations {
-  float: right;
+  display: inline;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary .responses ul.response_operations {
-  float: right;
+
 }
 
 
@@ -38,15 +81,26 @@
 
 #reflected .responses > ul li.response ul.rebutt_list > li.enjoinder {
   opacity: .25;
+  display: none;
 }
 
 #reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt {
   padding-left: 6px;
-  padding-top: 5px;
   width: 90%;
 }
 
-#reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, #reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
+#reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt a {
+  font-size: 10px; 
+  text-decoration: underline; 
+  color: inherit;
+}
+
+#reflected .responses > ul li.response ul.rebutt_list > li.rebutt_txt a.username {
+  display: none;
+}
+
+#reflected .responses > ul li.response.new ul.response_def li.response_dialog table.new_bullet_wrapper, 
+#reflected .responses > ul li.response.modify ul.response_def li.response_dialog table.new_bullet_wrapper {
   width: 90%;  
 }
 
@@ -89,6 +143,7 @@
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet {
 	margin-bottom: 6px !important;
 	padding-bottom: 6px;
+	font-size: 100%;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main ul.bullet_main_wrapper li.new_bullet_prompt li.count, 

@@ -17,17 +17,17 @@
               <ul class="bullet_operations">
                   <li class="modify_operation" title="Edit this summary bullet point">
                     <a class="modify bullet_operation">
-                      edit
+                      &#8231; <a class="op">edit</a>
                     </a>
                   </li>
                   <li title="Delete this summary bullet point" class="delete_operation">
                     <a class="delete bullet_operation"> 
-                      &#8231; delete 
+                      &#8231; <a class="op">delete</a>
                     </a>
                   </li>
                   <li class="rate_bullet">
                       <span class="bullet_prompt_problem bullet_operation">
-                          rate 
+                          &#8231; <a class="op">rate</a>
                           <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
                       </span>
                       <form name="rate_bullet" class="bullet_report_problem">
@@ -68,7 +68,7 @@
                   </li>
               </ul>              
             </div>
-            <%= this.bullet_text %>
+            <span class="rf_bullet_text"><%= this.bullet_text %></span>
           </li>
         <li class="bullet_author rf_listener_pic">
           <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
@@ -179,25 +179,25 @@
         </li>
         <li class="rebutt_txt">
           <div class="username">
-            <a class="user">by <%= this.user %></a>
-            <ul class="response_operations">
-                <li class="modify_operation">
-                        <a title="modify" class="modify">
-                         edit
-                      </a>
-                </li>
-             </ul>            
+            <a class="user" style="display: none">by <%= this.user %></a>            
           </div>
             <% if(this.sig == "2") { %>
-              <span class="response_yes">This is accurate. </span>
+              <div class="response_yes">Accurate</div>
             <% } else if(this.sig == "1") { %>
-              <span class="response_maybe">This is almost correct. </span> 
+              <div class="response_maybe">Almost correct</div> 
             <% } else if (this.sig == "0"){ %>
-              <span class="response_no">This is inaccurate. </span>
+              <div class="response_no">Inaccurate</div>
             <% } else if (this.sig == "-1"){ %>
-              <span class="response_no">This is not a summary. </span>              
+              <div class="response_not">Not a summary</div>              
             <% } %>
-            <%= this.text %>
+            <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'><%= this.user %>'s response</a>      
+            <ul class="response_operations">
+                <li class="modify_operation">
+                  <a title="modify" class="modify">
+                     <a class="op">edit</a>
+                  </a>
+                </li>
+             </ul>                  
          </li>
       </ul>
       <div class="cl"></div>
