@@ -400,8 +400,7 @@ Reflect = {
         
       footer
           .find( '.rate_bullet .op' )
-          .click( Reflect.handle.bullet_problem_mouseover); 
-          //    Reflect.handle.bullet_problem_mouseout );
+          .click( Reflect.handle.bullet_problem_click); 
 
       footer
           .find( '.delete' )
@@ -640,8 +639,8 @@ Reflect = {
       comment.find( '.highlight' ).removeClass( 'highlight' );
     },
 
-    bullet_problem_mouseover : function ( event ) {
-      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).fadeIn();
+    bullet_problem_click : function ( event ) {
+      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).slideDown();
       //$j( this ).find( '.bullet_report_problem' ).animate( {
       //  opacity : 1
       //}, 300 );
@@ -657,7 +656,7 @@ Reflect = {
       }
       flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      $j( this ).parents( '.bullet_report_problem' ).fadeOut();      
+      $j( this ).parents( '.bullet_report_problem' ).slideUp();      
     },
 
     response_delete : function ( event ) {

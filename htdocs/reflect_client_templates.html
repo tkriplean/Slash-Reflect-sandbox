@@ -12,67 +12,69 @@
           </li>
           <li class="bullet_text">
             <div class="username">
-              <a class="user">by <%= this.user %></a>  
-              <% if (this.score != '') { %> <span class='rf_score'>&#8231; score: <span><%= this.score %></span></span> <% } %>
-              <ul class="bullet_operations">
-                  <li class="modify_operation" title="Edit this summary bullet point">
-                    <a class="modify bullet_operation">
-                      &#8231; <a class="op">edit</a>
-                    </a>
-                  </li>
-                  <li title="Delete this summary bullet point" class="delete_operation">
-                    <a class="delete bullet_operation"> 
-                      &#8231; <a class="op">delete</a>
-                    </a>
-                  </li>
-                  <li class="rate_bullet">
-                      <span class="bullet_prompt_problem bullet_operation">
-                          &#8231; <a class="op">rate</a>
-                          <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
-                      </span>
-                      <form name="rate_bullet" class="bullet_report_problem">
-                        <div class="rate_header">
-                          This summary is...
-                        </div>                    
-                        <div class="flag">
-                          <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen" <% if(this.rating == "zen"){ %> CHECKED <% } %>   >
-                          <label for="rating_zen_<%= this.id %>">
-                            an elegant synthesis <span class="rating_class zen">zen-master (+3)</span>
-                          </label>
-                        </div>
-                        <div class="flag">
-                          <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold" <% if(this.rating == "gold"){ %> CHECKED <% } %>>
-                          <label for="rating_gold_<%= this.id %>">
-                            highlighting a good point <span class="rating_class gold">gold-sifter (+2)</span>
-                          </label>
-                        </div>
-                        <div class="flag">
-                          <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student" <% if(this.rating == "student"){ %> CHECKED <% } %>>
-                          <label for="rating_student_<%= this.id %>">                          
-                            somewhat on target <span class="rating_class student">student (+1)</span>
-                          </label>
-                        </div>
-                        <div class="flag">
-                          <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll" <% if(this.rating == "troll"){ %> CHECKED <% } %>>
-                          <label for="rating_troll_<%= this.id %>">
-                            overly antagonizing <span class="rating_class troll">troll (-3)</span>
-                          </label>
-                        </div>
-                        <div class="flag">
-                          <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti" <% if(this.rating == "graffiti"){ %> CHECKED <% } %>>
-                          <label for="rating_graffiti_<%= this.id %>">
-                            not actually a summary <span class="rating_class graffiti">graffiti (-3)</span>
-                          </label>
-                        </div>
-                        <div class="submit_rating">
-                          <a class="submit">Done</a>
-                          <a class="cancel">Cancel</a> 
-                        </div>                                                                             
-                      </form>
-                  </li>
-              </ul>              
+              <a class="user">by <%= this.user %></a>             
             </div>
             <span class="rf_bullet_text"><%= this.bullet_text %></span>
+            <div class="username">
+            <% if (this.score != '') { %> <span class='rf_score'>score: <span><%= this.score %></span></span> <% } %>
+            <ul class="bullet_operations">
+                <li class="modify_operation" title="Edit this summary bullet point">
+                  <a class="modify bullet_operation">
+                    <a class="op">edit</a>
+                  </a>
+                </li>
+                <li title="Delete this summary bullet point" class="delete_operation">
+                  <a class="delete bullet_operation"> 
+                    &#8231; <a class="op">delete</a>
+                  </a>
+                </li>
+                <li class="rate_bullet">
+                    <span class="bullet_prompt_problem bullet_operation">
+                        &#8231; <a class="op">rate</a>
+                        <img class="selector_arrow" src="<%= this.media_dir %>/selector_arrow.png"></img> 
+                    </span>
+                    <form name="rate_bullet" class="bullet_report_problem">
+                      <div class="rate_header">
+                        This summary is...
+                      </div>                    
+                      <div class="flag">
+                        <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen" <% if(this.rating == "zen"){ %> CHECKED <% } %>   >
+                        <label for="rating_zen_<%= this.id %>">
+                          an elegant synthesis <span class="rating_class zen">zen-master (+3)</span>
+                        </label>
+                      </div>
+                      <div class="flag">
+                        <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold" <% if(this.rating == "gold"){ %> CHECKED <% } %>>
+                        <label for="rating_gold_<%= this.id %>">
+                          highlighting a good point <span class="rating_class gold">gold-sifter (+2)</span>
+                        </label>
+                      </div>
+                      <div class="flag">
+                        <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student" <% if(this.rating == "student"){ %> CHECKED <% } %>>
+                        <label for="rating_student_<%= this.id %>">                          
+                          somewhat on target <span class="rating_class student">student (+1)</span>
+                        </label>
+                      </div>
+                      <div class="flag">
+                        <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll" <% if(this.rating == "troll"){ %> CHECKED <% } %>>
+                        <label for="rating_troll_<%= this.id %>">
+                          overly antagonizing <span class="rating_class troll">troll (-3)</span>
+                        </label>
+                      </div>
+                      <div class="flag">
+                        <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti" <% if(this.rating == "graffiti"){ %> CHECKED <% } %>>
+                        <label for="rating_graffiti_<%= this.id %>">
+                          not actually a summary <span class="rating_class graffiti">graffiti (-3)</span>
+                        </label>
+                      </div>
+                      <div class="submit_rating">
+                        <a class="submit">Done</a>
+                        <a class="cancel">Cancel</a> 
+                      </div>                                                                             
+                    </form>
+                </li>
+            </ul>            
+            </div>
           </li>
         <li class="bullet_author rf_listener_pic">
           <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
