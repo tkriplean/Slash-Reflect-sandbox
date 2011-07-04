@@ -6,8 +6,6 @@ var $j = jQuery;
 
 Reflect.config.study = false;
 Reflect.config.view.enable_rating = true;
-Reflect.config.view.images.added_bullet = '';
-Reflect.config.view.images.bullet_prompt = '';
 
 var is_new_slash = false;
 

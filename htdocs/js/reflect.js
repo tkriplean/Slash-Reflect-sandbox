@@ -86,15 +86,6 @@ Reflect = {
        uses_profile_pic : false,
        /* If the bullet summaries list the listener's name. */
        uses_user_name : false,
-       /* Defines the icons to be used, relative path from Reflect.config.api.media_dir. */
-       images : {
-         /* The image shown to the left of the prompt to add a new summary bullet point. 
-            Will get scaled to ~30px. */
-         bullet_prompt: 'listen.png',
-         /* The image shown to the left of existing bullet points. Probably best if it looks 
-            like a bullet in a bulleted list. Will get scaled to ~30px. */
-         added_bullet: 'listen.png'
-       },  
        /* Textual prompts */
        text : {
          //bullet_prompt: 'Tell us what you hear {{COMMENTER}} saying', 
@@ -394,7 +385,7 @@ Reflect = {
           .hover( Reflect.handle.bullet_mouseover, 
               Reflect.handle.bullet_mouseout );
                                   
-      var footer = bullet_obj.elements.bullet_operations,
+      var footer = bullet_obj.elements.bullet_meta,
         user = Reflect.utils.get_logged_in_user(),
         admin = Reflect.api.server.is_admin();
         
@@ -406,11 +397,11 @@ Reflect = {
           .find( '.delete' )
           .bind( 'click', Reflect.handle.bullet_delete );
 
-      footer.find( '.bullet_report_problem .submit' )
+      footer.find( '.rate_bullet_dialog .submit' )
           .bind( 'click', Reflect.handle.bullet_flag );
-      footer.find( '.bullet_report_problem .cancel' )
+      footer.find( '.rate_bullet_dialog .cancel' )
           .bind( 'click', function(){
-            $j( this ).parents( '.bullet_report_problem' ).fadeOut();
+            $j( this ).parents( '.rate_bullet_dialog' ).fadeOut();
           });
           
       if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
@@ -491,9 +482,6 @@ Reflect = {
       // wont work in Greasemonkey
       try {
         text_area.focus();
-        //text_area.example(function() {
-        //  return $(this).attr('title');
-        //}, { className : 'jqueryexample' });
       } catch ( err ) {
       }
 
@@ -514,19 +502,12 @@ Reflect = {
       response_obj.$elem.find( '.delete' )
           .bind( 'click', Reflect.handle.response_delete );
 
-      /*response_obj.$elem.find( '.response_operations' ).css( {
-        opacity : 0,
-        display : 'none'
-      } );*/
-
       var accurate_sel = 'input[name="accurate-' + response_obj.bullet.id + '"]';
       response_obj.$elem
           .find( accurate_sel )
           .click( Reflect.handle.accurate_clicked );
 
       if ( response_obj.user == Reflect.utils.get_logged_in_user() ) {
-        //response_obj.$elem.find( '.rebutt_txt' )
-        //    .click( Reflect.transitions.to_response );
         response_obj.$elem.find( '.modify' )
             .click( Reflect.transitions.to_response );
       }
@@ -551,17 +532,12 @@ Reflect = {
       var text_area = response_obj.$elem.find( 'textarea' ),
         count_sel = '#bullet-' 
           + response_obj.bullet.id 
-          + ' .responses .new li.count';
+          + ' .response.new li.count';
       text_area.NobleCount( count_sel, settings );
 
       // wont work in GM
       try {
-        text_area.focus();
-        //text_area.example(function() {
-        //  return $(this).attr('title');
-        //}, 
-        //  { className : 'jqueryexample' });
-        
+        text_area.focus();        
       } catch ( err ) {
       }
 
@@ -629,19 +605,12 @@ Reflect = {
         return;
       }
 
-      /*$j( this ).find( '.bullet_operations' ).animate( {
-        opacity : 0
-      }, 300, function () {
-      } );*/
-
-      //$j( this ).find( '.bullet_operations' ).fadeOut('fast');
-
       comment.find( '.highlight' ).removeClass( 'highlight' );
     },
 
     bullet_problem_click : function ( event ) {
-      $j( this ).parents('.rate_bullet').find( '.bullet_report_problem' ).slideDown();
-      //$j( this ).find( '.bullet_report_problem' ).animate( {
+      $j( this ).parents('.rate_bullet').find( '.rate_bullet_dialog' ).slideDown();
+      //$j( this ).find( '.rate_bullet_dialog' ).animate( {
       //  opacity : 1
       //}, 300 );
     },
@@ -649,14 +618,14 @@ Reflect = {
     bullet_flag : function ( event ) {
       var bullet_obj = $j.data( $j( this ).parents( '.bullet' )[0], 'bullet' ),
         flags = bullet_obj.flags,
-        flag = $j( this ).parents('.bullet_report_problem').find( 'input:checked' ).attr( 'value' ),
+        flag = $j( this ).parents('.rate_bullet_dialog').find( 'input:checked' ).attr( 'value' ),
         is_delete = flag in flags && flags[flag] < 0;
       if ( !is_delete ) {
         bullet_obj.my_rating = flag;
       }
       flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      $j( this ).parents( '.bullet_report_problem' ).slideUp();      
+      $j( this ).parents( '.rate_bullet_dialog' ).slideUp();      
     },
 
     response_delete : function ( event ) {
@@ -668,8 +637,8 @@ Reflect = {
     },
 
     response_problem_mouseover : function ( event ) {
-      $j( this ).find( '.bullet_report_problem' ).show();
-      $j( this ).find( '.bullet_report_problem' ).animate( {
+      $j( this ).find( '.rate_bullet_dialog' ).show();
+      $j( this ).find( '.rate_bullet_dialog' ).animate( {
         opacity : 1
       }, 300 );
       $j( this ).find( 'img.hover' ).css( 'display', 'inline' );
@@ -677,7 +646,7 @@ Reflect = {
     },
 
     response_problem_mouseout : function ( event ) {
-      $j( this ).find( '.bullet_report_problem' ).animate( {
+      $j( this ).find( '.rate_bullet_dialog' ).animate( {
         opacity : 0
       }, 300 );
       $j( this ).find( 'img.hover' ).hide();
@@ -696,7 +665,7 @@ Reflect = {
           'font-size' : '200%'
         } );
 
-        t_obj.parents( '.new_bullet_wrapper' ).find( '.bullet_submit' )
+        t_obj.parents( '.rf_dialog' ).find( '.bullet_submit' )
             .animate( {
               opacity : .25,
               duration : 50
@@ -712,7 +681,7 @@ Reflect = {
           'font-size' : '125%'
         } );
 
-        t_obj.parents( '.new_bullet_wrapper' ).find( '.bullet_submit' )
+        t_obj.parents( '.rf_dialog' ).find( '.bullet_submit' )
             .animate( {
               opacity : 1,
               duration : 50
@@ -908,7 +877,7 @@ Reflect = {
       if ( !canceled ) {
         var accurate_sel = "input[name='accurate-" + 
           response_obj.bullet.id + "']:checked";
-        params.text = response_obj.elements.new_response_text.hasClass('jqueryexample') ? '' : response_obj.elements.new_response_text.val();
+        params.text = response_obj.elements.new_response_text.val();
         response_obj.text = params.text;
         params.sig = response_obj.$elem.find( accurate_sel ).val();
         Reflect.api.post_response( response_obj );
@@ -962,28 +931,7 @@ Reflect = {
         col = new_col;
       }
       return col
-    },
-
-    get_inverted_background_color : function ( node, color_convert ) {
-      try {
-        var rgbString = Reflect.utils.get_background_color( node, true ),
-          res = '#';
-        
-        for ( var i = 0; i <= 2; ++i) {
-          var new_color = color_convert( rgbString[i] )
-                  .toString( 16 );
-          if ( new_color.length == 1 ) {
-            new_color = '0' + new_color;
-          }
-          res += new_color;
-        }
-        return res;
-      } catch ( err ) {
-        return '#555';
-      }
-    },
-    
-    
+    }
     
   },
 
@@ -1093,8 +1041,7 @@ Reflect = {
       },
       add_bullet : function ( bullet_info ) {
         var bullet_text = bullet_info.txt, 
-          bullet_id = bullet_info.id, 
-          responses = '';
+          bullet_id = bullet_info.id;
         if(!bullet_info.u_pic){
           bullet_info.u_pic = null;
         }
@@ -1105,7 +1052,7 @@ Reflect = {
           bullet_id : bullet_id,
           bullet_rev : bullet_info.rev,
           commenter : this.user,
-          responses : responses,
+          responses : '',
           comment : this,
           highlights : bullet_info.highlights,
           listener_pic : bullet_info.u_pic,
@@ -1192,7 +1139,6 @@ Reflect = {
       _build : function () {
         var template_vars = {
           bullet_text : Reflect.utils.escape( this.options.bullet_text ),
-          bullet_image : Reflect.config.view.images.added_bullet,
           user : Reflect.utils.escape( this.options.user ),
           media_dir : Reflect.config.api.media_dir,
           commenter : Reflect.utils.escape( this.options.commenter ),
@@ -1227,11 +1173,10 @@ Reflect = {
         }
 
         this.elements = {
-          response_list : this.$elem.find( '.responses ul' ),
           bullet_text : this.$elem.find( '.bullet_text' ),
           bullet_main : this.$elem.find( '.bullet_main' ),
-          bullet_operations : this.$elem
-              .find( '.bullet_operations' )
+          bullet_meta : this.$elem
+              .find( '.bullet_meta' )
         };
       },
       _build_prompt : function () {
@@ -1240,7 +1185,6 @@ Reflect = {
           commenter : commenter,
           media_dir : Reflect.config.api.media_dir,
           bullet_prompt : Reflect.config.view.text.bullet_prompt.replace('{{COMMENTER}}', commenter),
-          bullet_prompt_image : Reflect.config.view.images.bullet_prompt
         };
         
         var template = Reflect.templates.new_bullet_prompt;
@@ -1249,11 +1193,6 @@ Reflect = {
             .addClass( 'bullet' )
             .addClass( 'new_bullet' )
             .html( $j.jqote( template, template_vars ) );
-            /*.css( {
-              'background' : 'url(' 
-                + Reflect.api.server.media_dir 
-                + 'small_listener.png) left top no-repeat'
-            } ); */
             
         this.elements = {};
       },
@@ -1268,11 +1207,6 @@ Reflect = {
 
         if ( modify ) {
           text = $j.trim(this.elements.bullet_text.find('.rf_bullet_text').html());
-          /*if ( text.indexOf( "<span class=" ) > -1 ) {
-            text =  text.substring( 0, text
-                .toLowerCase()
-                .indexOf( "<span class=" ) );
-          }*/
         }
 
         var template_vars = {
@@ -1280,17 +1214,11 @@ Reflect = {
           bullet_id : this.id,
           txt : Reflect.utils.escape( text ),
           commenter : this.comment.user_short,
-          bullet_prompt_image : Reflect.config.view.images.bullet_prompt          
         };
         this.$elem.addClass( 'modify' ).unbind( 'click' )
           .unbind( 'mouseover' ).unbind( 'mouseout' )
           .html( 
             $j.jqote( Reflect.templates.new_bullet_dialog, template_vars ) );
-          /*.css( {
-              'background' : 'url(' 
-                + Reflect.api.server.media_dir 
-                + 'small_listener_trans.png) left top no-repeat'
-            } ); */
 
         this.elements = {
           new_bullet_text : this.$elem.find( '.new_bullet_text' ),
@@ -1311,18 +1239,19 @@ Reflect = {
         }
       },
       enter_highlight_state : function () {
-        var highlight = $j( '<table />' ).addClass( 'new_bullet_wrapper' )
-            .html( $j.jqote( Reflect.templates.bullet_highlight, {
-              media_dir : Reflect.api.server.media_dir
-            } ) );
-
         this.$elem.addClass('connect');
         
-        var wrapper = this.$elem.find('.bullet_main_wrapper');
-        var child = $j('<li />').addClass('bullet_dialog').append(highlight);
+        var wrapper = this.$elem.find('.bullet_main');
+        var child = $j('<div />')
+          .addClass('rf_dialog')
+          .append(
+            $j.jqote( Reflect.templates.bullet_highlight, {
+              media_dir : Reflect.api.server.media_dir
+            } )
+        );
         wrapper.append( child );
         this.elements.submit_button = this.$elem.find( '.submit .bullet_submit' );
-        return highlight;
+        return wrapper.find('.rf_dialog');
 
       },
       exit_highlight_state : function ( canceled ) {
@@ -1336,20 +1265,19 @@ Reflect = {
             .removeClass( 'new_bullet' )
             .addClass( 'full_bullet' );
           var me = this;
-          this.$elem.find( '.new_bullet_wrapper' ).fadeOut(200, function(){
+          this.$elem.find( '.rf_dialog' ).fadeOut(200, function(){
             me.$elem
               .removeClass( 'modify' )
               .removeClass( 'connect' );
-                        
-            
+            $j(this).remove();
           });
           me.set_attributes();
         }
         this.comment.clear_text();
       },
       _add_response : function ( params ) {
-        var response = $j( '<li />' ).response( params );
-        this.elements.response_list.append( response );
+        var response = $j( '<div />' ).response( params );
+        this.elements.bullet_main.after( response );
         this.responses.push( response );
         this.$elem.addClass('has_response');
         return $j.data( response[0], 'response' );
@@ -1374,9 +1302,6 @@ Reflect = {
           bullet : this
         };
         return this._add_response( params );
-      },
-      remove_response_section : function() {
-        this.elements.response_list.parent().remove();
       },
       set_flag : function () {
 
@@ -1437,7 +1362,6 @@ Reflect = {
         }
 
         this.elements = {
-          response_text : this.$elem.find( '.rebutt_txt' ),
           response_link : this.$elem.find( 'a.response_link')
         };
         this.elements.response_link.qtip({
@@ -1590,19 +1514,11 @@ Reflect = {
                 has_response = false;
 
               for ( var k in responses) {
-                has_response = true;
-                break;
+                var response_obj = bullet
+                    .add_response( responses[k] );
               }
-
-              if ( has_response ) {
-                for ( var k in responses) {
-                  var response_obj = bullet
-                      .add_response( responses[k] );
-                }
-              } else if ( comment.user == user ) {
+              if ( bullet.responses.length == 0 && comment.user == user ) {
                 bullet.add_response_dialog();
-              } else {
-                bullet.remove_response_section();
               }
 
               Reflect.bind.bullet( bullet );

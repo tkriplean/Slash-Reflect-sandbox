@@ -266,7 +266,7 @@ Reflect.study = {
 		     interval: 1000
 		};
 		
-		$j(element).find('.bullet_main_wrapper').hoverIntent( config );
+		$j(element).find('.bullet_main').hoverIntent( config );
 		
 	},
 	instrument_mousehovers : function (  ) {
@@ -277,7 +277,7 @@ Reflect.study = {
 		     interval: 1000
 		};
 		
-		$j(".bullet_main_wrapper").hoverIntent( config );
+		$j(".bullet_main").hoverIntent( config );
 		
 		config.over = Reflect.study.post_comment_mousehover;
 		$j(".rf_comment_text_wrapper").hoverIntent( config );
