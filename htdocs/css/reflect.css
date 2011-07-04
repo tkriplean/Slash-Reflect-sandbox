@@ -59,14 +59,20 @@
     display: inline;
     font-weight: normal; }
   #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
-    margin-bottom: 10px;
-    border-bottom: 1px dotted #777777; }
-    #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header span {
-      font-variant: small-caps; }
-    #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header a.rf_toggle_paginate {
-      color: #777777;
+    margin-bottom: 10px; }
+    #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_title {
+      font-variant: small-caps;
+      border-bottom: 1px dotted #777777;
+      width: 100%; }
+    #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate {
+      color: #aaaaaa;
       font-size: 80%;
       float: right; }
+      #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate a {
+        color: #aaaaaa;
+        text-decoration: underline; }
+        #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate a:hover {
+          cursor: pointer; }
   #reflected .rf_comment_wrapper .rf_comment_summary .username {
     margin-left: 4px;
     font-size: 90%;

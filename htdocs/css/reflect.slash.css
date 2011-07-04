@@ -128,12 +128,15 @@
   color: #666;
 }
 
+#reflected .rf_trial_notification {
+  padding: 10px;
+  font-size: 90%;
+  background-color: #e1e1e1;
+  margin: 10px;
+}
 #reflected .rf_toggle {
-  position: relative;
-  top: -25px;
-  font-size: 11px;
   color: #777;
-  float: right;
+  text-decoration: underline;
 }
 
 #reflected .rf_toggle:hover {

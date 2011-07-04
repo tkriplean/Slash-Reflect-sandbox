@@ -764,7 +764,7 @@ Reflect = {
     },
     toggle_bullets_pagination : function ( event ) {
       $j( this ).parents('.summary').find('.bullet_list').children().fadeIn();
-      $j( this ).hide();      
+      $j( this ).parent().hide();      
      }    
 
   },
@@ -1048,7 +1048,7 @@ Reflect = {
             + '<td id="rf_comment_summary-'
             + this.id + '" class="rf_comment_summary">'
             + '<div class="summary" id="summary-' + this.id + '">'
-            + '<div class="reflect_header"><span>Readers hear ' + this.user + ' saying...</span></div>'
+            + '<div class="reflect_header"><div class="rf_title">Readers hear ' + this.user + ' saying...</div></div>'
             + '<ul class="bullet_list" />' + '</div>' + '</td>' );
 
         var author_block = $j( '<span class="rf_comment_author">' 
@@ -1063,7 +1063,7 @@ Reflect = {
             .wrapInner( $j( '<table id="rf_comment_wrapper-' 
                 + this.id + '" class="rf_comment_wrapper" />' ) );
         
-        comment_text.before('<a class="rf_toggle state_on">[hide summaries]</a>');
+        
         
         //so that we don't try to break apart urls into different sentences...
         comment_text.find('a')
@@ -1073,23 +1073,7 @@ Reflect = {
               e.preventDefault();
             }
           });          
-        
-        this.$elem
-          .find( '.rf_toggle' )
-          .click( function() {
-            if ( $(this).hasClass('state_on') ) {
-              $('.rf_comment_summary').hide();
-              $('.rf_comment_text_wrapper').css('width', '100%');
-              $('.rf_toggle').addClass('state_off').removeClass('state_on');
-              $('.rf_toggle').text("[show summaries]");              
-            } else {
-              $('.rf_comment_summary').show();
-              $('.rf_comment_text_wrapper').css('width', 'inherit');
-              $('.rf_toggle').addClass('state_on').removeClass('state_off');
-              $('.rf_toggle').text("[hide summaries]");              
-            }
-          });
-          
+                  
         this.elements = {
           bullet_list : comment_text.find( '.bullet_list:first' ),
           comment_text : this.$elem.find( '.rf_comment_text:first' ),
@@ -1145,14 +1129,17 @@ Reflect = {
             .removeClass( 'highlight' );
       },
       hide_excessive_bullets : function() {
-        if ( this.bullets.length > 1 && this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
+        var HIDE_FACTOR = 1.5;
+        if ( this.bullets.length > 1 && this.elements.bullet_list.height() > HIDE_FACTOR * this.elements.comment_text.height() ) {
           var i = this.bullets.length - 1;
-          while (  i > 0 && this.elements.bullet_list.height() + 70 > this.elements.comment_text.height() ) {
+          while (  i > 0 && this.elements.bullet_list.height() > HIDE_FACTOR * this.elements.comment_text.height() ) {
             this.bullets[i].$elem.hide();
-            i -= 1;
+            i -= 1; 
           }
-          this.$elem.find('.reflect_header').append('<a class="rf_toggle_paginate">show all</a>');
-          this.$elem.find('.rf_toggle_paginate').bind (
+          var hidden = this.bullets.length - i - 1,
+            summary = hidden == 1 ? 'summary' : 'summaries';
+          this.$elem.find('.reflect_header').append('<div class="rf_toggle_paginate">' + hidden + ' ' + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
+          this.$elem.find('.rf_toggle_paginate a').bind (
             "click", Reflect.handle.toggle_bullets_pagination
           );
           this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top')) - 20);
@@ -1221,7 +1208,7 @@ Reflect = {
           if ( this.options.score ) {
             template_vars.score = this.options.score;
           } else {
-            template_vars.score = '-';
+            template_vars.score = '&ndash;';
           }
         }
         
