@@ -140,8 +140,8 @@
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet {
               cursor: pointer;
               padding-left: 4px; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_prompt_problem img.selector_arrow {
-                padding-top: 6px; }
+              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_prompt_problem .selector_arrow {
+                padding-top: 4px; }
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main ul.bullet_main_wrapper ul.bullet_operations > li.rate_bullet .bullet_report_problem {
                 display: none;
                 z-index: 99;
@@ -266,8 +266,9 @@
             color: #555555; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper .arrow {
             position: absolute;
-            top: 8px;
-            left: -10px; }
+            top: 10px;
+            left: -10px;
+            font-size: 250%; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main ul.bullet_main_wrapper li.bullet_dialog table.new_bullet_wrapper .submit {
             padding: 0 0 5px 5px; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect:hover {
