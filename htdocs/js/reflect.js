@@ -18,13 +18,13 @@
  * 
  * Browser compatability (out of date):
  * 
- *   firefox : best
+ *   firefox : good
  *    safari : good
  *    chrome : good      
- *    opera : untested
- *    IE6 : unusable
- *    IE7 : ugly as hell
- *    IE8 : ugly
+ *    opera : ?
+ *    IE6 : ?
+ *    IE7 : ugly
+ *    IE8 : good
  * 
  */
 
@@ -610,9 +610,6 @@ Reflect = {
 
     bullet_problem_click : function ( event ) {
       $j( this ).parents('.rate_bullet').find( '.rate_bullet_dialog' ).slideDown();
-      //$j( this ).find( '.rate_bullet_dialog' ).animate( {
-      //  opacity : 1
-      //}, 300 );
     },
 
     bullet_flag : function ( event ) {
@@ -790,11 +787,6 @@ Reflect = {
       bullet_obj.exit_edit_state( params, canceled );
 
       if ( !canceled && !bullet_obj.id ) {
-        /*bullet_obj.elements.bullet_main.animate( {
-          backgroundColor : '#FFFFaa'
-        }, {
-          duration : 1000
-        } );*/
       } else if ( canceled && !bullet_obj.id ) {
         bullet_obj.$elem.find( '.add_bullet' )
             .bind( 'click', Reflect.transitions.to_bullet, false );
@@ -835,18 +827,6 @@ Reflect = {
       bullet_obj.exit_highlight_state( canceled );
       if ( !canceled ) {
         Reflect.bind.bullet( bullet_obj );
-
-        /*var bullet_main = bullet_obj.elements.bullet_main,
-          bg = Reflect.utils.get_background_color( bullet_main );
-        bullet_main.animate( {
-          backgroundColor : bg
-        }, {
-          duration : 1500,
-          complete : function () {
-            $j( this ).removeAttr( 'style' );
-          }
-        } );*/
-
       } else if ( modified ) {
         Reflect.bind.bullet( bullet_obj );
       } else {
@@ -1184,7 +1164,7 @@ Reflect = {
         var template_vars = {
           commenter : commenter,
           media_dir : Reflect.config.api.media_dir,
-          bullet_prompt : Reflect.config.view.text.bullet_prompt.replace('{{COMMENTER}}', commenter),
+          bullet_prompt : Reflect.config.view.text.bullet_prompt.replace('{{COMMENTER}}', commenter)
         };
         
         var template = Reflect.templates.new_bullet_prompt;

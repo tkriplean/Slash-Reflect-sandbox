@@ -138,16 +138,16 @@
 <script type="text/html" id="reflect_template_response">
 <![CDATA[
       <% if(this.sig == "2") { %>
-        <div class="response_yes">accurate</div>
+        <div class="response_yes">accurate <span class="symbol">&#10003;</span></div>
       <% } else if(this.sig == "1") { %>
-        <div class="response_maybe">almost correct</div> 
+        <div class="response_maybe">almost correct <span class="symbol">&#10013;</span></div> 
       <% } else if (this.sig == "0"){ %>
-        <div class="response_no">inaccurate</div>
+        <div class="response_no">inaccurate <span class="symbol">&#9747;</span> </div>
       <% } else if (this.sig == "-1"){ %>
-        <div class="response_not">not a summary</div>              
+        <div class="response_not">not a summary <span class="symbol">&#9763;</span></div>              
       <% } %>
       <% if(this.text && this.text != '') { %>
-        <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'>full response</a>                    
+        <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'>read why &raquo;</a>                    
       <% } else { %>
         <span class="responder">&ndash; <%= this.user %></span>
       <% } %> 
