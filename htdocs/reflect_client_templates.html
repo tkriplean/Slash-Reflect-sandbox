@@ -6,7 +6,6 @@
           <ul class="bullet_meta">
             <li></li>  
             <li class="modify_operation" title="Edit this summary bullet point">
-              &#8231;
               <a class="modify bullet_operation op">
                 edit
               </a>
@@ -18,7 +17,11 @@
               </a>
             </li>
           </ul>
-          <div class="rf_bullet_text"><div class="bullet_point">&#8226;</div><%= this.bullet_text %>&ndash; <a class="user"><%= this.user %></a></div> 
+          <div class="rf_bullet_text">
+            <div class="bullet_point">&#8226;</div>
+            <%= this.bullet_text %>- 
+            <a class="user"><%= this.user %></a>
+          </div> 
           <% if (this.enable_rating) { %>
           <ul class="bullet_meta">
               <% if(this.score == '--') { %>
@@ -83,6 +86,7 @@
 <![CDATA[
   <div class="bullet_main">   
     <div class="prompt">
+      <div class="bullet_point">&#8226;</div>
        <a class="add_bullet" type="button" title="Show you understand by summarizing a point <%= this.commenter %> makes.">   
           <%= this.bullet_prompt %>
        </a>
@@ -96,6 +100,7 @@
 <![CDATA[
   <div class="bullet_main">      
     <div class="rf_dialog">
+       <div class="bullet_point">&#8226;</div>
        <div class="new_bullet_text_wrap">
           <textarea class="new_bullet_text" title="Help others better understand and show <%= this.commenter %> that s/he is being heard by restating a point you hear them making."><% if (this.txt) %><%= this.txt %></textarea>  
        </div>

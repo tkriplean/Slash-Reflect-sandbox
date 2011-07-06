@@ -89,22 +89,23 @@
       line-height: 1.2em; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self {
         min-height: 35px; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_point {
+        position: absolute;
+        left: -4px;
+        font-size: 125%; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main {
         float: left; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
-        width: 100%; }
+        width: 100%;
+        position: relative; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text {
           width: 95%;
           padding-left: 8px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .bullet_point {
-            position: absolute;
-            left: -10px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_score span {
             font-size: 85%;
             vertical-align: baseline; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_bullet_text {
-            padding-bottom: 2px;
-            position: relative; }
+            padding-bottom: 2px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_author.rf_listener_pic {
           max-width: 30px;
           overflow: hidden;
@@ -185,10 +186,12 @@
                         color: #9b5eb3; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main {
         background: none; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet {
-          text-decoration: underline; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet:hover {
-            cursor: pointer; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt {
+          padding-left: 8px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet {
+            text-decoration: underline; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet:hover {
+              cursor: pointer; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .modify_operation, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .delete_operation {
           display: none; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog {
@@ -241,7 +244,7 @@
         background-color: inherit; }
 
 #reflected .response {
-  margin: 12px 0 0 2px;
+  margin: 0px 0 0 2px;
   padding: 3px 3px 3px 6px;
   float: right;
   position: relative; }

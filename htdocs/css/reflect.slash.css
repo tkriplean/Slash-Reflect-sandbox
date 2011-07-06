@@ -27,28 +27,28 @@
 #reflected .response .symbol {
 }
 
-#reflected .response.accurate_yes .response_yes .symbol{
+#reflected .response.accurate_yes .response_yes {
   color: #066;
 }
-/*
-#reflected .response.accurate_somewhat .response_maybe .symbol{
-  color: #FCF6EA;
+
+#reflected .response.accurate_somewhat .response_maybe {
+  color: #853;
 }
 
-#reflected .response.accurate_no .response_no .symbol{
-  color: #FCDEE0;
+#reflected .response.accurate_no .response_no {
+  color: #660;
 }
 
-#reflected .response.accurate_not .response_not .symbol{
-  color: #FFD695;
+#reflected .response.accurate_not .response_not {
+  color: #600;
 }
-*/
+
 
 #reflected .response.accurate_yes .response_yes,
 #reflected .response.accurate_somewhat .response_maybe,
 #reflected .response.accurate_no .response_no,
 #reflected .response.accurate_not .response_not {
-  color: #4D4D4D;
+  font-weight: bold;
 }
 
 
@@ -89,7 +89,7 @@
 }
 
 #reflected a.user {
-  color: #999;
+  color: #066;
   text-transform: lowercase;
 }
 
