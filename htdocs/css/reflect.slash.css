@@ -24,16 +24,15 @@
 	display: none;
 }
 
-#reflected .response     .symbol {
+#reflected .response .symbol {
   float: right;
   display: block;
-  color: white;
-}
-/*
-#reflected .response.accurate_yes .response_yes .symbol{
-  color: #D0E7D2;
 }
 
+#reflected .response.accurate_yes .response_yes .symbol{
+  color: #066;
+}
+/*
 #reflected .response.accurate_somewhat .response_maybe .symbol{
   color: #FCF6EA;
 }
@@ -52,7 +51,6 @@
 #reflected .response.accurate_no .response_no,
 #reflected .response.accurate_not .response_not {
   color: #4D4D4D;
-  font-weight: bold;
 }
 
 
@@ -92,4 +90,8 @@
 	overflow:visible;
 }
 
+#reflected a.user {
+  color: #999;
+  text-transform: lowercase;
+}
 

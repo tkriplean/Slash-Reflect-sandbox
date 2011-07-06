@@ -609,7 +609,12 @@ Reflect = {
     },
 
     bullet_problem_click : function ( event ) {
-      $j( this ).parents('.rate_bullet').find( '.rate_bullet_dialog' ).slideDown();
+      var dialog = $j( this ).parents('.rate_bullet').find( '.rate_bullet_dialog' );
+      if( dialog.css('display') == 'none' ) {
+        dialog.slideDown();
+      } else {
+        dialog.slideUp();
+      }
     },
 
     bullet_flag : function ( event ) {
@@ -1134,7 +1139,7 @@ Reflect = {
           if ( this.options.score ) {
             template_vars.score = this.options.score;
           } else {
-            template_vars.score = '&ndash;';
+            template_vars.score = '--';
           }
         }
         
@@ -1346,13 +1351,32 @@ Reflect = {
         };
         this.elements.response_link.qtip({
               content: {
-                 text: false
+                 text: '&#8220;' + this.text + '&#8221;',
+                 title: {
+                   text : this.user + " " + {"1":'clarifies',"2":'verifies',"0":'disputes', '-1':'responds'}[this.options.sig] + "..."
+                 }
               },
               position : { corner: {
                        target: 'bottomRight',
                        tooltip: 'topRight'
                     }},              
-              style: 'blue'
+              style: {
+                background: 'white',
+                color: 'black',
+                border: {
+                  width: 3,
+                  radius: 0,
+                  color: '#066'
+                },
+                title: {
+                  padding: '2px 12px'
+                },
+                tip: true
+              },
+              hide: {
+                fixed : false
+              }
+              
            });
 
       },

@@ -4,9 +4,9 @@
 
         <div class="bullet_text">
           <ul class="bullet_meta">
-            <li><a class="user">by <%= this.user %></a></li>      
+            <li>by <a class="user"><%= this.user %></a></li>  
             <li class="modify_operation" title="Edit this summary bullet point">
-              &#8231; 
+              &#8231;
               <a class="modify bullet_operation op">
                 edit
               </a>
@@ -18,11 +18,14 @@
               </a>
             </li>
           </ul>
-          <div class="rf_bullet_text"><%= this.bullet_text %></div>
+          <div class="rf_bullet_text"><%= this.bullet_text %></div> 
           <% if (this.enable_rating) { %>
           <ul class="bullet_meta">
-               <li class='rf_score'>score: <span><%= this.score %></span></li>
-          
+              <% if(this.score == '--') { %>
+                <li class='rf_score'>unrated <span></span></li>
+              <%} else { %>
+                <li class='rf_score'>rating: <span><%= this.score %></span></li>                
+              <% } %>
               <li class="rate_bullet">
                   <a class="op bullet_operation bullet_prompt_problem">rate &#9662;</a>
                   <form name="rate_bullet" class="rate_bullet_dialog">
@@ -137,17 +140,18 @@
 
 <script type="text/html" id="reflect_template_response">
 <![CDATA[
+      <div class="floating_bullet">&#9664;</div>
       <% if(this.sig == "2") { %>
         <div class="response_yes">accurate <span class="symbol">&#10003;</span></div>
       <% } else if(this.sig == "1") { %>
-        <div class="response_maybe">almost correct <span class="symbol">&#10013;</span></div> 
+        <div class="response_maybe">almost correct <span class="symbol"></span></div> 
       <% } else if (this.sig == "0"){ %>
         <div class="response_no">inaccurate <span class="symbol">&#9747;</span> </div>
       <% } else if (this.sig == "-1"){ %>
-        <div class="response_not">not a summary <span class="symbol">&#9763;</span></div>              
+        <div class="response_not">not a summary <span class="symbol"></span></div>              
       <% } %>
       <% if(this.text && this.text != '') { %>
-        <a class="response_link" title='"<%= this.text %>"<br>  &mdash; <%= this.user %>'>read why &raquo;</a>                    
+        <a class="response_link">read why &raquo;</a>                    
       <% } else { %>
         <span class="responder">&ndash; <%= this.user %></span>
       <% } %> 

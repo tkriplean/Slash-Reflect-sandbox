@@ -25,8 +25,6 @@
 #reflected .rf_comment .rf_comment_wrapper {
   position: relative;
   border-collapse: collapse; }
-  #reflected .rf_comment .rf_comment_wrapper a:hover {
-    background-color: inherit; }
   #reflected .rf_comment .rf_comment_wrapper textarea {
     padding: 3px 5px;
     font-size: 100%; }
@@ -69,11 +67,11 @@
       border-bottom: 1px dotted #777777;
       width: 100%; }
     #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate {
-      color: #aaaaaa;
-      font-size: 80%;
+      color: #7d7d7d;
+      font-size: 70%;
       float: right; }
       #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate a {
-        color: #aaaaaa;
+        color: #7d7d7d;
         text-decoration: underline; }
         #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate a:hover {
           cursor: pointer; }
@@ -101,8 +99,6 @@
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text {
           width: 95%;
           padding-left: 8px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_score {
-            color: #aaaaaa; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_bullet_text {
             padding-bottom: 2px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_author.rf_listener_pic {
@@ -119,11 +115,11 @@
           font-variant: small-caps;
           text-transform: lowercase;
           padding-bottom: 2px;
-          position: relative; }
+          position: relative;
+          color: #7d7d7d; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta a {
-            color: #aaaaaa; }
+            color: #7d7d7d; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta .bullet_operation {
-            color: #aaaaaa;
             cursor: pointer;
             padding-right: 2px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li {
@@ -200,7 +196,7 @@
             width: 100%;
             padding-bottom: 5px; }
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer a {
-              color: #aaaaaa; }
+              color: #7d7d7d; }
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer a:hover {
                 background-color: inherit;
                 color: inherit; }
@@ -210,7 +206,7 @@
                 padding-right: 15px; }
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.count {
                 padding: 0 20px 0 10px;
-                color: #aaaaaa; }
+                color: #7d7d7d; }
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.be_neutral {
                 float: right; }
                 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.be_neutral a:hover {
@@ -236,18 +232,24 @@
         background-color: inherit; }
 
 #reflected .response {
-  margin: 0px 0 4px 10px;
+  margin: 12px 0 4px 10px;
   padding: 3px 3px 3px 6px;
-  float: right; }
+  float: right;
+  position: relative; }
+  #reflected .response .floating_bullet {
+    position: absolute;
+    left: -8px;
+    color: #e1e1e1; }
   #reflected .response .response_yes,
   #reflected .response .response_no,
   #reflected .response .response_maybe,
   #reflected .response .response_not {
-    font-size: 85%;
+    font-size: 90%;
     font-variant: small-caps; }
   #reflected .response a.response_link {
     color: #4d4d4d;
-    font-size: 80%; }
+    font-size: 85%;
+    padding: 3px 35px 3px 0px; }
   #reflected .response .response_operations > li {
     display: inline; }
     #reflected .response .response_operations > li .modify {
