@@ -142,11 +142,11 @@
 <![CDATA[
       <div class="floating_bullet">&#9664;</div>
       <% if(this.sig == "2") { %>
-        <div class="response_yes">accurate <span class="symbol">&#10003;</span></div>
+        <div class="response_yes"> <span class="symbol">&#10003;</span> accurate</div>
       <% } else if(this.sig == "1") { %>
         <div class="response_maybe">almost correct <span class="symbol"></span></div> 
       <% } else if (this.sig == "0"){ %>
-        <div class="response_no">inaccurate <span class="symbol">&#9747;</span> </div>
+        <div class="response_no">inaccurate</div>
       <% } else if (this.sig == "-1"){ %>
         <div class="response_not">not a summary <span class="symbol"></span></div>              
       <% } %>

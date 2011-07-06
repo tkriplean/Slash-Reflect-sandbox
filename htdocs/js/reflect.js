@@ -1331,7 +1331,7 @@ Reflect = {
             sig : Reflect.utils.escape( String(this.options.sig) ),
             user : Reflect.utils.escape( first_name ),
             media_dir : Reflect.api.server.media_dir
-          };
+        };
         this.$elem
             .addClass( 'response' )
             .addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no', '-1':'not'}[this.options.sig]).html( 
@@ -1349,12 +1349,10 @@ Reflect = {
         this.elements = {
           response_link : this.$elem.find( 'a.response_link')
         };
+        //{"1":'clarifies',"2":'verifies',"0":'disputes', '-1':'responds'}[this.options.sig]
         this.elements.response_link.qtip({
               content: {
-                 text: '&#8220;' + this.text + '&#8221;',
-                 title: {
-                   text : this.user + " " + {"1":'clarifies',"2":'verifies',"0":'disputes', '-1':'responds'}[this.options.sig] + "..."
-                 }
+                 text: '&#8220;' + this.text + '&#8221;<div class=\"signature\">&ndash; ' + this.user + '</div>'
               },
               position : { 
                 corner: {
@@ -1366,15 +1364,12 @@ Reflect = {
                 }
               },              
               style: {
-                background: 'white',
+                background: '#e1e1e1',
                 color: 'black',
                 border: {
                   width: 3,
                   radius: 0,
                   color: '#066'
-                },
-                title: {
-                  padding: '2px 12px'
                 },
                 tip: false
               },

@@ -99,6 +99,9 @@
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text {
           width: 95%;
           padding-left: 8px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_score span {
+            font-size: 85%;
+            vertical-align: baseline; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_bullet_text {
             padding-bottom: 2px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_author.rf_listener_pic {
@@ -130,33 +133,38 @@
               #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog {
                 display: none;
                 z-index: 99;
-                background-color: white;
+                background-color: #e1e1e1;
                 position: absolute;
                 width: 280px;
                 left: 45px;
-                border: 1px solid #bbbbbb;
+                border: 3px solid #006666;
                 padding: 5px;
-                font-size: 110%;
-                font-variant: normal; }
+                font-size: 100%;
+                font-variant: normal;
+                text-transform: none;
+                cursor: auto;
+                top: 15px; }
                 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog div.submit_rating {
-                  font-size: 80%;
                   padding-top: 5px; }
                   #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog div.submit_rating a {
                     padding: 5px 5px 3px 0; }
                     #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog div.submit_rating a:hover {
-                      text-decoration: underline; }
+                      color: black; }
                 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog .rate_header {
-                  font-size: 90%; }
+                  padding-bottom: 5px;
+                  font-weight: bold; }
                 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog .flag {
                   border: 0px solid #bbbbbb;
                   display: block;
                   width: 100%;
-                  background-color: white; }
+                  padding: 3px 0; }
                   #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog .flag:hover {
                     background-color: #eeeeee; }
+                  #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog .flag input {
+                    margin: 0;
+                    padding: 0 4px 0 0; }
                   #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li.rate_bullet .rate_bullet_dialog .flag label {
                     display: inline;
-                    font-size: 85%;
                     color: #777777;
                     font-weight: normal;
                     cursor: pointer; }
@@ -232,7 +240,7 @@
         background-color: inherit; }
 
 #reflected .response {
-  margin: 12px 0 4px 10px;
+  margin: 12px 0 0 2px;
   padding: 3px 3px 3px 6px;
   float: right;
   position: relative; }
@@ -240,6 +248,9 @@
     position: absolute;
     left: -8px;
     color: #e1e1e1; }
+  #reflected .response .lead {
+    font-size: 70%;
+    color: white; }
   #reflected .response .response_yes,
   #reflected .response .response_no,
   #reflected .response .response_maybe,
@@ -256,37 +267,44 @@
       color: #777777;
       cursor: pointer;
       padding-right: 3px; }
-  #reflected .response.new ul.response_def, #reflected .response.modify ul.response_def {
-    background-color: #ffe5e5;
-    padding: 5px; }
-    #reflected .response.new ul.response_def label.prompt, #reflected .response.modify ul.response_def label.prompt {
-      padding: 5px;
-      font-size: 80%;
-      font-weight: bold; }
-    #reflected .response.new ul.response_def li.response_prompt ul.response_eval, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval {
-      padding: 5px 0 0px 8px; }
-      #reflected .response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval li {
-        display: inline;
-        padding-right: 6px; }
-    #reflected .response.new ul.response_def li.response_dialog, #reflected .response.modify ul.response_def li.response_dialog {
-      display: none; }
-      #reflected .response.new ul.response_def li.response_dialog .rf_dialog, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog {
-        position: relative;
-        padding-left: 12px; }
-        #reflected .response.new ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text {
-          height: 60px;
-          padding: 4px 2px;
-          width: 100%;
-          overflow: auto; }
-        #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer {
-          width: 100%;
-          padding-bottom: 5px; }
-          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a {
-            color: inherit; }
-            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover {
-              background-color: inherit;
+  #reflected .response.new, #reflected .response.modify {
+    padding: 0; }
+    #reflected .response.new ul.response_def, #reflected .response.modify ul.response_def {
+      background-color: #ffe5e5;
+      padding: 5px; }
+      #reflected .response.new ul.response_def label.prompt, #reflected .response.modify ul.response_def label.prompt {
+        padding: 5px;
+        font-size: 80%;
+        font-weight: bold; }
+      #reflected .response.new ul.response_def li.response_prompt ul.response_eval, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval {
+        padding: 5px 0 0px 8px; }
+        #reflected .response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval li {
+          display: inline;
+          padding-right: 6px; }
+      #reflected .response.new ul.response_def li.response_dialog, #reflected .response.modify ul.response_def li.response_dialog {
+        display: none; }
+        #reflected .response.new ul.response_def li.response_dialog .rf_dialog, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog {
+          position: relative;
+          padding-left: 12px; }
+          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text {
+            height: 60px;
+            padding: 4px 2px;
+            width: 100%;
+            overflow: auto; }
+          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer {
+            width: 100%;
+            padding-bottom: 5px; }
+            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a {
               color: inherit; }
-          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li {
-            display: inline-block; }
-            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit {
-              padding-right: 15px; }
+              #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover {
+                background-color: inherit;
+                color: inherit; }
+            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li {
+              display: inline-block; }
+              #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit {
+                padding-right: 15px; }
+
+.qtip-content .signature {
+  padding: 0px 0 0 10px;
+  color: #777777;
+  text-align: right; }
