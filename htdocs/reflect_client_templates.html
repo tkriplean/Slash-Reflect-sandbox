@@ -4,7 +4,7 @@
 
         <div class="bullet_text">
           <ul class="bullet_meta">
-            <li>by <a class="user"><%= this.user %></a></li>  
+            <li></li>  
             <li class="modify_operation" title="Edit this summary bullet point">
               &#8231;
               <a class="modify bullet_operation op">
@@ -18,7 +18,7 @@
               </a>
             </li>
           </ul>
-          <div class="rf_bullet_text"><%= this.bullet_text %></div> 
+          <div class="rf_bullet_text"><div class="bullet_point">&#8226;</div><%= this.bullet_text %>&ndash; <a class="user"><%= this.user %></a></div> 
           <% if (this.enable_rating) { %>
           <ul class="bullet_meta">
               <% if(this.score == '--') { %>
