@@ -1356,10 +1356,15 @@ Reflect = {
                    text : this.user + " " + {"1":'clarifies',"2":'verifies',"0":'disputes', '-1':'responds'}[this.options.sig] + "..."
                  }
               },
-              position : { corner: {
-                       target: 'bottomRight',
-                       tooltip: 'topRight'
-                    }},              
+              position : { 
+                corner: {
+                  target: 'bottomRight',
+                  tooltip: 'topRight'
+                },
+                adjust: {
+                  y: 15
+                }
+              },              
               style: {
                 background: 'white',
                 color: 'black',
@@ -1371,7 +1376,7 @@ Reflect = {
                 title: {
                   padding: '2px 12px'
                 },
-                tip: true
+                tip: false
               },
               hide: {
                 fixed : false
