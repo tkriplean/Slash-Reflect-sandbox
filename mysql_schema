@@ -21,8 +21,14 @@ CREATE TABLE reflect_bullet_revision (
 	
 	txt text NOT NULL,
 	active tinyint(4) DEFAULT 1,
-	score tinyint(4),
 	
+	rating_zen tinyint(4) DEFAULT 0,
+  rating_gold tinyint(4) DEFAULT 0,
+  rating_sun tinyint(4) DEFAULT 0,
+  rating_troll tinyint(4) DEFAULT 0,
+  rating_graffiti tinyint(4) DEFAULT 0,
+  rating varchar(255),
+
 	PRIMARY KEY id (id),
 	KEY (bullet_id),
 	KEY (comment_id)
@@ -40,8 +46,7 @@ CREATE TABLE reflect_bullet_rating (
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	user_id int, 
 	
-	rating text NOT NULL,
-	score tinyint(4),
+	rating varchar(255) NOT NULL,
 	
 	PRIMARY KEY id (id),
 	KEY (bullet_id),

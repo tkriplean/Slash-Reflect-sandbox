@@ -363,7 +363,9 @@ Reflect = {
       vals = {
         params : params,
         success : function ( data ) {
-          bullet_obj.$elem.find('.rf_score span').text(data.updated_score);
+          bullet_obj.$elem.find('.rf_gallery_container div')
+            .attr('class', data.rating)
+            .attr('title', Reflect.utils.badge_tooltip(data.rating));
         },
         error : function ( data ) {}
       };
@@ -381,62 +383,110 @@ Reflect = {
     /* Establishes default state for a bullet */
     bullet : function ( bullet_obj ) {
 
-      bullet_obj.$elem.find('.bullet_main')
+      bullet_obj.$elem
           .hover( Reflect.handle.bullet_mouseover, 
               Reflect.handle.bullet_mouseout );
                                   
       var footer = bullet_obj.elements.bullet_meta,
+          eval_block = bullet_obj.elements.bullet_eval,
         user = Reflect.utils.get_logged_in_user(),
         admin = Reflect.api.server.is_admin();
-        
-      footer
-          .find( '.rate_bullet .op' )
-          .click( Reflect.handle.bullet_problem_click); 
+      
+      var first_name = bullet_obj.user;
+       if (first_name.indexOf(' ') > -1){
+        first_name = first_name.substring(0, first_name.indexOf(' '));
+      }      
+      var template_vars = {
+        bullet_author : first_name,
+        rating : bullet_obj.my_rating,
+        ratings : bullet_obj.ratings
+      };
+      
+      eval_block
+        .find('.rf_gallery_container div')
+        .qtip({
+              content: { text: false },
+              position : { 
+                corner: {
+                  target: 'bottomRight',
+                  tooltip: 'topRight'
+                },
+              },              
+              style: {
+                background: '#e1e1e1',
+                color: '#4d4d4d',
+                border: {
+                  width: 3,
+                  radius: 0,
+                  color: '#066'
+                },
+              }
+           })
+        .attr('title', Reflect.utils.badge_tooltip(bullet_obj.ratings.rating));        
+      
+      eval_block
+          .find( '.rf_rating .rf_selector_container' )
+          .qtip({
+                content: {
+                   text: $j.jqote( Reflect.templates.bullet_rating, template_vars )
+                },
+                position : { 
+                  corner: {
+                    target: 'bottomRight',
+                    tooltip: 'topRight'
+                  },
+                  adjust: {
+                    y: 0, x: 10
+                  }
+                },              
+                style: {
+                  background: '#e1e1e1',
+                  color: '#4d4d4d',
+                  padding: '0',
+                  border: {
+                    width: 3,
+                    radius: 0,
+                    color: '#066'
+                  },
+                  tip: false
+                },
+                hide: {
+                  fixed : true
+                },
+                api: {
+                  onRender: function(){
+                    this.elements.tooltip.find( '.flag' )
+                        .bind( 'click', function(event){
+                          Reflect.handle.bullet_flag(event, bullet_obj) 
+                          $(eval_block
+                              .find( '.rf_rating .rf_selector_container' )).qtip('hide');
+                        });
+                  }
+                }
+
+             });
 
       footer
           .find( '.delete' )
           .bind( 'click', Reflect.handle.bullet_delete );
 
-      footer.find( '.rate_bullet_dialog .submit' )
-          .bind( 'click', Reflect.handle.bullet_flag );
-      footer.find( '.rate_bullet_dialog .cancel' )
-          .bind( 'click', function(){
-            $j( this ).parents( '.rate_bullet_dialog' ).fadeOut();
-          });
           
       if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
         footer.find( '.modify_operation' ).show();
         footer.find( '.delete_operation' ).show();
-        footer.find( '.rate_bullet' ).hide();
       } else if ( Reflect.api.server.is_admin() ) {
         footer.find( '.modify_operation' ).hide();
         footer.find( '.delete_operation' ).show();
-         Reflect.config.view.enable_rating ? 
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
       } else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
         footer.find( '.modify_operation' ).hide();
         footer.find( '.delete_operation' ).show();
-         Reflect.config.view.enable_rating ?
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
       } else {
         footer.find( '.modify_operation' ).hide();
         footer.find( '.delete_operation' ).hide();
-         Reflect.config.view.enable_rating && user != bullet_obj.user && user != bullet_obj.comment.user ?
-          footer.find('.rate_bullet').show() :
-          footer.find('.rate_bullet').hide();
       }
-
-
-      /*footer.css( {
-        display : 'none'
-      } ); */
 
       // set modify bullet action
       if ( bullet_obj.user != 'Anonymous' && bullet_obj.user == Reflect.utils.get_logged_in_user() ) {
-        // bullet_obj.elements.bullet_text
-        //    .click( Reflect.transitions.to_bullet );
         footer.find( '.modify' )
             .click( Reflect.transitions.to_bullet );
       }
@@ -494,23 +544,11 @@ Reflect = {
     /* Establishes default state for a response */
     response : function ( bullet_obj, response_obj ) {
       
-      var user = Reflect.utils.get_logged_in_user();
-      if ( user != response_obj.user ) {
-        response_obj.$elem.find( '.response_operations' ).hide();
-      }
-
-      response_obj.$elem.find( '.delete' )
-          .bind( 'click', Reflect.handle.response_delete );
-
       var accurate_sel = 'input[name="accurate-' + response_obj.bullet.id + '"]';
       response_obj.$elem
           .find( accurate_sel )
           .click( Reflect.handle.accurate_clicked );
 
-      if ( response_obj.user == Reflect.utils.get_logged_in_user() ) {
-        response_obj.$elem.find( '.modify' )
-            .click( Reflect.transitions.to_response );
-      }
     },
     
     /* Establishes dialog state for a response */
@@ -578,7 +616,7 @@ Reflect = {
     bullet_mouseover : function ( event ) {
 
       var bullet_obj = $j
-          .data( $j( this ).parents('.bullet')[0], 'bullet' );
+          .data( $j( this )[0], 'bullet' );
 
       if ( bullet_obj.comment.$elem.hasClass( 'highlight_state' )
           || bullet_obj.comment.$elem.hasClass( 'bullet_state' ) ) {
@@ -596,7 +634,7 @@ Reflect = {
     
     bullet_mouseout : function ( event ) {
       var bullet_obj = $j
-          .data( $j( this ).parents('.bullet'), 'bullet' );
+          .data( $j( this )[0], 'bullet' );
       
       var comment = $j( this ).parents( '.rf_comment_wrapper' );
       if ( comment.hasClass( 'highlight_state' )
@@ -608,26 +646,22 @@ Reflect = {
       comment.find( '.highlight' ).removeClass( 'highlight' );
     },
 
-    bullet_problem_click : function ( event ) {
-      var dialog = $j( this ).parents('.rate_bullet').find( '.rate_bullet_dialog' );
-      if( dialog.css('display') == 'none' ) {
-        dialog.slideDown();
-      } else {
-        dialog.slideUp();
-      }
-    },
-
-    bullet_flag : function ( event ) {
-      var bullet_obj = $j.data( $j( this ).parents( '.bullet' )[0], 'bullet' ),
-        flags = bullet_obj.flags,
-        flag = $j( this ).parents('.rate_bullet_dialog').find( 'input:checked' ).attr( 'value' ),
-        is_delete = flag in flags && flags[flag] < 0;
+    bullet_flag : function ( event, bullet_obj ) {
+      var flags = bullet_obj.flags,
+        flag = $j( event.currentTarget ).attr('name'),
+        is_delete = flag in flags && flags[flag] > 0;
+      
       if ( !is_delete ) {
         bullet_obj.my_rating = flag;
+        $j( event.currentTarget )
+          .addClass('selected')
+          .siblings('.selected').removeClass('selected');
+      } else {
+        $j( event.currentTarget )
+          .removeClass('selected');
       }
       flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      $j( this ).parents( '.rate_bullet_dialog' ).slideUp();      
     },
 
     response_delete : function ( event ) {
@@ -902,20 +936,19 @@ Reflect = {
       return Reflect.current_user;
     },
 
-    get_background_color : function ( node, no_convert ) {
-      var col = $j.getColor(node[0], 'background-color');
-      if ( !no_convert ) {
-        var new_col = "#";
-        for ( var i = 0; i <= 2; ++i) {
-          var new_color = col[i].toString( 16 );
-          if ( new_color.length == 1 ) {
-            new_color = '0' + new_color;
-          }
-          new_col += new_color;
-        }
-        col = new_col;
+    badge_tooltip : function ( rating ) {
+      switch ( rating ) {
+        case 'zen':
+          return 'This summary is an elegant, zen-like distillation of meaning.';
+        case 'sun':
+          return 'This summary helps shed light on what the commenter was trying to say.';
+        case 'gold':
+          return 'This summary uncovers an important point that could easily be missed.';
+        case 'graffiti':
+          return 'This does not appear to be a summary afterall.';
+        case 'troll':
+          return 'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
       }
-      return col
     }
     
   },
@@ -1042,7 +1075,8 @@ Reflect = {
           highlights : bullet_info.highlights,
           listener_pic : bullet_info.u_pic,
           score : bullet_info.score,
-          my_rating : bullet_info.my_rating
+          my_rating : bullet_info.my_rating,
+          ratings : bullet_info.ratings
         };
         return this._add_bullet( params );
       },
@@ -1094,7 +1128,9 @@ Reflect = {
         this.set_attributes();
         this.responses = [];
         this.flags = {};
-        if ( this.options.my_rating ) {
+        this.ratings = this.options.ratings;
+        
+        if ( this.options.my_rating && this.options.my_rating != 'undefined' ) {
           this.my_rating = this.options.my_rating;
           this.flags[this.my_rating] = 1;
         }
@@ -1122,6 +1158,8 @@ Reflect = {
       },
       options : {},
       _build : function () {
+        var logged_in_user = Reflect.utils.get_logged_in_user();
+        
         var template_vars = {
           bullet_text : Reflect.utils.escape( this.options.bullet_text ),
           user : Reflect.utils.escape( this.options.user ),
@@ -1131,25 +1169,23 @@ Reflect = {
           uses_profile_pic : Reflect.config.view.uses_profile_pic,
           uses_user_name : Reflect.config.view.uses_user_name,
           id : this.id,
-          rating : this.my_rating,
-          enable_rating : Reflect.config.view.enable_rating
-        };   
-        
-        if ( Reflect.config.view.enable_rating ) {
-          if ( this.options.score ) {
-            template_vars.score = this.options.score;
-          } else {
-            template_vars.score = '--';
-          }
-        }
+          my_rating : this.my_rating,
+          rating : this.ratings ? this.ratings.rating : null,
+          enable_rating : Reflect.config.view.enable_rating 
+            && logged_in_user != this.options.commenter
+            && logged_in_user != this.user
+        };
         
         this.$elem
             .addClass( 'bullet' )
             .html( $j.jqote( Reflect.templates.bullet, template_vars ) );
         
-        if ( this.user == Reflect.utils.get_logged_in_user() ) {
+        if ( this.user == logged_in_user ) {
           this.$elem
             .addClass( 'self' );
+        } else if ( this.options.commenter == logged_in_user ) {
+          this.$elem
+            .addClass( 'responder_viewing' );
         }
 
         if ( this.id ) {
@@ -1160,8 +1196,9 @@ Reflect = {
         this.elements = {
           bullet_text : this.$elem.find( '.bullet_text' ),
           bullet_main : this.$elem.find( '.bullet_main' ),
-          bullet_meta : this.$elem
-              .find( '.bullet_meta' )
+          bullet_meta : this.$elem.find( '.bullet_meta' ),
+          bullet_eval : this.$elem.find( '.rf_evaluation' )
+          
         };
       },
       _build_prompt : function () {
@@ -1261,8 +1298,8 @@ Reflect = {
         this.comment.clear_text();
       },
       _add_response : function ( params ) {
-        var response = $j( '<div />' ).response( params );
-        this.elements.bullet_main.after( response );
+        var response = $j( '<li />' ).response( params );
+        this.elements.bullet_eval.find('.badges').prepend( response );
         this.responses.push( response );
         this.$elem.addClass('has_response');
         return $j.data( response[0], 'response' );
@@ -1297,7 +1334,7 @@ Reflect = {
     Response : {
       init : function ( options, elem ) {
         this.options = $j.extend( {}, this.options, options );
-
+        this.tag = Reflect.utils.escape( String(this.options.sig) );
         this.elem = elem;
         this.$elem = $j( elem );
 
@@ -1327,57 +1364,53 @@ Reflect = {
           first_name = first_name.substring(0, first_name.indexOf(' '));
         }
         var template_vars = {
-            text : this.text,
-            sig : Reflect.utils.escape( String(this.options.sig) ),
+            text : this.tag == '1' ? this.text : '--',
+            sig : this.tag,
             user : Reflect.utils.escape( first_name ),
-            media_dir : Reflect.api.server.media_dir
+            media_dir : Reflect.api.server.media_dir,
+            gallery_tag : '1'
         };
+        
+        if ( this.tag == '2' ) {
+          this.$elem
+            .html($j.jqote( Reflect.templates.response, template_vars ))
+            .qtip({
+                  content : this.user + ' confirms that this summary is accurate.',
+                  position : { 
+                    corner: {
+                      target: 'bottomMiddle',
+                      tooltip: 'topMiddle'
+                    },
+                  },              
+                  style: {
+                    background: '#e1e1e1',
+                    color: '#4d4d4d',
+                    border: {
+                      width: 3,
+                      radius: 0,
+                      color: '#066'
+                    },
+                    width: 140
+                  }
+               });                   
+             
+        } else if ( this.tag == '1' ) {
+          this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' + this.text + '</div>')
+        }
+        
         this.$elem
-            .addClass( 'response' )
-            .addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no', '-1':'not'}[this.options.sig]).html( 
-            $j.jqote( Reflect.templates.response, template_vars ) );
-            
-        if ( this.user == Reflect.utils.get_logged_in_user() ) {
+            .addClass( 'rf_response' );
+            /*.addClass('accurate_'+{"1":'somewhat',"2":'yes',"0":'no'}[this.options.sig]).html( 
+            $j.jqote( Reflect.templates.response, template_vars ) ); */
+        
+        /*if ( this.user == Reflect.utils.get_logged_in_user() ) {
           this.$elem
             .addClass( 'self' );
-        }
+        } */
                         
         if ( this.id ) {
           this.set_id( this.id, this.rev );
         }
-
-        this.elements = {
-          response_link : this.$elem.find( 'a.response_link')
-        };
-        //{"1":'clarifies',"2":'verifies',"0":'disputes', '-1':'responds'}[this.options.sig]
-        this.elements.response_link.qtip({
-              content: {
-                 text: '&#8220;' + this.text + '&#8221;<div class=\"signature\">&ndash; ' + this.user + '</div>'
-              },
-              position : { 
-                corner: {
-                  target: 'bottomRight',
-                  tooltip: 'topRight'
-                },
-                adjust: {
-                  y: 15
-                }
-              },              
-              style: {
-                background: '#e1e1e1',
-                color: 'black',
-                border: {
-                  width: 3,
-                  radius: 0,
-                  color: '#066'
-                },
-                tip: false
-              },
-              hide: {
-                fixed : false
-              }
-              
-           });
 
       },
       _build_prompt : function () {
@@ -1451,7 +1484,8 @@ Reflect = {
         new_bullet_dialog : $j.jqotec( '#reflect_template_new_bullet_dialog' ),
         bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
         response : $j.jqotec( '#reflect_template_response' ),
-        response_dialog : $j.jqotec( '#reflect_template_response_prompt' )
+        response_dialog : $j.jqotec( '#reflect_template_response_prompt' ),
+        bullet_rating : $j.jqotec( '#reflect_template_bullet_rating')
       } );      
     }
   },
@@ -1522,7 +1556,7 @@ Reflect = {
                     .add_response( responses[k] );
               }
               if ( bullet.responses.length == 0 && comment.user == user ) {
-                bullet.add_response_dialog();
+                // bullet.add_response_dialog();
               }
 
               Reflect.bind.bullet( bullet );

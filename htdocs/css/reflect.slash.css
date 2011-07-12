@@ -2,10 +2,6 @@
 	width: inherit;
 }
 
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.has_response .bullet_main{
-  width: 235px;
-}
-
 #reflected .response {
   width: 93px; 
   background-color: #E1E1E1;
@@ -15,10 +11,37 @@
   width: 350px;
 }
 
-#reflected .response.new ul.response_def, 
-#reflected .response.modify ul.response_def {
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .rf_clarification {
+ width: 268px; 
+}
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
   width: 275px;
 }
+
+
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .rf_clarification,
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .rf_clarification {
+ width: 95%; 
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main,
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .bullet_main,
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .bullet_main {
+  width: 95%;
+}
+
+
+#reflected .rf_comment_wrapper .rf_comment_summary .rf_evaluation {
+  width: 62px;
+  float: right;
+}
+
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .rf_evaluation,
+#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .rf_evaluation {
+  width: 15px;
+}
+
 
 #reflected .bullet_author.rf_listener_pic {
 	display: none;
@@ -61,11 +84,13 @@
 #reflected .rf_trial_notification {
   padding: 10px;
   font-size: 90%;
-  background-color: #e1e1e1;
+  background-color: #066;
+  color: white;
   margin: 10px;
 }
   #reflected .rf_toggle {
-    color: #777;
+    font-weight: bold;
+    color: white;
     text-decoration: underline;
   }
 
@@ -80,7 +105,7 @@
 	margin: 0 !important;	
 }
 
-#reflected .rf_comment * {
+#reflected .rf_comment td {
 	vertical-align: top;
 }
 
@@ -89,7 +114,9 @@
 }
 
 #reflected a.user {
-  color: #066;
+  color: black;
   text-transform: lowercase;
 }
 
+#reflected .rf_comment_wrapper .rf_comment_text_wrapper .rf_comment_text .sentence.highlight {
+}

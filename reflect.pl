@@ -117,21 +117,26 @@ sub get_data {
 	my($str_comments) = @_;
 	my $data = {};
 	
+	my $user_info = __get_user_info();
+	my $uid = $user_info->{id};
 	
 	my @comments = ($str_comments =~ /\d+/g); 
 	foreach my $comment_id (@comments) {
 		my $bullets = {};
 		my $db_bullets = $slashdb->sqlSelectAll( 
-			'bullet_id, id, created, user, txt, score', 
+			'bullet_id, id, created, user, txt, rating_zen, rating_gold, rating_sun, rating_troll, rating_graffiti, rating', 
 			'reflect_bullet_revision', 
 			"active=1 AND comment_id=$comment_id"
 		);
-
-		my $db_ratings = $slashdb->sqlSelectAll( 
-			'bullet_id, rating', 
-			'reflect_bullet_rating', 
-			"comment_id=$comment_id"
-		);
+    my $db_ratings;
+    
+    if (!$user_info->{is_anon}) {
+  		$db_ratings = $slashdb->sqlSelectAll( 
+  			'bullet_id, rating', 
+  			'reflect_bullet_rating', 
+  			"comment_id=$comment_id AND user_id=$uid"
+  		);
+		}
 		
 		foreach my $db_bullet (@$db_bullets){
 			my $bullet = {
@@ -140,13 +145,22 @@ sub get_data {
 				'ts' => @$db_bullet[2],
 				'u' => @$db_bullet[3],
 				'txt' => @$db_bullet[4],
-				'score' => @$db_bullet[5]
+				'ratings' => {
+				  'zen' => @$db_bullet[5],
+				  'gold' => @$db_bullet[6],
+				  'sun' => @$db_bullet[7],
+				  'troll' => @$db_bullet[8],
+				  'graffiti' => @$db_bullet[9],
+				  'rating' => @$db_bullet[10]
+				}
 			};
-			foreach my $db_rating (@$db_ratings){
-			  if (@$db_rating[0] == @$db_bullet[0]) {
-			    $bullet->{'my_rating'} = @$db_rating[1];
-			  }
-			}
+						
+  		foreach my $db_rating (@$db_ratings){
+  		  if (@$db_rating[0] == @$db_bullet[0]) {
+  		    $bullet->{'my_rating'} = @$db_rating[1];
+  		    $bullet->{'ratings'}->{@$db_rating[1]} -= 1; 
+  		  }
+  		}
 			
 			my $db_highlights = $slashdb->sqlSelectAll(
 				'element_id',
@@ -370,44 +384,59 @@ sub create_bullet_rating {
 	);
 	
 	if(!$is_delete) {
-    my %scores = ('zen' => 3, 'gold' => 2, 'student' => 1, 'troll' => -3, 'graffiti' => -3);
     $slashdb->sqlInsert(
     	'reflect_bullet_rating', { 
     	  'comment_id' => $comment_id,
     	  'bullet_id' => $bullet_id,
     	  'bullet_rev' => $bullet_rev,
     	  'rating' => $rating,
-    	  'score' => %scores->{$rating},
     	  'user_id' => $user_info->{id}
     	}
     );
 	}
 	
-	my ($total_count, $total_score) = $slashdb->sqlSelect( 
-		'count(score), sum(score)', 
+	my $ratings = $slashdb->sqlSelectAll( 
+		'rating, count(*)', 
 		'reflect_bullet_rating', 
-		"bullet_id=$bullet_id"
+		"bullet_id=$bullet_id",
+		'GROUP BY rating'
 	);
-	
-	my $score = 0;
-	if ( $total_count > 0 ) {
-	  # TODO: combine these SQL calls...
-  	$score = $total_score / $total_count;
-	  $slashdb->sqlUpdate(
-	    'reflect_bullet_revision',
-	    {'score' => $score},
-	    "bullet_id=$bullet_id AND active=1"
-	  );  	
-  	if($total_count >= 3 && $score < 0) {
-  	  $slashdb->sqlUpdate(
-  	    'reflect_bullet_revision',
-  	    {'active' => 0},
-  	    "bullet_id=$bullet_id AND active=1"
-  	  );
-  	}
-	}
 		
-	return "{\"updated_score\":$score}";
+	my $update_obj = {
+	  'rating_zen' => 0,
+	  'rating_gold' => 0,
+	  'rating_sun' => 0,
+	  'rating_troll' => 0,
+	  'rating_graffiti' => 0
+	};
+	my $high_cnt = 0;
+	my $high_rating;
+	foreach my $row (@$ratings) {
+	  my $rating = @$row[0];
+	  $update_obj->{"rating_$rating"} = @$row[1];
+	  if(@$row[1] > $high_cnt){
+	    $high_cnt = @$row[1];
+	    $high_rating = @$row[0];
+	  }
+	}
+	
+	if($high_cnt > 0) {
+	  $update_obj->{"rating"} = $high_rating;
+	}
+  $slashdb->sqlUpdate(
+    'reflect_bullet_revision',
+    $update_obj,
+    "bullet_id=$bullet_id AND active=1"
+  );
+	#if($total_count >= 3 && $score < 0) {
+	#  $slashdb->sqlUpdate(
+	#    'reflect_bullet_revision',
+	#    {'active' => 0},
+	#    "bullet_id=$bullet_id AND active=1"
+	#  );
+	#}
+		
+	return "{\"rating\":\"$high_rating\"}";
 	
 }
 

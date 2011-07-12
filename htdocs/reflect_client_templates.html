@@ -3,6 +3,12 @@
       <div class="bullet_main">        
 
         <div class="bullet_text">
+
+          <div class="rf_bullet_text">
+            <div class="bullet_point">&#8226;</div>
+            <%= this.bullet_text %>- 
+            <a class="user"><%= this.user %></a>
+          </div> 
           <ul class="bullet_meta">
             <li></li>  
             <li class="modify_operation" title="Edit this summary bullet point">
@@ -11,73 +17,34 @@
               </a>
             </li>
             <li title="Delete this summary bullet point" class="delete_operation">
-              &#8231;
               <a class="delete bullet_operation op"> 
                 delete
               </a>
             </li>
-          </ul>
-          <div class="rf_bullet_text">
-            <div class="bullet_point">&#8226;</div>
-            <%= this.bullet_text %>- 
-            <a class="user"><%= this.user %></a>
-          </div> 
-          <% if (this.enable_rating) { %>
-          <ul class="bullet_meta">
-              <% if(this.score == '--') { %>
-                <li class='rf_score'>unrated <span></span></li>
-              <%} else { %>
-                <li class='rf_score'>rating: <span><%= this.score %></span></li>                
-              <% } %>
-              <li class="rate_bullet">
-                  <a class="op bullet_operation bullet_prompt_problem">rate &#9662;</a>
-                  <form name="rate_bullet" class="rate_bullet_dialog">
-                    <div class="rate_header">
-                      This summary is...
-                    </div>                    
-                    <div class="flag">
-                      <input id="rating_zen_<%= this.id %>" type="radio" name="rating" value="zen" <% if(this.rating == "zen"){ %> CHECKED <% } %>   >
-                      <label for="rating_zen_<%= this.id %>">
-                        an elegant synthesis <span class="rating_class zen">zen-master (+3)</span>
-                      </label>
-                    </div>
-                    <div class="flag">
-                      <input id="rating_gold_<%= this.id %>" type="radio" name="rating" value="gold" <% if(this.rating == "gold"){ %> CHECKED <% } %>>
-                      <label for="rating_gold_<%= this.id %>">
-                        highlighting a good point <span class="rating_class gold">gold-sifter (+2)</span>
-                      </label>
-                    </div>
-                    <div class="flag">
-                      <input id="rating_student_<%= this.id %>" type="radio" name="rating" value="student" <% if(this.rating == "student"){ %> CHECKED <% } %>>
-                      <label for="rating_student_<%= this.id %>">                          
-                        somewhat on target <span class="rating_class student">student (+1)</span>
-                      </label>
-                    </div>
-                    <div class="flag">
-                      <input id="rating_troll_<%= this.id %>" type="radio" name="rating" value="troll" <% if(this.rating == "troll"){ %> CHECKED <% } %>>
-                      <label for="rating_troll_<%= this.id %>">
-                        overly antagonizing <span class="rating_class troll">troll (-3)</span>
-                      </label>
-                    </div>
-                    <div class="flag">
-                      <input id="rating_graffiti_<%= this.id %>" type="radio" name="rating" value="graffiti" <% if(this.rating == "graffiti"){ %> CHECKED <% } %>>
-                      <label for="rating_graffiti_<%= this.id %>">
-                        not actually a summary <span class="rating_class graffiti">graffiti (-3)</span>
-                      </label>
-                    </div>
-                    <div class="submit_rating">
-                      <a class="submit">Done</a>
-                      <a class="cancel">Cancel</a> 
-                    </div>                                                                             
-                  </form>
-              </li>
-            </ul>            
-          <% } %>
+          </ul>          
         </div>
       <div class="bullet_author rf_listener_pic">
         <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
       </div>    
      </div>
+     <div class="rf_evaluation">
+       <ul class="badges">
+         <% if (this.enable_rating) { %>
+           <li class="rf_rating">
+             <ul>
+               <li class="rf_gallery_container">
+                 <div class="<%= this.rating %>"></div>
+               </li>
+               <li class="rf_selector_container">
+                 <div class="rf_selector"></div>
+               </li>
+             </ul>
+             <div class="cl"></div>
+           </li>
+         <% } %>
+         <div class="cl"></div>
+       </ul>
+     </div>     
      <div class="cl"></div>
 ]]>
 </script>
@@ -93,6 +60,80 @@
     </div>
   </div>
   <div class="cl"></div>
+]]>
+</script>
+
+
+<script type="text/html" id="reflect_template_bullet_rating">
+<![CDATA[
+  <div class="rate_bullet">
+    <form name="rate_bullet" class="rate_bullet_dialog">
+      <div class="rate_header">
+        Does <%= this.bullet_author %>&#39;s summary...
+      </div>                    
+      <div name="zen" class="flag <% if(this.rating == 'zen'){ %> selected <% } %>">
+        <div class="label">
+          elegantly distill meaning? 
+        </div>
+        <div class="rating_class zen"></div>
+        <div class="rating_votes"><span class="others"><%= this.ratings.zen %></span><span class="me">+1</span></div> 
+        <div class="cl"></div>            
+      </div>
+      <div name="gold" class="flag <% if(this.rating == 'gold'){ %> selected <% } %>">
+        <div class="label">
+          uncover a good point?
+        </div>
+        <div class="rating_class gold"></div>
+        <div class="rating_votes"><span class="others"><%= this.ratings.gold %></span><span class="me">+1</span></div>
+        <div class="cl"></div>     
+      </div>
+      <div name="sun" class="flag <% if(this.rating == 'sun'){ %> selected <% } %>">
+        <div class="label">                          
+          clarify the message?
+        </div>
+        <div class="rating_class sun"></div>
+        <div class="rating_votes"><span class="others"><%= this.ratings.sun %></span><span class="me">+1</span></div>
+        <div class="cl"></div>     
+      </div>
+      <div name="troll" class="flag <% if(this.rating == 'troll'){ %> selected <% } %>">
+        <div class="label">
+          provoke unnecessarily? 
+        </div>
+        <div class="rating_class troll"></div>
+        <div class="rating_votes"><span class="others"><%= this.ratings.troll %></span><span class="me">+1</span></div>
+        <div class="cl"></div>     
+      </div>
+      <div name="graffiti" class="flag <% if(this.rating == 'graffiti'){ %> selected <% } %>">
+        <div class="label">
+          umm, its not a summary 
+        </div>
+        <div class="rating_class graffiti"></div>
+        <div class="rating_votes"><span class="others"><%= this.ratings.graffiti %></span><span class="me">+1</span></div>
+        <div class="cl"></div>     
+      </div>
+                                                             
+    </form>      
+  </div>
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_rating_menu">
+<![CDATA[
+  <% if(this.sig == "2") { %>
+      <span class="rf_response_symbol">&#10003;</span> 
+  <% } else if(this.sig == "1") { %>
+  <% } else if (this.sig == "0"){ %>
+  <% } %> 
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_badge_hover">
+<![CDATA[
+  <% if(this.sig == "2") { %>
+      <span class="rf_response_symbol">&#10003;</span> 
+  <% } else if(this.sig == "1") { %>
+  <% } else if (this.sig == "0"){ %>
+  <% } %> 
 ]]>
 </script>
 
@@ -143,30 +184,14 @@
 ]]>
 </script>
 
+
 <script type="text/html" id="reflect_template_response">
 <![CDATA[
-      <div class="floating_bullet">&#9664;</div>
       <% if(this.sig == "2") { %>
-        <div class="response_yes"> <span class="symbol">&#10003;</span> accurate</div>
+          <span class="rf_response_symbol">&#10003;</span> 
       <% } else if(this.sig == "1") { %>
-        <div class="response_maybe">almost correct <span class="symbol"></span></div> 
       <% } else if (this.sig == "0"){ %>
-        <div class="response_no">inaccurate</div>
-      <% } else if (this.sig == "-1"){ %>
-        <div class="response_not">not a summary <span class="symbol"></span></div>              
-      <% } %>
-      <% if(this.text && this.text != '') { %>
-        <a class="response_link">read why &raquo;</a>                    
-      <% } else { %>
-        <span class="responder">&ndash; <%= this.user %></span>
       <% } %> 
-      <ul class="response_operations">
-          <li class="modify_operation">
-            <a title="modify" class="modify op">
-               edit
-            </a>
-          </li>
-       </ul>                  
 ]]>
 </script>
 
