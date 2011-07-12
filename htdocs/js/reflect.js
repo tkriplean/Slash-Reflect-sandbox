@@ -406,6 +406,7 @@ Reflect = {
         .find('.rf_gallery_container div')
         .qtip({
               content: { text: false },
+              show : { delay: 15 },
               position : { 
                 corner: {
                   target: 'bottomRight',
@@ -430,6 +431,7 @@ Reflect = {
                 content: {
                    text: $j.jqote( Reflect.templates.bullet_rating, template_vars )
                 },
+                show : { delay: 15 },
                 position : { 
                   corner: {
                     target: 'bottomRight',
@@ -469,21 +471,6 @@ Reflect = {
       footer
           .find( '.delete' )
           .bind( 'click', Reflect.handle.bullet_delete );
-
-          
-      if ( user != 'Anonymous' && user == bullet_obj.user && bullet_obj.responses.length == 0 ) {
-        footer.find( '.modify_operation' ).show();
-        footer.find( '.delete_operation' ).show();
-      } else if ( Reflect.api.server.is_admin() ) {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).show();
-      } else if ( user == 'Anonymous' && user == bullet_obj.user && bullet_obj.added_this_session ) {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).show();
-      } else {
-        footer.find( '.modify_operation' ).hide();
-        footer.find( '.delete_operation' ).hide();
-      }
 
       // set modify bullet action
       if ( bullet_obj.user != 'Anonymous' && bullet_obj.user == Reflect.utils.get_logged_in_user() ) {
@@ -1171,9 +1158,12 @@ Reflect = {
           id : this.id,
           my_rating : this.my_rating,
           rating : this.ratings ? this.ratings.rating : null,
-          enable_rating : Reflect.config.view.enable_rating 
-            && logged_in_user != this.options.commenter
-            && logged_in_user != this.user
+          enable_rating : Reflect.config.view.enable_rating,
+          allow_rating : logged_in_user != this.options.commenter
+            && logged_in_user != this.user,
+          enable_actions : Reflect.api.server.is_admin()
+            || (logged_in_user != 'Anonymous' && logged_in_user == this.user && this.responses.length == 0)
+            || (logged_in_user == 'Anonymous' && user == this.user && this.added_this_session)
         };
         
         this.$elem
@@ -1299,7 +1289,7 @@ Reflect = {
       },
       _add_response : function ( params ) {
         var response = $j( '<li />' ).response( params );
-        this.elements.bullet_eval.find('.badges').prepend( response );
+        this.elements.bullet_eval.find('.rf_rating').after( response );
         this.responses.push( response );
         this.$elem.addClass('has_response');
         return $j.data( response[0], 'response' );
@@ -1376,6 +1366,7 @@ Reflect = {
             .html($j.jqote( Reflect.templates.response, template_vars ))
             .qtip({
                   content : this.user + ' confirms that this summary is accurate.',
+                  show : { delay: 15 },
                   position : { 
                     corner: {
                       target: 'bottomMiddle',

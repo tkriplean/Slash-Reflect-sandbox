@@ -9,19 +9,23 @@
             <%= this.bullet_text %>- 
             <a class="user"><%= this.user %></a>
           </div> 
-          <ul class="bullet_meta">
-            <li></li>  
-            <li class="modify_operation" title="Edit this summary bullet point">
-              <a class="modify bullet_operation op">
-                edit
-              </a>
-            </li>
-            <li title="Delete this summary bullet point" class="delete_operation">
-              <a class="delete bullet_operation op"> 
-                delete
-              </a>
-            </li>
-          </ul>          
+          <% if (this.enable_actions) { %>
+            
+            <ul class="bullet_meta">
+              <li></li>  
+              <li class="modify_operation" title="Edit this summary bullet point">
+                <a class="modify bullet_operation op">
+                  edit
+                </a>
+              </li>
+              <li title="Delete this summary bullet point" class="delete_operation">
+                <a class="delete bullet_operation op"> 
+                  delete
+                </a>
+              </li>
+            </ul>          
+          <% } %>
+        
         </div>
       <div class="bullet_author rf_listener_pic">
         <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
@@ -36,7 +40,9 @@
                  <div class="<%= this.rating %>"></div>
                </li>
                <li class="rf_selector_container">
-                 <div class="rf_selector"></div>
+                 <% if (this.allow_rating) { %>
+                   <div class="rf_selector"></div>
+                 <% } %>
                </li>
              </ul>
              <div class="cl"></div>

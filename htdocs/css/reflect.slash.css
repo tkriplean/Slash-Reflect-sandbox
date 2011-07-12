@@ -8,7 +8,7 @@
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
-  width: 350px;
+  width: 340px;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .rf_clarification {
@@ -20,26 +20,9 @@
 
 
 
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .rf_clarification,
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .rf_clarification {
- width: 95%; 
-}
-
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main,
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .bullet_main,
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .bullet_main {
-  width: 95%;
-}
-
-
 #reflected .rf_comment_wrapper .rf_comment_summary .rf_evaluation {
-  width: 62px;
+  width: 57px;
   float: right;
-}
-
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.responder_viewing .rf_evaluation,
-#reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self .rf_evaluation {
-  width: 15px;
 }
 
 
@@ -86,7 +69,8 @@
   font-size: 90%;
   background-color: #066;
   color: white;
-  margin: 10px;
+  width: 340px;
+  float: right;
 }
   #reflected .rf_toggle {
     font-weight: bold;
