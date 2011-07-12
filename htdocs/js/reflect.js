@@ -363,9 +363,12 @@ Reflect = {
       vals = {
         params : params,
         success : function ( data ) {
-          bullet_obj.$elem.find('.rf_gallery_container div')
-            .attr('class', data.rating)
-            .attr('title', Reflect.utils.badge_tooltip(data.rating));
+          bullet_obj.$elem.find('.rf_gallery_container')
+            .qtip('api').updateContent(Reflect.utils.badge_tooltip(data.rating) )
+          bullet_obj.$elem.find('.rf_gallery_container')
+            .attr({
+              'class': data.rating + ' rf_gallery_container'
+            });
         },
         error : function ( data ) {}
       };
@@ -403,9 +406,9 @@ Reflect = {
       };
       
       eval_block
-        .find('.rf_gallery_container div')
+        .find('.rf_gallery_container')
         .qtip({
-              content: { text: false },
+              content: { text: Reflect.utils.badge_tooltip(bullet_obj.ratings.rating) },
               show : { delay: 15 },
               position : { 
                 corner: {
@@ -421,9 +424,13 @@ Reflect = {
                   radius: 0,
                   color: '#066'
                 },
+              },
+              api: {
+                beforeShow: function(){
+                  return !!bullet_obj.ratings.rating;
+                }
               }
-           })
-        .attr('title', Reflect.utils.badge_tooltip(bullet_obj.ratings.rating));        
+           });       
       
       eval_block
           .find( '.rf_rating .rf_selector_container' )
@@ -932,7 +939,7 @@ Reflect = {
         case 'gold':
           return 'This summary uncovers an important point that could easily be missed.';
         case 'graffiti':
-          return 'This does not appear to be a summary afterall.';
+          return 'This does not appear to be a summary.';
         case 'troll':
           return 'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
       }
@@ -1369,8 +1376,8 @@ Reflect = {
                   show : { delay: 15 },
                   position : { 
                     corner: {
-                      target: 'bottomMiddle',
-                      tooltip: 'topMiddle'
+                      target: 'bottomRight',
+                      tooltip: 'topRight'
                     },
                   },              
                   style: {

@@ -62,7 +62,7 @@ Reflect.Contract = Reflect.Contract.extend({
           $('.rf_comment_summary').hide();
           $('.rf_comment_text_wrapper').css('width', '100%');
           $('.rf_toggle').addClass('state_off').removeClass('state_on');
-          $('.rf_toggle').text("show the summaries.");              
+          $('.rf_toggle').text("show the summaries");              
         } else {
           $('.rf_comment_summary').show();
           $('.rf_comment_text_wrapper').css('width', 'inherit');

@@ -36,14 +36,16 @@
          <% if (this.enable_rating) { %>
            <li class="rf_rating">
              <ul>
-               <li class="rf_gallery_container">
-                 <div class="<%= this.rating %>"></div>
+               <li class="rf_gallery_container <%= this.rating %>">
+                 <div></div>
                </li>
+               <% if (this.allow_rating) { %>
                <li class="rf_selector_container">
-                 <% if (this.allow_rating) { %>
+                 
                    <div class="rf_selector"></div>
-                 <% } %>
                </li>
+               <% } %>
+
              </ul>
              <div class="cl"></div>
            </li>

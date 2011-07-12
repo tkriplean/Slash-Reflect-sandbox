@@ -422,6 +422,8 @@ sub create_bullet_rating {
 	
 	if($high_cnt > 0) {
 	  $update_obj->{"rating"} = $high_rating;
+	} else {
+	  $update_obj->{"rating"} = undef;
 	}
   $slashdb->sqlUpdate(
     'reflect_bullet_revision',
