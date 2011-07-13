@@ -1,9 +1,3 @@
-try {
-    GM_log('inheritance');
-}catch(err){
-    
-}
-
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.

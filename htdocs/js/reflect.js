@@ -403,7 +403,7 @@ Reflect = {
           .find('.rf_gallery_container')
           .qtip({
                 content: { text: Reflect.utils.badge_tooltip(bullet_obj.ratings.rating) },
-                show : { delay: 15 },
+                show : { delay: 35 },
                 position : { 
                   corner: {
                     target: 'bottomRight',
@@ -432,7 +432,7 @@ Reflect = {
                   content: {
                      text: $j.jqote( Reflect.templates.bullet_rating, template_vars )
                   },
-                  show : { delay: 15 },
+                  show : { delay: 50 },
                   position : { 
                     corner: {
                       target: 'bottomRight',
@@ -1354,14 +1354,14 @@ Reflect = {
               var tip = this.options.user + ' confirms that this summary is accurate.';
               break;
             case '0':
-              var tip = this.options.user + ' thinks this is not a summary.';
+              var tip = this.options.user + ' does not think this is a summary.';
               break;
           }
           this.$elem
             .html($j.jqote( Reflect.templates.response, template_vars ))
             .qtip({
               content : tip,
-              show : { delay: 100 },
+              show : { delay: 140 },
               position : { 
                 corner: {
                   target: 'bottomRight',

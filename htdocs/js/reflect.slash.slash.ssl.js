@@ -59,8 +59,8 @@ Reflect.Contract = Reflect.Contract.extend({
         $j(this).children('div:first').addClass('rf-comment');
     });
     
-    $j('#commentlisting').prepend('<div class="rf_trial_notification">We are experimenting with a new feature. Next to every comment, anyone can restate a point that they think the commenter is making. The goal is to encourage listening and mutual understanding.<br>' +
-                                  'If you wish to enable or disable these summaries for this story, click here to <a class="rf_toggle state_on">hide the summaries</a>.</div>');
+    $j('#commentlisting').prepend('<div class="rf_trial_notification">We are experimenting with a new feature. Next to every comment, anyone can restate a point that they think the commenter is making. The goal is to encourage listening and to highlight interesting points.' +
+                                  'You can also <a class="rf_toggle state_on">hide the summaries</a>.</div><div class="cl"></div>');
     
     $j('.rf_toggle')
       .click( function() {
@@ -68,7 +68,7 @@ Reflect.Contract = Reflect.Contract.extend({
           $('.rf_comment_summary').hide();
           $('.rf_comment_text_wrapper').css('width', '100%');
           $('.rf_toggle').addClass('state_off').removeClass('state_on');
-          $('.rf_toggle').text("show the summaries.");              
+          $('.rf_toggle').text("show the summaries");              
         } else {
           $('.rf_comment_summary').show();
           $('.rf_comment_text_wrapper').css('width', 'inherit');
