@@ -96,9 +96,7 @@ Reflect = {
          //bullet_prompt: 'What is {{COMMENTER}}'s point?',
          //bullet_prompt: 'What point is {{COMMENTER}} making?',            
          bullet_prompt: 'What do you hear {{COMMENTER}} saying?',
-         response_prompt: 'Did {{LISTENER}} hear you accurately?'
-         //response_prompt: 'Is this an accurate summary?',
-         //response_prompt: 'Is this an accurate summary?'
+         response_prompt: 'Did {{LISTENER}} understand your point?'
        }
              
      },
@@ -294,13 +292,8 @@ Reflect = {
         }
       }
       var bullet_obj = response_obj.bullet, 
-        text = response_obj.$elem
-          .find( 'textarea.new_response_text' ).val(), 
+        text = response_obj.elements.new_response_text.val(), 
         user = Reflect.utils.get_logged_in_user();
-
-      if ( text.length == 0 ) {
-        return;
-      }
       
       var input_sel = "input[name='accurate-"
           + response_obj.bullet.id + "']:checked",
@@ -405,75 +398,77 @@ Reflect = {
         ratings : bullet_obj.ratings
       };
       
-      eval_block
-        .find('.rf_gallery_container')
-        .qtip({
-              content: { text: Reflect.utils.badge_tooltip(bullet_obj.ratings.rating) },
-              show : { delay: 15 },
-              position : { 
-                corner: {
-                  target: 'bottomRight',
-                  tooltip: 'topRight'
-                },
-              },              
-              style: {
-                background: '#e1e1e1',
-                color: '#4d4d4d',
-                border: {
-                  width: 3,
-                  radius: 0,
-                  color: '#066'
-                },
-              },
-              api: {
-                beforeShow: function(){
-                  return !!bullet_obj.ratings.rating;
-                }
-              }
-           });       
-      
-      eval_block
-          .find( '.rf_rating .rf_selector_container' )
+      if ( !bullet_obj.added_this_session ) {
+        eval_block
+          .find('.rf_gallery_container')
           .qtip({
-                content: {
-                   text: $j.jqote( Reflect.templates.bullet_rating, template_vars )
-                },
+                content: { text: Reflect.utils.badge_tooltip(bullet_obj.ratings.rating) },
                 show : { delay: 15 },
                 position : { 
                   corner: {
                     target: 'bottomRight',
                     tooltip: 'topRight'
                   },
-                  adjust: {
-                    y: 0, x: 10
-                  }
                 },              
                 style: {
                   background: '#e1e1e1',
                   color: '#4d4d4d',
-                  padding: '0',
                   border: {
                     width: 3,
                     radius: 0,
                     color: '#066'
                   },
-                  tip: false
-                },
-                hide: {
-                  fixed : true
                 },
                 api: {
-                  onRender: function(){
-                    this.elements.tooltip.find( '.flag' )
-                        .bind( 'click', function(event){
-                          Reflect.handle.bullet_flag(event, bullet_obj) 
-                          $(eval_block
-                              .find( '.rf_rating .rf_selector_container' )).qtip('hide');
-                        });
+                  beforeShow: function(){
+                    return !!bullet_obj.ratings.rating;
                   }
                 }
+             });       
+      
+        eval_block
+            .find( '.rf_rating .rf_selector_container' )
+            .qtip({
+                  content: {
+                     text: $j.jqote( Reflect.templates.bullet_rating, template_vars )
+                  },
+                  show : { delay: 15 },
+                  position : { 
+                    corner: {
+                      target: 'bottomRight',
+                      tooltip: 'topRight'
+                    },
+                    adjust: {
+                      y: 0, x: 10
+                    }
+                  },              
+                  style: {
+                    background: '#e1e1e1',
+                    color: '#4d4d4d',
+                    padding: '0',
+                    border: {
+                      width: 3,
+                      radius: 0,
+                      color: '#066'
+                    },
+                    tip: false
+                  },
+                  hide: {
+                    fixed : true
+                  },
+                  api: {
+                    onRender: function(){
+                      this.elements.tooltip.find( '.flag' )
+                          .bind( 'click', function(event){
+                            Reflect.handle.bullet_flag(event, bullet_obj) 
+                            $(eval_block
+                                .find( '.rf_rating .rf_selector_container' )).qtip('hide');
+                          });
+                    }
+                  }
 
-             });
+               });
+      }
 
       footer
           .find( '.delete' )
@@ -536,22 +531,15 @@ Reflect = {
     }, 
     
     /* Establishes default state for a response */
-    response : function ( bullet_obj, response_obj ) {
-      
-      var accurate_sel = 'input[name="accurate-' + response_obj.bullet.id + '"]';
-      response_obj.$elem
-          .find( accurate_sel )
-          .click( Reflect.handle.accurate_clicked );
-
-    },
+    response : function ( bullet_obj, response_obj ) {},
     
     /* Establishes dialog state for a response */
     new_response : function ( response_obj ) {
-      response_obj.$elem.find( '.bullet_submit' ).bind( 'click', {
+      response_obj.elements.prompt.find( '.bullet_submit' ).bind( 'click', {
         canceled : false
       }, Reflect.transitions.from_response );
 
-      response_obj.$elem.find( '.cancel_bullet' ).bind( 'click', {
+      response_obj.elements.prompt.find( '.cancel_bullet' ).bind( 'click', {
         canceled : true
       }, Reflect.transitions.from_response );
 
@@ -561,21 +549,23 @@ Reflect = {
         max_chars : 140
       };
 
-      var text_area = response_obj.$elem.find( 'textarea' ),
+      var text_area = response_obj.elements.prompt.find( 'textarea' ),
         count_sel = '#bullet-' 
           + response_obj.bullet.id 
-          + ' .response.new li.count';
+          + ' .response_prompt li.count';
       text_area.NobleCount( count_sel, settings );
 
       // wont work in GM
       try {
         text_area.focus();        
-      } catch ( err ) {
-      }
+      } catch ( err ) {}
+      
+      response_obj.elements.prompt.hover(
+        function(){
+          response_obj.elements.prompt.find('.response_eval').slideDown();
+        }
+      );
 
-      response_obj.$elem
-          .find( 'input[name=\'accurate-' + response_obj.bullet.id + '\']' )
-          .click( Reflect.handle.accurate_clicked );
     }
 
   },
@@ -753,14 +743,6 @@ Reflect = {
       }
     },
 
-    accurate_clicked : function () {
-      var response_obj = $j.data( $j( this )
-          .parents( '.response' )[0], 'response' );
-
-      response_obj.$elem.find( '.response_dialog' ).slideDown('slow',
-        function(){ $(this).find('textarea').focus();});
-      response_obj.$elem.find( '.submit .bullet_submit' ).removeAttr( 'disabled' );
-    },
     toggle_bullets_pagination : function ( event ) {
       $j( this ).parents('.summary').find('.bullet_list').children().fadeIn();
       $j( this ).parent().hide();      
@@ -877,9 +859,9 @@ Reflect = {
     },
 
     from_response : function ( event ) {
-      var response_obj = $j.data( $j( this )
-          .parents( '.response' )[0], 'response' ), 
-        bullet_obj = response_obj.bullet, 
+      var bullet_obj = $j.data( $j( this )
+          .parents( '.bullet' )[0], 'bullet' ), 
+        response_obj =   $j.data( bullet_obj.responses[0][0], 'response' ), 
         canceled = event.data.canceled;
 
       params = {
@@ -892,7 +874,7 @@ Reflect = {
           response_obj.bullet.id + "']:checked";
         params.text = response_obj.elements.new_response_text.val();
         response_obj.text = params.text;
-        params.sig = response_obj.$elem.find( accurate_sel ).val();
+        params.sig = response_obj.elements.prompt.find( accurate_sel ).val();
         Reflect.api.post_response( response_obj );
       }
       response_obj.exit_dialog( params, canceled );
@@ -1276,7 +1258,6 @@ Reflect = {
       exit_highlight_state : function ( canceled ) {
         if ( canceled && !this.id ) {
           this.$elem
-            .removeClass( 'modify' )
             .removeClass( 'connect' );
           this._build_prompt();
         } else {
@@ -1286,7 +1267,6 @@ Reflect = {
           var me = this;
           this.$elem.find( '.rf_dialog' ).fadeOut(200, function(){
             me.$elem
-              .removeClass( 'modify' )
               .removeClass( 'connect' );
             $j(this).remove();
           });
@@ -1331,7 +1311,6 @@ Reflect = {
     Response : {
       init : function ( options, elem ) {
         this.options = $j.extend( {}, this.options, options );
-        this.tag = Reflect.utils.escape( String(this.options.sig) );
         this.elem = elem;
         this.$elem = $j( elem );
 
@@ -1356,44 +1335,53 @@ Reflect = {
         this.text = Reflect.utils.escape( this.options.text );
       },
       _build : function () {
-        var first_name = this.options.user;
+        var first_name = this.options.user,
+          tag = Reflect.utils.escape( String(this.options.sig) );
         if (first_name.indexOf(' ') > -1){
           first_name = first_name.substring(0, first_name.indexOf(' '));
         }
         var template_vars = {
-            text : this.tag == '1' ? this.text : '--',
-            sig : this.tag,
+            text : tag == '1' ? this.text : '--',
+            sig : tag,
             user : Reflect.utils.escape( first_name ),
             media_dir : Reflect.api.server.media_dir,
             gallery_tag : '1'
         };
         
-        if ( this.tag == '2' ) {
+        if ( tag == '2' || tag == '0' ) {
+          switch ( tag ) {
+            case '2':
+              var tip = this.options.user + ' confirms that this summary is accurate.';
+              break;
+            case '0':
+              var tip = this.options.user + ' thinks this is not a summary.';
+              break;
+          }
           this.$elem
             .html($j.jqote( Reflect.templates.response, template_vars ))
             .qtip({
-                  content : this.user + ' confirms that this summary is accurate.',
-                  show : { delay: 15 },
-                  position : { 
-                    corner: {
-                      target: 'bottomRight',
-                      tooltip: 'topRight'
-                    },
-                  },              
-                  style: {
-                    background: '#e1e1e1',
-                    color: '#4d4d4d',
-                    border: {
-                      width: 3,
-                      radius: 0,
-                      color: '#066'
-                    },
-                    width: 140
-                  }
-               });                   
+              content : tip,
+              show : { delay: 100 },
+              position : { 
+                corner: {
+                  target: 'bottomRight',
+                  tooltip: 'topRight'
+                },
+              },              
+              style: {
+                background: '#e1e1e1',
+                color: '#4d4d4d',
+                border: {
+                  width: 3,
+                  radius: 0,
+                  color: '#066'
+                },
+                width: 140
+              }
+           });                   
              
-        } else if ( this.tag == '1' ) {
-          this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' + this.text + '</div>')
+        } else if ( tag == '1' ) {
+          this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' + this.text + ' - ' + first_name + '</div>')
         }
         
         this.$elem
@@ -1421,10 +1409,12 @@ Reflect = {
             summarizer : this.bullet.user,
             response_prompt : Reflect.config.view.text.response_prompt.replace('{{LISTENER}}', this.bullet.user)            
           };
-        this.$elem.addClass( 'response' ).addClass( 'new' ).html( 
-            $j.jqote( Reflect.templates.response_dialog, template_vars ) );
+          
+        this.bullet.elements.bullet_main.append($j.jqote( Reflect.templates.response_dialog, template_vars ));
+
         this.elements = {
-          new_response_text : this.$elem.find( '.new_response_text' )
+          prompt : this.bullet.$elem.find( '.response_prompt' ),
+          new_response_text : this.bullet.$elem.find( '.new_response_text' )
         };
 
       },
@@ -1434,13 +1424,15 @@ Reflect = {
         this.$elem.attr( 'id', 'response-' + this.id );
       },
       exit_dialog : function ( params, canceled ) {
+        params.user = Reflect.utils.get_logged_in_user();
         this.options = $j.extend( {}, this.options, params );
         if ( !canceled || this.id ) {
+          this.elements.prompt.remove();
           this._build();
           this.set_attributes();
           this.$elem.removeClass('new');
         } else if ( canceled ) {
-          this._build_prompt();
+          this.elements.prompt.find('.response_eval').slideUp();
         }
       },
       enter_edit_state : function () {
@@ -1547,14 +1539,15 @@ Reflect = {
 
               var bullet = comment.add_bullet( bullet_info ), 
                 responses = bullet_info.responses, 
-                has_response = false;
+                has_response = false,
+                response_obj;
 
               for ( var k in responses) {
-                var response_obj = bullet
-                    .add_response( responses[k] );
+                bullet.add_response( responses[k] );
               }
               if ( bullet.responses.length == 0 && comment.user == user ) {
-                // bullet.add_response_dialog();
+                response_obj = bullet.add_response_dialog();
+                Reflect.bind.new_response( response_obj );
               }
 
               Reflect.bind.bullet( bullet );

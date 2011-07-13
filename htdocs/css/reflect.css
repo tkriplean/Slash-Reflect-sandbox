@@ -90,6 +90,13 @@
       cursor: default; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self {
         min-height: 35px; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .prompt {
+        padding-left: 8px; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .prompt a.add_bullet {
+          text-decoration: underline;
+          font-weight: bold; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .prompt a.add_bullet:hover {
+            cursor: pointer; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet:hover .bullet_point {
         color: inherit; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet:hover .bullet_point {
@@ -106,12 +113,10 @@
         position: relative; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text {
           width: 95%;
-          padding-left: 8px; }
+          padding: 0 0 2px 8px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_score span {
             font-size: 85%;
             vertical-align: baseline; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_bullet_text {
-            padding-bottom: 2px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_author.rf_listener_pic {
           max-width: 30px;
           overflow: hidden;
@@ -125,6 +130,7 @@
           line-height: 1em;
           text-transform: lowercase;
           padding-bottom: 2px;
+          padding-left: 8px;
           position: relative;
           color: #7d7d7d; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta a {
@@ -134,65 +140,60 @@
             padding-right: 2px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li {
             display: inline; }
-      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main {
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main {
         background: none;
         width: 95%; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt {
-          padding-left: 8px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet {
-            text-decoration: underline;
-            font-weight: bold; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .prompt a.add_bullet:hover {
-              cursor: pointer; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .modify_operation, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .delete_operation {
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .modify_operation, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .delete_operation {
           display: none; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog {
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog {
           margin-left: 7px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .new_bullet_text_wrap {
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap {
             padding-bottom: 3px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .new_bullet_text_wrap textarea.new_bullet_text {
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap textarea.new_bullet_text {
               height: 60px;
               padding: 4px 2px;
               width: 100%;
               overflow: auto; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer {
-            width: 100%;
-            padding-bottom: 5px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer a {
-              color: #7d7d7d; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer a:hover {
-                background-color: inherit;
-                color: inherit; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li {
-              display: inline-block; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.submit a {
-                padding-right: 15px; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.count {
-                padding: 0 20px 0 10px;
-                color: #7d7d7d; }
-              #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.be_neutral {
-                float: right; }
-                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.be_neutral a:hover {
-                  cursor: help; }
-                #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .bullet_main .rf_dialog .submit_footer li.be_neutral .big_word {
-                  text-decoration: underline; }
-      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog {
-        position: relative;
-        background-color: #ffffaa; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .connect_directions {
-          font-size: 110%;
-          padding: 10px;
-          text-align: center;
-          font-weight: bold; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .connect_directions .arrow {
-            position: absolute;
-            top: 8px;
-            left: -10px;
-            font-size: 250%; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit {
-          padding: 0 0 5px 5px; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main {
+        width: 95%; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog {
+          position: relative;
+          background-color: #ffffaa; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .connect_directions {
+            font-size: 110%;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .connect_directions .arrow {
+              position: absolute;
+              top: 8px;
+              left: -10px;
+              font-size: 250%; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit {
+            padding: 0 0 5px 5px; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect:hover {
         background-color: inherit; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer {
+        width: 100%;
+        padding-bottom: 5px; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer a, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer a {
+          color: #7d7d7d; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer a:hover, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer a:hover {
+            background-color: inherit;
+            color: inherit; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li {
+          display: inline-block; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.submit a, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.submit a {
+            padding-right: 15px; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.count, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.count {
+            padding: 0 20px 0 10px;
+            color: #7d7d7d; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.be_neutral, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.be_neutral {
+            float: right; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.be_neutral a:hover, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.be_neutral a:hover {
+              cursor: help; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.be_neutral .big_word, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.be_neutral .big_word {
+              text-decoration: underline; }
 
 #reflected .bullet .rf_evaluation {
   font-size: 90%;
@@ -224,18 +225,18 @@
         width: 16px;
         height: 16px;
         margin: 3px 0 0 5px; }
-      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div {
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.zen, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.gold, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.graffiti, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.sun, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.troll {
         opacity: 1; }
-        #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div.zen {
-          background-position: 0px -61px; }
-        #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div.gold {
-          background-position: -16px -61px; }
-        #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div.graffiti {
-          background-position: -32px -61px; }
-        #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div.sun {
-          background-position: -48px -61px; }
-        #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover div.troll {
-          background-position: -64px -61px; }
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.zen div {
+        background-position: 0px -61px; }
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.gold div {
+        background-position: -16px -61px; }
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.graffiti div {
+        background-position: -32px -61px; }
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.sun div {
+        background-position: -48px -61px; }
+      #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container:hover.troll div {
+        background-position: -64px -61px; }
     #reflected .bullet .rf_evaluation .badges .rf_rating .rf_selector_container {
       height: 20px;
       width: 16px;
@@ -252,11 +253,15 @@
   #reflected .bullet .rf_evaluation .rf_response {
     color: black;
     float: right;
-    padding-top: 3px; }
+    padding-top: 3px;
+    width: 13px; }
     #reflected .bullet .rf_evaluation .rf_response .rf_response_symbol {
-      color: #6baa70;
       font-size: 150%;
-      opacity: 0.6; }
+      opacity: 0.8; }
+      #reflected .bullet .rf_evaluation .rf_response .rf_response_symbol.confirmed {
+        color: #6baa70; }
+      #reflected .bullet .rf_evaluation .rf_response .rf_response_symbol.not {
+        color: #a96f6a; }
       #reflected .bullet .rf_evaluation .rf_response .rf_response_symbol:hover {
         opacity: 1; }
 
@@ -326,6 +331,55 @@
     font-weight: bold;
     font-size: 10px; }
 
+#reflected .response_prompt {
+  border: 3px solid #006666;
+  position: relative;
+  padding: 12px 18px;
+  margin: 10px 0 0 8px;
+  color: #414141;
+  width: 95%; }
+  #reflected .response_prompt .floating_arrow {
+    position: absolute;
+    top: -14px;
+    left: 25%;
+    color: #006666; }
+  #reflected .response_prompt label.prompt {
+    font-weight: bold;
+    padding-bottom: 3px;
+    display: block; }
+  #reflected .response_prompt ul.response_eval {
+    display: none; }
+    #reflected .response_prompt ul.response_eval > li {
+      padding: 4px 0 0px 0px; }
+      #reflected .response_prompt ul.response_eval > li label {
+        font-size: 86%;
+        padding-left: 5px;
+        color: #777777; }
+  #reflected .response_prompt .rf_dialog {
+    position: relative; }
+    #reflected .response_prompt .rf_dialog .count {
+      float: right;
+      color: #aaaaaa; }
+    #reflected .response_prompt .rf_dialog .new_bullet_text_wrap {
+      padding: 4px 0 0 21px; }
+      #reflected .response_prompt .rf_dialog .new_bullet_text_wrap textarea.new_response_text {
+        height: 60px;
+        padding: 4px 2px;
+        width: 100%;
+        overflow: auto; }
+    #reflected .response_prompt .rf_dialog .submit_footer {
+      width: 100%;
+      padding-top: 5px; }
+      #reflected .response_prompt .rf_dialog .submit_footer a {
+        color: #777777; }
+        #reflected .response_prompt .rf_dialog .submit_footer a:hover {
+          background-color: inherit;
+          color: inherit; }
+      #reflected .response_prompt .rf_dialog .submit_footer li {
+        display: inline-block; }
+        #reflected .response_prompt .rf_dialog .submit_footer li.submit {
+          padding-right: 15px; }
+
 #reflected .response {
   margin: 0px 0 0 2px;
   padding: 3px 3px 3px 6px;
@@ -368,28 +422,6 @@
         #reflected .response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval li {
           display: inline;
           padding-right: 6px; }
-      #reflected .response.new ul.response_def li.response_dialog, #reflected .response.modify ul.response_def li.response_dialog {
-        display: none; }
-        #reflected .response.new ul.response_def li.response_dialog .rf_dialog, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog {
-          position: relative;
-          padding-left: 12px; }
-          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .new_bullet_text_wrap textarea.new_response_text {
-            height: 60px;
-            padding: 4px 2px;
-            width: 100%;
-            overflow: auto; }
-          #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer {
-            width: 100%;
-            padding-bottom: 5px; }
-            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a {
-              color: inherit; }
-              #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer a:hover {
-                background-color: inherit;
-                color: inherit; }
-            #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li {
-              display: inline-block; }
-              #reflected .response.new ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit, #reflected .response.modify ul.response_def li.response_dialog .rf_dialog .submit_footer li.submit {
-                padding-right: 15px; }
 
 .qtip-content .signature {
   padding: 0px 0 0 10px;
