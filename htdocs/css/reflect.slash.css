@@ -66,11 +66,11 @@
 
 #reflected .rf_trial_notification {
   padding: 10px;
-  font-size: 90%;
+  font-size: 100%;
   background-color: #066;
   color: white;
-  width: 340px;
   float: right;
+  position: relative;
 }
   #reflected .rf_toggle {
     font-weight: bold;
@@ -81,6 +81,13 @@
   #reflected .rf_toggle:hover {
     cursor: pointer;
   }
+
+#reflected .rf_trial_notification .triangle {
+  color: #066;
+  position: absolute;
+  left: 85%;
+  bottom: -13px;
+}
 
 #reflected .rf_comment_wrapper .rf_comment_summary ol, 
 #reflected .rf_comment_wrapper .rf_comment_summary ul, 
