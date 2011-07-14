@@ -162,6 +162,7 @@ sub get_data {
   		  }
   		}
 			
+			
 			my $db_highlights = $slashdb->sqlSelectAll(
 				'element_id',
 				'reflect_highlight',
@@ -174,25 +175,25 @@ sub get_data {
 			}
 			$bullet->{'highlights'} = \@highlights;
 			
-			my $db_responses = $slashdb->sqlSelectAll(
+			my ($response_id, $rid, $ts, $user, $txt, $signal) = $slashdb->sqlSelect(
 				'response_id,id,created,user,txt,signal',
 				'reflect_response_revision',
 				'active=1 AND bullet_id=' . $bullet->{id}
 			);
 
-			my $responses = {};
-			foreach my $db_response (@$db_responses) {
-				
-				my $response = {
-					'id' => @$db_response[0],
-					'rev' => @$db_response[1],
-					'ts' => @$db_response[2],
-					'sig' => @$db_response[5],
-					'txt' => @$db_response[4],
-					'u' => @$db_response[3]
-				};
-				$responses->{$response->{id}} = $response;
-			}
+      # TODO : get rid of responses
+			my $responses = {};				
+			if ($response_id) {
+  			my $response = {
+  				'id' => $response_id,
+  				'rev' => $rid,
+  				'ts' => $ts,
+  				'sig' => $signal,
+  				'txt' => $txt,
+  				'u' => $user
+  			};
+  			$responses->{$response->{id}} = $response;
+      }
 			$bullet->{responses} = $responses;
 			$bullets->{$bullet->{id}} = $bullet;
 		}
@@ -412,14 +413,14 @@ sub create_bullet_rating {
 	my $high_cnt = 0;
 	my $high_rating;
 	foreach my $row (@$ratings) {
-	  my $rating = @$row[0];
-	  $update_obj->{"rating_$rating"} = @$row[1];
+	  my $row_rating = @$row[0];
+	  $update_obj->{"rating_$row_rating"} = @$row[1];
 	  if(@$row[1] > $high_cnt){
 	    $high_cnt = @$row[1];
 	    $high_rating = @$row[0];
 	  }
 	}
-	
+
 	if($high_cnt > 0) {
 	  $update_obj->{"rating"} = $high_rating;
 	} else {
@@ -430,16 +431,30 @@ sub create_bullet_rating {
     $update_obj,
     "bullet_id=$bullet_id AND active=1"
   );
-	#if($total_count >= 3 && $score < 0) {
-	#  $slashdb->sqlUpdate(
-	#    'reflect_bullet_revision',
-	#    {'active' => 0},
-	#    "bullet_id=$bullet_id AND active=1"
-	#  );
-	#}
-		
+
+  ### determine if we should deactivate this bullet  
+	if( $rating == 'troll' || $rating == 'graffiti') {	  
+
+	  my $good_ratings = $update_obj->{'rating_zen'} + $update_obj->{'rating_gold'} + $update_obj->{'rating_sun'};
+	  my $bad_ratings = $update_obj->{'rating_troll'} + $update_obj->{'rating_graffiti'};
+    my $total_count = $good_ratings + $bad_ratings;
+    my $signal = $slashdb->sqlSelect(
+  		'signal',
+  		'reflect_response_revision',
+  		'active=1 AND bullet_id=' . $bullet_id
+  	);
+    
+    if ( ($total_count >= 3 && $good_ratings < $bad_ratings && !$signal) || $signal == 0 ) {
+  	  $slashdb->sqlUpdate(
+  	    'reflect_bullet_revision',
+  	    {'active' => 0},
+  	    "bullet_id=$bullet_id AND active=1"
+  	  );
+    }
+	}
+
 	return "{\"rating\":\"$high_rating\"}";
-	
+
 }
 
 #######################
