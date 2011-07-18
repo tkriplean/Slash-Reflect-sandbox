@@ -88,8 +88,6 @@
       display: list-item;
       line-height: 1.2em;
       cursor: default; }
-      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.self {
-        min-height: 35px; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .prompt {
         padding-left: 8px; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet .prompt a.add_bullet {
@@ -140,6 +138,8 @@
             padding-right: 2px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li {
             display: inline; }
+          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta .verification {
+            display: none; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main {
         background: none;
         width: 95%; }
@@ -320,7 +320,7 @@
 
 .rf_clarification {
   margin: 5px 0 0 8px;
-  background-color: #e1e1e1;
+  background-color: #efefef;
   font-size: 12px;
   position: relative;
   padding: 6px 10px; }

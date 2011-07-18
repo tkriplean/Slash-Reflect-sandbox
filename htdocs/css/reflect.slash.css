@@ -30,9 +30,6 @@
 	display: none;
 }
 
-#reflected .response .symbol {
-}
-
 #reflected .response.accurate_yes .response_yes {
   color: #066;
 }

@@ -20,6 +20,18 @@
               <a class="delete bullet_operation op"> 
                 delete
               </a>
+              <span class="verification">
+                Are you sure?
+                <a class="delete_for_sure bullet_operation op"> 
+                  yes
+                </a>
+                <a class="delete_nope bullet_operation op"> 
+                  no
+                </a>              
+              
+              </span>
+
+              
             </li>
           </ul>
         <% } %>
@@ -132,7 +144,7 @@
        </div>
        <ul class="submit_footer">
           <li class="submit">
-             <a class="bullet_submit">Done</a>
+             <a class="bullet_submit" disabled="<% if (this.txt) { %>false<% } else { %>true<% } %>">Done</a>
           </li>
           <li class="submit">
             <a class="cancel_bullet">cancel</a>
