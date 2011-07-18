@@ -1226,7 +1226,7 @@ Reflect = {
       .live('click', Reflect.handle.sentence_click);
     
     $j('.rf_comment.highlight_state .rf_comment_text a.exclude_from_reflect')
-      .live('click', function( event ){ e.preventDefault(); });
+      .live('click', function( event ){ event.preventDefault(); });
 
     $j('.rf_comment .rf_toggle_paginate a')
       .live('click', Reflect.handle.toggle_bullets_pagination);
