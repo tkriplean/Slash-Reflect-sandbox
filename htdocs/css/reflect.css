@@ -427,3 +427,10 @@
   padding: 0px 0 0 10px;
   color: #777777;
   text-align: right; }
+
+.too_many_chars {
+  font-weight: bold;
+  font-size: 200%; }
+
+#rf_user_name {
+  display: none; }

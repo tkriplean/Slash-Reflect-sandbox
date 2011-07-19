@@ -171,7 +171,7 @@ sub get_data {
 			
 			my @highlights = ();
 			foreach my $highlight (@$db_highlights) {
-				push(@highlights, {'eid' => @$highlight[0]});
+				push(@highlights, @$highlight[0]);
 			}
 			$bullet->{'highlights'} = \@highlights;
 			
@@ -216,7 +216,7 @@ sub create_bullet {
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
 	if($commenter == $user_info->{id} || $text eq '') {
 	  return '';
-	}	
+	}
 	
 	$slashdb->sqlInsert(
 		'reflect_bullet', { 'comment_id' => $comment_id }
