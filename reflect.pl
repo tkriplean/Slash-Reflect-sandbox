@@ -12,7 +12,7 @@ use Slash::Display;
 use Slash::Utility;
 use Slash::Messages;
 use Slash::Utility::Data;
-
+use Slash::Constants qw(:strip);
 use Data::Dumper;
 
 
@@ -69,32 +69,49 @@ sub main {
 	my $retval;
 	
 	if ( $op eq 'data' ) {
-		$retval = get_data($params->{'comments'});
+		$retval = get_data(strip_extrans($params->{'comments'}));
 	} elsif ( $op eq 'response' ) {
 		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
-			$retval = delete_response( $params->{'response_id'} );
+			$retval = delete_response( 
+			  strip_extrans( $params->{'response_id'}) );
 		} elsif ( exists $params->{'response_id'} ) {
-			$retval = update_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
-				$params->{'response_id'}, $params->{'text'}, $params->{'signal'} );
+			$retval = update_response( 
+			  strip_extrans($params->{'comment_id'}), 
+			  strip_extrans($params->{'bullet_id'}), 
+				strip_extrans($params->{'response_id'}), 
+				strip_extrans($params->{'text'}), 
+				strip_extrans($params->{'signal'}) );
 		} else {
-			$retval = create_response( $params->{'comment_id'}, $params->{'bullet_id'}, 
-				$params->{'text'}, $params->{'signal'});
+			$retval = create_response( 
+			  strip_extrans($params->{'comment_id'}), 
+			  strip_extrans($params->{'bullet_id'}), 
+				strip_extrans($params->{'text'}), 
+				strip_extrans($params->{'signal'}));
 		}		
 	} elsif ( $op eq 'bullet' ) {
 		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
-			$retval = delete_bullet( $params->{'bullet_id'} );
+			$retval = delete_bullet( strip_extrans($params->{'bullet_id'}) );
+			$retval = strip_extrans($params->{'bullet_id'});
 		} elsif ( exists $params->{'bullet_id'} ) {
-			$retval = update_bullet( $params->{'comment_id'}, $params->{'bullet_id'}, 
-				$params->{'text'}, $params->{'highlights'} );
+			$retval = update_bullet( 
+			  strip_extrans($params->{'comment_id'}), 
+			  strip_extrans($params->{'bullet_id'}), 
+				strip_extrans($params->{'text'}), 
+				strip_extrans($params->{'highlights'}) );
 		} else {
-			$retval = create_bullet( $params->{'comment_id'}, $params->{'text'}, 
-				$params->{'highlights'});
+			$retval = create_bullet( 
+			  strip_extrans($params->{'comment_id'}),
+			  strip_extrans($params->{'text'}), 
+				strip_extrans($params->{'highlights'}));
 		}
 	} elsif ( $op eq 'bullet_rating' ) {
 	  my $is_delete = exists $params->{'is_delete'} && $params->{'is_delete'} eq 'true';	  
 		if ( exists $params->{'bullet_id'} ) {
-			$retval = create_bullet_rating( $params->{'comment_id'}, 
-			  $params->{'bullet_id'}, $params->{'bullet_rev'}, $params->{'rating'}, $is_delete );
+			$retval = create_bullet_rating( 
+			  strip_extrans($params->{'comment_id'}), 
+			  strip_extrans($params->{'bullet_id'}), 
+			  strip_extrans($params->{'bullet_rev'}), 
+			  strip_extrans($params->{'rating'}), $is_delete );
 		}	  
 	}
 	
@@ -110,7 +127,7 @@ sub main {
 ###
 # Callback for getting reflect data.
 #
-# @param array $comments
+# @param array $comments (list of comment ids to load reflect data for)
 # @return hash ref
 sub get_data {
 	my $slashdb = getCurrentDB();
@@ -128,15 +145,6 @@ sub get_data {
 			'reflect_bullet_revision', 
 			"active=1 AND comment_id=$comment_id"
 		);
-    my $db_ratings;
-    
-    if (!$user_info->{is_anon}) {
-  		$db_ratings = $slashdb->sqlSelectAll( 
-  			'bullet_id, rating', 
-  			'reflect_bullet_rating', 
-  			"comment_id=$comment_id AND user_id=$uid"
-  		);
-		}
 		
 		foreach my $db_bullet (@$db_bullets){
 			my $bullet = {
@@ -154,15 +162,21 @@ sub get_data {
 				  'rating' => @$db_bullet[10]
 				}
 			};
-						
-  		foreach my $db_rating (@$db_ratings){
-  		  if (@$db_rating[0] == @$db_bullet[0]) {
-  		    $bullet->{'my_rating'} = @$db_rating[1];
-  		    $bullet->{'ratings'}->{@$db_rating[1]} -= 1; 
-  		  }
+
+      if (!$user_info->{is_anon}) {
+    		my $db_ratings = $slashdb->sqlSelectAll( 
+    			'bullet_id, rating', 
+    			'reflect_bullet_rating', 
+    			"comment_id=$comment_id AND user_id=$uid"
+    		);
+    		foreach my $db_rating (@$db_ratings){
+    		  if (@$db_rating[0] == @$db_bullet[0]) {
+    		    $bullet->{'my_rating'} = @$db_rating[1];
+    		    $bullet->{'ratings'}->{@$db_rating[1]} -= 1; 
+    		  }
+    		}
   		}
-			
-			
+
 			my $db_highlights = $slashdb->sqlSelectAll(
 				'element_id',
 				'reflect_highlight',
@@ -181,20 +195,15 @@ sub get_data {
 				'active=1 AND bullet_id=' . $bullet->{id}
 			);
 
-      # TODO : get rid of responses
-			my $responses = {};				
-			if ($response_id) {
-  			my $response = {
-  				'id' => $response_id,
-  				'rev' => $rid,
-  				'ts' => $ts,
-  				'sig' => $signal,
-  				'txt' => $txt,
-  				'u' => $user
-  			};
-  			$responses->{$response->{id}} = $response;
-      }
-			$bullet->{responses} = $responses;
+			$bullet->{response} = $response_id ? {
+				'id' => $response_id,
+				'rev' => $rid,
+				'ts' => $ts,
+				'sig' => $signal,
+				'txt' => $txt,
+				'u' => $user
+  		} : undef;
+
 			$bullets->{$bullet->{id}} = $bullet;
 		}
 		$data->{$comment_id} = $bullets;
@@ -215,7 +224,7 @@ sub create_bullet {
 	#server side permission check for this operation...
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
 	if($commenter == $user_info->{id} || $text eq '') {
-	  return '';
+	  return '{}';
 	}
 	
 	$slashdb->sqlInsert(
@@ -227,7 +236,7 @@ sub create_bullet {
 	my $bullet_revision_params = { 
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
-		'txt' => strip_nohtml($text),
+		'txt' => $text,
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'active' => 1
@@ -373,9 +382,9 @@ sub create_bullet_rating {
 	#server side permission check for this operation...
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
 	my $summarizer = $slashdb->sqlSelect('user_id', 'reflect_bullet_revision', "id = $bullet_rev");
-	if($commenter == $uid || 
-	   $user_info->{is_anon} || 
-	   ($uid != 0 && $summarizer == $uid) ) {
+	if($commenter == $uid 
+	   || $user_info->{is_anon}
+	   || ($uid != 0 && $summarizer == $uid) ) {
 	  return "{}";
 	}
 
@@ -420,12 +429,9 @@ sub create_bullet_rating {
 	    $high_rating = @$row[0];
 	  }
 	}
+  
+  $update_obj->{"rating"} = $high_cnt > 0 ? $high_rating : undef;
 
-	if($high_cnt > 0) {
-	  $update_obj->{"rating"} = $high_rating;
-	} else {
-	  $update_obj->{"rating"} = undef;
-	}
   $slashdb->sqlUpdate(
     'reflect_bullet_revision',
     $update_obj,
@@ -469,7 +475,7 @@ sub create_response {
 	#server side permission check for this operation...
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
 	if($commenter != $user_info->{id}) {
-	  return '';
+	  return '{}';
 	}
 	
 	my $response_params = { 
@@ -487,7 +493,7 @@ sub create_response {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
 		'response_id' => $response_id,
-		'txt' => strip_nohtml($text),
+		'txt' => $text,
 		'user' => $user_info->{name},
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
@@ -513,7 +519,7 @@ sub update_response {
 	  'user_id', 'reflect_response_revision', 
 	  "response_id = $response_id AND active = 1");
 	if($responder != $user_info->{id}) {
-	  return '';
+	  return '{}';
 	}
 	
 	$slashdb->sqlUpdate(
@@ -553,7 +559,7 @@ sub delete_response {
 	  'user_id', 'reflect_response_revision', 
 	  "response_id = $response_id AND active = 1");
 	if($responder != $user_info->{id}) {
-	  return '';
+	  return '{}';
 	}
 		
 	$slashdb->sqlUpdate(

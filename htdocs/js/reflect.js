@@ -855,10 +855,10 @@ Reflect = {
         if ( canceled && !this.id ) {
           this._build_prompt();
         } else {
-          $j.extend( this.options, params, {
+          $j.extend( this.options, {
             listener_pic:Reflect.api.server.get_current_user_pic(),
             txt: this.elements.new_bullet_text.val(),
-            user: Reflect.utils.get_logged_in_user() } );
+            u: Reflect.utils.get_logged_in_user() } );
           
           this.set_attributes();
           this._build();
@@ -1137,15 +1137,12 @@ Reflect = {
             $j.each(bullets, function(key, bullet_info) {
 
               var bullet = comment.add_bullet( bullet_info ), 
-                responses = bullet_info.responses;
-
-              for ( var k in responses) {
-                bullet.add_response( responses[k] );
-              }
-              if ( !bullet.response && comment.user == user ) {
+                response = bullet_info.response;
+              if ( response ) {
+                bullet.add_response( response );
+              } else if ( !bullet.response && comment.user == user ) {
                 bullet.add_response_dialog();
               }
-
             });
             comment.hide_excessive_bullets();
           }
