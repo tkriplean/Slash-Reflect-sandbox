@@ -91,7 +91,6 @@ sub main {
 	} elsif ( $op eq 'bullet' ) {
 		if ( exists $params->{'delete'} && $params->{'delete'} eq 'true' ) { 
 			$retval = delete_bullet( strip_extrans($params->{'bullet_id'}) );
-			$retval = strip_extrans($params->{'bullet_id'});
 		} elsif ( exists $params->{'bullet_id'} ) {
 			$retval = update_bullet( 
 			  strip_extrans($params->{'comment_id'}), 

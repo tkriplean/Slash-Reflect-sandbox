@@ -112,9 +112,6 @@
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text {
           width: 95%;
           padding: 0 0 2px 8px; }
-          #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_text .rf_score span {
-            font-size: 85%;
-            vertical-align: baseline; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_author.rf_listener_pic {
           max-width: 30px;
           overflow: hidden;
@@ -143,8 +140,6 @@
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main {
         background: none;
         width: 95%; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .modify_operation, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .delete_operation {
-          display: none; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog {
           margin-left: 7px; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap {
@@ -385,52 +380,15 @@
   padding: 3px 3px 3px 6px;
   float: right;
   position: relative; }
-  #reflected .response .floating_bullet {
-    position: absolute;
-    left: -8px;
-    color: #e1e1e1; }
-  #reflected .response .lead {
-    font-size: 70%;
-    color: white; }
-  #reflected .response .response_yes,
-  #reflected .response .response_no,
-  #reflected .response .response_maybe,
-  #reflected .response .response_not {
-    font-size: 90%;
-    font-variant: small-caps; }
-  #reflected .response a.response_link {
-    color: #4d4d4d;
-    font-size: 85%;
-    padding: 3px 35px 3px 0px; }
-  #reflected .response .response_operations > li {
-    display: inline; }
-    #reflected .response .response_operations > li .modify {
-      color: #777777;
-      cursor: pointer;
-      padding-right: 3px; }
-  #reflected .response.new, #reflected .response.modify {
-    padding: 0; }
-    #reflected .response.new ul.response_def, #reflected .response.modify ul.response_def {
-      background-color: #ffe5e5;
-      padding: 5px; }
-      #reflected .response.new ul.response_def label.prompt, #reflected .response.modify ul.response_def label.prompt {
-        padding: 5px;
-        font-size: 80%;
-        font-weight: bold; }
-      #reflected .response.new ul.response_def li.response_prompt ul.response_eval, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval {
-        padding: 5px 0 0px 8px; }
-        #reflected .response.new ul.response_def li.response_prompt ul.response_eval li, #reflected .response.modify ul.response_def li.response_prompt ul.response_eval li {
-          display: inline;
-          padding-right: 6px; }
 
-.qtip-content .signature {
+#reflected .qtip-content .signature {
   padding: 0px 0 0 10px;
   color: #777777;
   text-align: right; }
 
-.too_many_chars {
+#reflected .too_many_chars {
   font-weight: bold;
   font-size: 200%; }
 
-#rf_user_name {
+#reflected #rf_user_name {
   display: none; }

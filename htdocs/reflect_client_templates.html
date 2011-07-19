@@ -1,68 +1,68 @@
 <script type="text/html" id="reflect_template_bullet">
 <![CDATA[
-      <div class="bullet_main">        
+  <div class="bullet_main">        
 
-        <div class="bullet_text">
-          <div class="bullet_point">&#8226;</div>
-          <span class="rf_bullet_text">
-            <%= this.bullet_text %> 
+    <div class="bullet_text">
+      <div class="bullet_point">&#8226;</div>
+      <span class="rf_bullet_text">
+        <%= this.bullet_text %> 
+      </span>
+      <a class="user"> - <%= this.user %></a>
+    </div> 
+    <% if (this.enable_actions) { %>      
+      <ul class="bullet_meta">
+        <li class="modify_operation" title="Edit this summary bullet point">
+          <a class="modify bullet_operation op">
+            edit
+          </a>
+        </li>
+        <li title="Delete this summary bullet point" class="delete_operation">
+          <a class="delete bullet_operation op"> 
+            delete
+          </a>
+          <span class="verification">
+            Are you sure?
+            <a class="delete_for_sure bullet_operation op"> 
+              yes
+            </a>
+            <a class="delete_nope bullet_operation op"> 
+              no
+            </a>              
+          
           </span>
-          <a class="user"> - <%= this.user %></a>
-        </div> 
-        <% if (this.enable_actions) { %>      
-          <ul class="bullet_meta">
-            <li class="modify_operation" title="Edit this summary bullet point">
-              <a class="modify bullet_operation op">
-                edit
-              </a>
-            </li>
-            <li title="Delete this summary bullet point" class="delete_operation">
-              <a class="delete bullet_operation op"> 
-                delete
-              </a>
-              <span class="verification">
-                Are you sure?
-                <a class="delete_for_sure bullet_operation op"> 
-                  yes
-                </a>
-                <a class="delete_nope bullet_operation op"> 
-                  no
-                </a>              
-              
-              </span>
 
-              
-            </li>
-          </ul>
-        <% } %>
-        
-      <div class="bullet_author rf_listener_pic">
-        <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
-      </div>    
-     </div>
-     <div class="rf_evaluation">
-       <ul class="badges">
-         <% if (this.enable_rating) { %>
-           <li class="rf_rating">
-             <ul>
-               <li class="rf_gallery_container <%= this.rating %>">
-                 <div></div>
-               </li>
-               <% if (this.allow_rating) { %>
-               <li class="rf_selector_container">
-                 
-                   <div class="rf_selector"></div>
-               </li>
-               <% } %>
-
-             </ul>
-             <div class="cl"></div>
+          
+        </li>
+      </ul>
+    <% } %>
+    
+  <div class="bullet_author rf_listener_pic">
+    <img title="<%= this.user %>" src="<%= this.listener_pic %>"/>
+  </div>    
+ </div>
+ <div class="rf_evaluation">
+   <ul class="badges">
+     <% if (this.enable_rating) { %>
+       <li class="rf_rating">
+         <ul>
+           <li class="rf_gallery_container <%= this.rating %>">
+             <div></div>
            </li>
-         <% } %>
+           <% if (this.allow_rating) { %>
+           <li class="rf_selector_container">
+             
+               <div class="rf_selector"></div>
+           </li>
+           <% } %>
+
+         </ul>
          <div class="cl"></div>
-       </ul>
-     </div>     
+       </li>
+     <% } %>
      <div class="cl"></div>
+   </ul>
+ </div>     
+ <div class="cl"></div>
 ]]>
 </script>
 

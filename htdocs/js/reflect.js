@@ -46,6 +46,13 @@ var Reflect;
 *    .utils : misc methods used throughout
 */    
 
+$j( document ).ready( function () {
+  $j.ajaxSetup({ cache: false });
+
+  Reflect.init();
+} );
+
+
 Reflect = {
     
   /**
@@ -126,6 +133,175 @@ Reflect = {
     }
   } ),
 
+  /**
+  * Get Reflect moving. 
+  * 
+  * Fetches data and templates from the server, enforces the contract. 
+  */    
+  init : function () {
+    // register the bridges
+    $j.plugin( 'bullet', Reflect.entities.Bullet );
+    $j.plugin( 'comment', Reflect.entities.Comment );
+    $j.plugin( 'response', Reflect.entities.Response );
+    //////////
+
+    // instantiate the classes that may have been overridden
+    Reflect.contract = new Reflect.Contract( Reflect.config.contract );
+    Reflect.api.server = new Reflect.api.DataInterface( Reflect.config.api );
+    //////////
+
+    // handle additional refactoring required for Reflect contract
+    Reflect.contract.add_css();
+    Reflect.contract.modifier();
+    //////////
+
+    // set up event delegation
+    Reflect.handle.initialize_delegators();
+    /////////////////////////
+
+    //////////
+    // figure out which comments are present on the page so that we
+    // can ask the server for the respective bullets
+    var loaded_comments = [];
+    for (i = 0; i < Reflect.contract.components.length; i++) {
+      var component = Reflect.contract.components[i];
+      $j( component.comment_identifier ).each( function () {
+        var comment_id = $j( this ).attr( 'id' )
+            .substring( component.comment_offset );
+        loaded_comments.push( comment_id );
+      } );
+    }
+    loaded_comments = JSON.stringify( loaded_comments );
+    ////////////////////
+
+    function get_data_callback ( data ) {
+      Reflect.data = data;
+      Reflect.enforce_contract();
+      Reflect.contract.post_process();
+
+      if ( Reflect.config.study ) {
+        Reflect.study.load_surveys();
+        Reflect.study.instrument_mousehovers();
+      }      
+    }
+
+    function get_templates_callback ( data ) {      
+      Reflect.templates.init( data );
+      Reflect.api.server.get_data( {
+          comments : loaded_comments
+        },
+        get_data_callback
+      );
+    }
+
+    // check if templates.html has already been loaded...
+    if ( $j('#reflect_templates_present').length ) {
+      get_templates_callback( $j('#reflect_templates_present').html() );
+    } else {
+      Reflect.api.server.get_templates( get_templates_callback );      
+    }  
+
+  },
+
+  /**
+  * Take the current DOM and wrap Reflect elements where appropriated, guided
+  * by the Reflect.contract. 
+  */
+  enforce_contract : function () {
+    $j( Reflect.contract.get_comment_thread() )
+        .wrapInner( '<div id="reflected" />' );
+
+    var user = typeof Reflect.contract.user_name_selector == 'function'
+      ? Reflect.contract.user_name_selector()
+      : $j(Reflect.contract.user_name_selector).text();
+
+    if ( !user || user == '' || user == null || user == 'undefined' ) {
+      user = Reflect.api.server.get_current_user();
+    }
+    
+    var user_el = '<span id="rf_user_name">' + user + '</span>';
+    $j( '#reflected' ).append( user_el );
+
+    for (i = 0; i < Reflect.contract.components.length; i++) {
+      var component = Reflect.contract.components[i];
+
+      $j( component.comment_identifier )
+        .each( function ( index ) {
+          $j( this ).comment( {
+            initializer : component
+          });
+          var comment = $j.data( this, 'comment' );
+
+          if ( Reflect.data && Reflect.data[comment.id]) {
+            var bullets = [];
+            $j.each( Reflect.data[comment.id], function(key, val){
+              bullets.push( val );      
+            })
+
+            // rank order of bullets in list
+            bullets = bullets.sort( function ( a, b ) {
+              var a_tot = 0.0, b_tot = 0.0;
+              for (var j in a.highlights) {
+                a_tot += parseFloat(a.highlights[j]);
+              }
+               for ( var j in b.highlights) {
+                b_tot += parseFloat( b.highlights[j] );
+              }
+              var a_score = a_tot / a.highlights.length,
+                b_score = b_tot / b.highlights.length;
+              return a_score - b_score;
+            } );
+
+            $j.each(bullets, function(key, bullet_info) {
+
+              var bullet = comment.add_bullet( bullet_info ), 
+                response = bullet_info.response;
+              if ( response ) {
+                bullet.add_response( response );
+              } else if ( !bullet.response && comment.user == user ) {
+                bullet.add_response_dialog();
+              }
+            });
+            comment.hide_excessive_bullets();
+          }
+          
+          // segment sentences we can index them during highlighting
+          comment.elements.comment_text.wrap_sentences();
+          comment.elements.comment_text.find( '.sentence' )
+              .each( function ( index ) {
+                $j( this ).attr( 'id', 'sentence-' + index );
+              } );
+                        
+          comment.add_bullet_prompt();
+
+        } );
+    }
+  },
+  /**
+  * HTML templates so that we don't have to have long, ugly HTML snippets
+  * managed via javascript. Use jquery.jqote2 to implement html templating.
+  * HTML file full of scripts is fetched from server. Each script simply
+  * contains HTML along with some templating methods. These scripts can 
+  * then be created as parameterized HTML via jqote2. 
+  * 
+  * Reflect.templates stores compiled HTML templates at the ready. 
+  */      
+  templates : {
+    init : function ( templates_from_server ) {      
+      $j( 'body' ).append( templates_from_server );
+      
+      $j.extend( Reflect.templates, {
+        bullet : $j.jqotec( '#reflect_template_bullet' ),
+        new_bullet_prompt : $j.jqotec( '#reflect_template_new_bullet_prompt' ),
+        new_bullet_dialog : $j.jqotec( '#reflect_template_new_bullet_dialog' ),
+        bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
+        response : $j.jqotec( '#reflect_template_response' ),
+        response_dialog : $j.jqotec( '#reflect_template_response_prompt' ),
+        bullet_rating : $j.jqotec( '#reflect_template_bullet_rating')
+      } );      
+    }
+  },
+  
   /**
   * Methods for communicating with a generic Reflect API. Reflect applications 
   * should override the base api.DataInterface class in order to implement the 
@@ -502,55 +678,6 @@ Reflect = {
       $j( event.target ).toggleClass( 'highlight' );
     }
 
-  },
-
-  /**
-  * Your standard misc collection of functions. 
-  */    
-  utils : {
-    /* escape the string */
-    escape : function (str) {
-      if ( str ) {
-        return $j('<div/>')
-          .text(str.replace(/\\"/g, '"').replace(/\\'/g, "'"))
-          .html();
-      } else {
-        return '';
-      }
-    },
-    
-    first_name : function ( full_name ) {
-      if (full_name.indexOf(' ') > -1){
-        full_name = full_name.substring(0, full_name.indexOf(' '));
-      }      
-      return full_name;
-    },
-    
-    get_logged_in_user : function () {
-      if ( typeof Reflect.current_user == 'undefined' ) {
-        Reflect.current_user = $j( '#rf_user_name' ).text();
-      }
-      return Reflect.current_user;
-    },
-
-    badge_tooltip : function ( rating ) {
-      if ( rating ) {
-        switch ( rating.rating ) {
-          case 'zen':
-            return 'This summary is an elegant, zen-like distillation of meaning.';
-          case 'sun':
-            return 'This summary helps shed light on what the commenter was trying to say.';
-          case 'gold':
-            return 'This summary uncovers an important point that could easily be missed.';
-          case 'graffiti':
-            return 'This does not appear to be a summary.';
-          case 'troll':
-            return 'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
-        }
-      }
-      return '';
-    }
-    
   },
 
   /**
@@ -1029,6 +1156,54 @@ Reflect = {
     }
 
   },
+  /**
+  * Your standard misc collection of functions. 
+  */    
+  utils : {
+    /* escape the string */
+    escape : function (str) {
+      if ( str ) {
+        return $j('<div/>')
+          .text(str.replace(/\\"/g, '"').replace(/\\'/g, "'"))
+          .html();
+      } else {
+        return '';
+      }
+    },
+    
+    first_name : function ( full_name ) {
+      if (full_name.indexOf(' ') > -1){
+        full_name = full_name.substring(0, full_name.indexOf(' '));
+      }      
+      return full_name;
+    },
+    
+    get_logged_in_user : function () {
+      if ( typeof Reflect.current_user == 'undefined' ) {
+        Reflect.current_user = $j( '#rf_user_name' ).text();
+      }
+      return Reflect.current_user;
+    },
+
+    badge_tooltip : function ( rating ) {
+      if ( rating ) {
+        switch ( rating.rating ) {
+          case 'zen':
+            return 'This summary is an elegant, zen-like distillation of meaning.';
+          case 'sun':
+            return 'This summary helps shed light on what the commenter was trying to say.';
+          case 'gold':
+            return 'This summary uncovers an important point that could easily be missed.';
+          case 'graffiti':
+            return 'This does not appear to be a summary.';
+          case 'troll':
+            return 'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
+        }
+      }
+      return '';
+    }
+    
+  },
   
   default_third_party_settings : {
     qtip: function ( delay ){
@@ -1058,185 +1233,8 @@ Reflect = {
         max_chars : 140
       }
     }
-  },
-
-  /**
-  * HTML templates so that we don't have to have long, ugly HTML snippets
-  * managed via javascript. Use jquery.jqote2 to implement html templating.
-  * HTML file full of scripts is fetched from server. Each script simply
-  * contains HTML along with some templating methods. These scripts can 
-  * then be created as parameterized HTML via jqote2. 
-  * 
-  * Reflect.templates stores compiled HTML templates at the ready. 
-  */      
-  templates : {
-    init : function ( templates_from_server ) {      
-      $j( 'body' ).append( templates_from_server );
-      
-      $j.extend( Reflect.templates, {
-        bullet : $j.jqotec( '#reflect_template_bullet' ),
-        new_bullet_prompt : $j.jqotec( '#reflect_template_new_bullet_prompt' ),
-        new_bullet_dialog : $j.jqotec( '#reflect_template_new_bullet_dialog' ),
-        bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
-        response : $j.jqotec( '#reflect_template_response' ),
-        response_dialog : $j.jqotec( '#reflect_template_response_prompt' ),
-        bullet_rating : $j.jqotec( '#reflect_template_bullet_rating')
-      } );      
-    }
-  },
-  
-  /**
-  * Take the current DOM and wrap Reflect elements where appropriated, guided
-  * by the Reflect.contract. 
-  */
-  enforce_contract : function () {
-    $j( Reflect.contract.get_comment_thread() )
-        .wrapInner( '<div id="reflected" />' );
-
-    var user = typeof Reflect.contract.user_name_selector == 'function'
-      ? Reflect.contract.user_name_selector()
-      : $j(Reflect.contract.user_name_selector).text();
-
-    if ( !user || user == '' || user == null || user == 'undefined' ) {
-      user = Reflect.api.server.get_current_user();
-    }
-    
-    var user_el = '<span id="rf_user_name">' + user + '</span>';
-    $j( '#reflected' ).append( user_el );
-
-    for (i = 0; i < Reflect.contract.components.length; i++) {
-      var component = Reflect.contract.components[i];
-
-      $j( component.comment_identifier )
-        .each( function ( index ) {
-          $j( this ).comment( {
-            initializer : component
-          });
-          var comment = $j.data( this, 'comment' );
-
-          if ( Reflect.data && Reflect.data[comment.id]) {
-            var bullets = [];
-            $j.each( Reflect.data[comment.id], function(key, val){
-              bullets.push( val );      
-            })
-
-            // rank order of bullets in list
-            bullets = bullets.sort( function ( a, b ) {
-              var a_tot = 0.0, b_tot = 0.0;
-              for (var j in a.highlights) {
-                a_tot += parseFloat(a.highlights[j]);
-              }
-               for ( var j in b.highlights) {
-                b_tot += parseFloat( b.highlights[j] );
-              }
-              var a_score = a_tot / a.highlights.length,
-                b_score = b_tot / b.highlights.length;
-              return a_score - b_score;
-            } );
-
-            $j.each(bullets, function(key, bullet_info) {
-
-              var bullet = comment.add_bullet( bullet_info ), 
-                response = bullet_info.response;
-              if ( response ) {
-                bullet.add_response( response );
-              } else if ( !bullet.response && comment.user == user ) {
-                bullet.add_response_dialog();
-              }
-            });
-            comment.hide_excessive_bullets();
-          }
-          
-          // segment sentences we can index them during highlighting
-          comment.elements.comment_text.wrap_sentences();
-          comment.elements.comment_text.find( '.sentence' )
-              .each( function ( index ) {
-                $j( this ).attr( 'id', 'sentence-' + index );
-              } );
-                        
-          comment.add_bullet_prompt();
-
-        } );
-    }
-  },
-  
-  
-
-  /**
-  * Get Reflect moving. 
-  * 
-  * Fetches data and templates from the server, enforces the contract. 
-  */    
-  init : function () {
-    // register the bridges
-    $j.plugin( 'bullet', Reflect.entities.Bullet );
-    $j.plugin( 'comment', Reflect.entities.Comment );
-    $j.plugin( 'response', Reflect.entities.Response );
-    //////////
-  
-    // instantiate the classes that may have been overridden
-    Reflect.contract = new Reflect.Contract( Reflect.config.contract );
-    Reflect.api.server = new Reflect.api.DataInterface( Reflect.config.api );
-    //////////
-  
-    // handle additional refactoring required for Reflect contract
-    Reflect.contract.add_css();
-    Reflect.contract.modifier();
-    //////////
-    
-    // set up event delegation
-    Reflect.handle.initialize_delegators();
-    /////////////////////////
-  
-    //////////
-    // figure out which comments are present on the page so that we
-    // can ask the server for the respective bullets
-    var loaded_comments = [];
-    for (i = 0; i < Reflect.contract.components.length; i++) {
-      var component = Reflect.contract.components[i];
-      $j( component.comment_identifier ).each( function () {
-        var comment_id = $j( this ).attr( 'id' )
-            .substring( component.comment_offset );
-        loaded_comments.push( comment_id );
-      } );
-    }
-    loaded_comments = JSON.stringify( loaded_comments );
-    ////////////////////
-
-    function get_data_callback ( data ) {
-      Reflect.data = data;
-      Reflect.enforce_contract();
-      Reflect.contract.post_process();
-        
-      if ( Reflect.config.study ) {
-        Reflect.study.load_surveys();
-        Reflect.study.instrument_mousehovers();
-      }      
-    }
-    
-    function get_templates_callback ( data ) {      
-      Reflect.templates.init( data );
-      Reflect.api.server.get_data( {
-          comments : loaded_comments
-        },
-        get_data_callback
-      );
-    }
-    
-    // check if templates.html has already been loaded...
-    if ( $j('#reflect_templates_present').length ) {
-      get_templates_callback( $j('#reflect_templates_present').html() );
-    } else {
-      Reflect.api.server.get_templates( get_templates_callback );      
-    }  
-
   }
 };
-
-$j( document ).ready( function () {
-  $j.ajaxSetup({ cache: false });
-
-  Reflect.init();
-} );
+  
 
 })(jQuery);
