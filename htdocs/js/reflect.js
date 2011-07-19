@@ -472,8 +472,9 @@ Reflect = {
     post_rating : function ( bullet_obj, rating, is_delete ) {
 
       function ajax_callback ( data ){
+        bullet_obj.ratings.rating = data.rating;
         bullet_obj.$elem.find('.rf_gallery_container')
-          .qtip('api').updateContent(Reflect.utils.badge_tooltip({rating:data.rating}) )
+          .qtip('api').updateContent(Reflect.utils.badge_tooltip(bullet_obj) )
         bullet_obj.$elem.find('.rf_gallery_container')
           .attr({
             'class': data.rating + ' rf_gallery_container'
@@ -492,7 +493,7 @@ Reflect = {
         params : params,
         success : ajax_callback,
         error : function ( data ) {}
-      } );
+      });
     }    
 
   },
@@ -527,10 +528,10 @@ Reflect = {
         .live('click',  function( event ) { $j( this ).siblings( '.verification' ).show(); });
 
       $j('.bullet.full_bullet .bullet_meta .delete_nope')
-        .live('click',  function( event ) { $j( this ).siblings( '.verification' ).hide(); });      
+        .live('click',  function( event ) { $j( this ).parents( '.verification' ).hide(); });      
 
       $j('.bullet.full_bullet .bullet_meta .delete_for_sure')
-        .live('click',  function( event ) { 
+        .live('click',  function( event ) {
           var bullet_obj = $j.data( $j( event.target )
               .parents( '.bullet' )[0], 'bullet' );        
           Reflect.api.post_delete_bullet( bullet_obj );
@@ -582,20 +583,33 @@ Reflect = {
 
       // responses
       $j('.bullet.full_bullet .response_prompt')
-        .live('mouseover', function( event ) { 
-          $j(event.target).find('.response_eval').slideDown();} );
+        .live('click', function( event ) { 
+          $j( this ).find('.response_eval').slideDown(); 
+          $j( this ).find('.action_call').hide();
+        });
+
+      $j('.bullet.full_bullet .response_prompt .response_maybe')
+        .live('click', function( event ) { 
+          $j( this ).siblings('.response_dialog').find('.new_response_text')
+            .focus();
+        });
 
       $j('.bullet.full_bullet .response_prompt .bullet_submit')
         .live('click', function( event ) { 
           var response_obj = $j.data( $j( event.target )
               .parents( '.bullet' ).find('.rf_response')[0], 'response' );
-          Reflect.api.post_response( response_obj );
-          response_obj.exit_dialog( params, false );
+          if ( response_obj.$elem.find('input:checked').length > 0 ) {
+            Reflect.api.post_response( response_obj );
+            response_obj.exit_dialog( false );
+          }
         });
 
       $j('.bullet.full_bullet .response_prompt .cancel_bullet')
         .live('click', function( event ) {  
-          $(event.target).parents('.response_eval').slideUp();} );
+          $j(event.target).parents('.response_eval').slideUp();
+          $j(event.target).parents('.response_prompt').find('.action_call').fadeIn();
+          return false;
+        } );
 
     },        
     bullet_mouseover : function ( event ) {
@@ -609,7 +623,7 @@ Reflect = {
     bullet_mouseout : function ( event ) {      
       var comment = $j
         .data( $j( event.target ).parents( '.rf_comment' )[0], 'comment' );
-        
+
       if ( !comment.$elem.hasClass( 'highlight_state' )
           && !comment.$elem.hasClass( 'bullet_state' ) ) {
         comment.$elem.find( '.highlight' ).removeClass( 'highlight' );
@@ -835,7 +849,6 @@ Reflect = {
           this._build();
         }
         return this;
-
       },
       set_attributes : function () {
         this.id = this.options.id ? this.options.id : null;
@@ -886,7 +899,7 @@ Reflect = {
         if ( this.id && !this.added_this_session ) {
           var me = this,
             qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(35), {
-              content : Reflect.utils.badge_tooltip(this.ratings),
+              content : Reflect.utils.badge_tooltip(this),
               api : {
                 beforeShow: function(){
                   return !!me.ratings.rating;
@@ -901,7 +914,7 @@ Reflect = {
              rating : this.my_rating,
              ratings : this.ratings
           }, selector_container = this.elements.bullet_eval.find( '.rf_rating .rf_selector_container' );
-          
+
           qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
             content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
             position: { adjust: { y: 0, x: 10}},
@@ -959,7 +972,7 @@ Reflect = {
         this.comment.$elem.addClass( 'bullet_state' );
         this.elements = {
           new_bullet_text : this.$elem.find( '.new_bullet_text' ),
-          bullet_text : this.$elem.find( '.bullet_text' ),
+          bullet_text : this.$elem.find( '.rf_bullet_text' ),
           submit_button : this.$elem.find( '.submit .bullet_submit' )
         };
         
@@ -968,12 +981,12 @@ Reflect = {
             this.comment.id + ' .bullet.modify li.count';
             
         this.elements.new_bullet_text.NobleCount(count_sel , settings );
-
+        this.options.text_backup = this.text;
+        
         // wont work in Greasemonkey
         try {
           this.elements.new_bullet_text.focus();
-        } catch ( err ) {
-        }
+        } catch ( err ) {}
 
       },
       exit_edit_state : function ( canceled ) {
@@ -984,7 +997,7 @@ Reflect = {
         } else {
           $j.extend( this.options, {
             listener_pic:Reflect.api.server.get_current_user_pic(),
-            txt: this.elements.new_bullet_text.val(),
+            txt: canceled ? this.options.txt : this.elements.new_bullet_text.val(),
             u: Reflect.utils.get_logged_in_user() } );
           
           this.set_attributes();
@@ -1004,10 +1017,14 @@ Reflect = {
       exit_highlight_state : function ( canceled ) {
         this.comment.$elem.removeClass( 'highlight_state' );
         
-        if ( canceled && !this.id ) {
-          this.$elem.removeClass( 'connect' );
+        if ( canceled & !this.id ) {
           this._build_prompt();
+          this.$elem.removeClass( 'connect' );
         } else {
+          if ( canceled ) {
+            this.options.txt = this.options.text_backup;
+            this.elements.bullet_text.text(this.options.txt);
+          }
           this.$elem
             .removeClass( 'new_bullet' )
             .addClass( 'full_bullet' );
@@ -1081,7 +1098,7 @@ Reflect = {
               var tip = this.user + ' does not think this is a summary.';
               break;
           }
-          var qtip_settings = $j.extend(Reflect.default_third_party_settings.qtip(140), {
+          var qtip_settings = $j.extend(true, Reflect.default_third_party_settings.qtip(140), {
             content : tip,
             style : { width : 140 }
           });
@@ -1119,6 +1136,12 @@ Reflect = {
           submit_button : this.$elem.find( '.submit .bullet_submit' )
         };
 
+        var settings = Reflect.default_third_party_settings.noblecount(),
+            count_sel = '#bullet-' 
+            + this.bullet.id 
+            + ' .response_prompt li.count';
+        this.elements.new_response_text.NobleCount( count_sel, settings );    
+
       },
       set_id : function ( id, rev ) {
         this.id = id;
@@ -1137,21 +1160,6 @@ Reflect = {
         this._build();
         this.set_attributes();
         this.$elem.removeClass('new');
-      },
-      enter_edit_state : function () {
-        this._build_prompt();
-        
-        var settings = Reflect.default_third_party_settings.noblecount(),
-            count_sel = '#bullet-' 
-            + this.bullet.id 
-            + ' .response_prompt li.count';
-        this.elements.new_response_text.NobleCount( count_sel, settings );
-
-        // wont work in GM
-        try {
-          this.elements.new_response_text.focus();        
-        } catch ( err ) {}        
-        
       }
     }
 
@@ -1185,22 +1193,45 @@ Reflect = {
       return Reflect.current_user;
     },
 
-    badge_tooltip : function ( rating ) {
-      if ( rating ) {
-        switch ( rating.rating ) {
+    badge_tooltip : function ( bullet_obj ) {
+      var tip = '<div class="badge_tooltip">',
+          rating = bullet_obj.ratings.rating;
+          
+      if ( bullet_obj.ratings ) {
+        switch ( rating ) {
           case 'zen':
-            return 'This summary is an elegant, zen-like distillation of meaning.';
+            tip += 'This summary is an elegant, zen-like distillation of meaning.';
+            break;
           case 'sun':
-            return 'This summary helps shed light on what the commenter was trying to say.';
+            tip +=  'This summary helps shed light on what the commenter was trying to say.';
+            break;
           case 'gold':
-            return 'This summary uncovers an important point that could easily be missed.';
+            tip +=  'This summary uncovers an important point that could easily be missed.';
+            break;
           case 'graffiti':
-            return 'This does not appear to be a summary.';
+            tip +=  'This does not appear to be a summary.';
+            break;
           case 'troll':
-            return 'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
+            tip +=  'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
+            break;
         }
       }
-      return '';
+      if ( !bullet_obj.my_rating ) {
+        var person_str = bullet_obj.ratings[rating] == 1 ? 'person' : 'people';
+        tip += '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '</div>';        
+      } else if ( bullet_obj.my_rating == rating ) {
+        var others = '';
+        if ( bullet_obj.ratings[rating] == 1 ) { 
+          others = ' one other';
+        } else if ( bullet_obj.ratings[rating] > 1 ) {
+          others = ' ' + bullet_obj.ratings[rating] + ' others'
+        }
+        tip += '<div class="according_to">You' + others + ' agree</div>';
+      } else {
+        tip += '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '. You disagree</div>';        
+      }
+
+      return tip + '</div>';
     }
     
   },

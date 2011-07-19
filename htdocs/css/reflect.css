@@ -14,9 +14,9 @@
   list-style-type: none; }
 #reflected a {
   cursor: pointer; }
+  #reflected a.user {
+    cursor: default; }
 
-#reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .modify_operation, #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .delete_operation {
-  display: none; }
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .sentence {
   cursor: pointer;
   text-decoration: none; }
@@ -97,6 +97,8 @@
             cursor: pointer; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.new_bullet:hover .bullet_point {
         color: inherit; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .rf_evaluation, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .bullet_meta {
+        display: none; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet:hover .bullet_point {
         color: #66a8ff; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_point {
@@ -136,7 +138,8 @@
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta > li {
             display: inline; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main .bullet_meta .verification {
-            display: none; }
+            display: none;
+            color: #006666; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main {
         background: none;
         width: 95%; }
@@ -145,10 +148,11 @@
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap {
             padding-bottom: 3px; }
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap textarea.new_bullet_text {
-              height: 60px;
-              padding: 4px 2px;
+              height: 55px;
+              padding: 3px 2px;
               width: 100%;
-              overflow: auto; }
+              overflow: auto;
+              margin: -5px 0 0 -2px; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main {
         width: 95%; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog {
@@ -392,3 +396,6 @@
 
 #reflected #rf_user_name {
   display: none; }
+
+.according_to {
+  text-align: right; }

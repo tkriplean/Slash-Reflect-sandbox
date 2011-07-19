@@ -197,14 +197,15 @@
       <div class="response_prompt">
          <div class="floating_arrow">&#9650;</div>
          <label class="prompt"><%= this.response_prompt %></label>
+         <span class="action_call">click to answer</span>
          <ul class="response_eval">
             <li><input type="radio" id="accurate-yes-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="2" <% if(this.sig == "2"){ %> CHECKED <% } %>><label for="accurate-yes-<%=this.bullet_id %>" class="response_yes">Yes.</label></li>
-            <li><input type="radio" id="accurate-maybe-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="1" <% if(this.sig == "1"){ %> CHECKED <% } %>><label for="accurate-maybe-<%=this.bullet_id %>" class="response_maybe">Perhaps, but I should clarify...</label>
+            <li><input type="radio" class="response_maybe" id="accurate-maybe-<%=this.bullet_id %>" name="accurate-<%=this.bullet_id %>" value="1" <% if(this.sig == "1"){ %> CHECKED <% } %>><label for="accurate-maybe-<%=this.bullet_id %>" class="response_maybe">Perhaps, but I should clarify...</label>
 
             <div class="response_dialog">
               <div class="rf_dialog">
                 <div class="new_bullet_text_wrap">
-                  <textarea class="new_response_text" title="Clarify your point to help <%=this.summarizer %> and others better understand your message."><% if(this.text) %><%= this.text %></textarea>  
+                  <textarea class="new_response_text" title="Clarify your point to help <%=this.summarizer %> and others better understand your message."><% if(this.text) %><%= this.text %></textarea>
                 </div>
                 <ul><li title="Please limit your response to 140 characters or less." class="count">
                   <a>
