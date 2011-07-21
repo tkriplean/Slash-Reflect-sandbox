@@ -6,3 +6,5 @@ INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, 
 INSERT INTO message_codes (code, type, seclev, send, subscribe, delivery_bvalue) VALUES (100, 'Reflect summary', 1, 'now', 0, 3);
 
 INSERT INTO string_param (type, code, name) VALUES ('commentcodes_extended','reflect_enabled','Reflect enabled');
+
+ALTER TABLE discussions MODIFY COLUMN commentstatus ENUM('disabled','enabled','friends_only','friends_fof_only','no_foe','no_foe_eof','logged_in', 'reflect_enabled');

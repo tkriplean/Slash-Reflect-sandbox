@@ -48,7 +48,6 @@ var Reflect;
 
 $j( document ).ready( function () {
   $j.ajaxSetup({ cache: false });
-
   Reflect.init();
 } );
 
