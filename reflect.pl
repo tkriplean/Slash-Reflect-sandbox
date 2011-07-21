@@ -443,13 +443,13 @@ sub create_bullet_rating {
 	  my $good_ratings = $update_obj->{'rating_zen'} + $update_obj->{'rating_gold'} + $update_obj->{'rating_sun'};
 	  my $bad_ratings = $update_obj->{'rating_troll'} + $update_obj->{'rating_graffiti'};
     my $total_count = $good_ratings + $bad_ratings;
-    my $signal = $slashdb->sqlSelect(
-  		'signal',
+    my ($rev_id, $signal) = $slashdb->sqlSelect(
+  		'id, signal',
   		'reflect_response_revision',
   		'active=1 AND bullet_id=' . $bullet_id
   	);
     
-    if ( ($total_count >= 3 && $good_ratings < $bad_ratings && !$signal) || $signal == 0 ) {
+    if ( ($total_count >= 3 && $good_ratings < $bad_ratings && !$signal) || ( $rev_id && $signal == 0 ) ) {
   	  $slashdb->sqlUpdate(
   	    'reflect_bullet_revision',
   	    {'active' => 0},

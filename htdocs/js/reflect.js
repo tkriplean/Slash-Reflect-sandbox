@@ -423,27 +423,24 @@ Reflect = {
     post_response : function ( response_obj ) {
 
       function ajax_callback ( data ) {
-        var modify = response_obj.id;
         response_obj.set_id( data.insert_id, data.rev_id );
       }
       
       var bullet_obj = response_obj.bullet, 
         text = response_obj.elements.new_response_text.val(), 
-        user = Reflect.utils.get_logged_in_user();
-      
-      var input_sel = "input[name='accurate-"
+        user = Reflect.utils.get_logged_in_user(),
+        input_sel = "input[name='accurate-"
           + response_obj.bullet.id + "']:checked",
-        signal = bullet_obj.$elem.find( input_sel ).val();
-
-      var params = {
-        bullet_id : bullet_obj.id,
-        comment_id : bullet_obj.comment.id,
-        bullet_rev : bullet_obj.rev,
-        text : text,
-        signal : signal,
-        response : true,
-        user : user
-      };
+        signal = bullet_obj.$elem.find( input_sel ).val(),
+        params = {
+          bullet_id : bullet_obj.id,
+          comment_id : bullet_obj.comment.id,
+          bullet_rev : bullet_obj.rev,
+          text : text,
+          signal : signal,
+          response : true,
+          user : user };
+          
       if ( response_obj.id ) {
         params.response_id = response_obj.id;
         params.response_rev = response_obj.rev;
@@ -797,20 +794,36 @@ Reflect = {
         } );
       },
       hide_excessive_bullets : function() {
-        if ( this.bullets.length < 2 ) {
-          return;
-        }
-        var HIDE_FACTOR = 1.5,
-          comment_text_height = this.elements.comment_text.height();
-        if ( this.elements.bullet_list.height() > HIDE_FACTOR * comment_text_height ) {
-          var i = this.bullets.length - 1;
+        function hide_loop( bullet_obj, hide_only_deviants, hide_only_response_no ) {
+          var i = bullet_obj.bullets.length - 1, hidden = 0,
+            subset = hide_only_response_no ? '.rf_response_symbol.not' : '.graffiti, .troll';
+          
           while (  i > 0 
-            && this.elements.bullet_list.height() > HIDE_FACTOR * comment_text_height ) {
-            this.bullets[i].$elem.hide();
-            i -= 1; 
+            && bullet_obj.elements.bullet_list.height() > comment_text_height + HIDE_FACTOR ) {
+
+            if ( (!hide_only_deviants 
+                 || bullet_obj.bullets[i].$elem.find(subset).length > 0 )
+                 && bullet_obj.bullets[i].$elem.is(':visible') ) {
+              bullet_obj.bullets[i].$elem.hide();
+              hidden += 1;
+            }
+            i -= 1;
           }
-          var hidden = this.bullets.length - i - 1,
-            summary = hidden == 1 ? 'summary' : 'summaries';
+          return hidden;
+        }
+
+        if ( this.bullets.length < 2 ) { return; }
+        var HIDE_FACTOR = 150,
+          comment_text_height = this.elements.comment_text.height();
+        if ( this.elements.bullet_list.height() > comment_text_height + HIDE_FACTOR ) {
+          // first hide all bullets marked by commenter as not a summary
+          var hidden = hide_loop( this, true, true );
+          // hide all suspected non-summaries
+          hidden += hide_loop( this, true, false );
+          // now just select from remaining
+          hidden += hide_loop( this, false );
+        
+          var summary = hidden == 1 ? 'summary' : 'summaries';
           this.$elem.find('.reflect_header')
             .append('<div class="rf_toggle_paginate">' + hidden + ' ' 
                     + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
@@ -867,18 +880,11 @@ Reflect = {
         this.$elem
           .addClass( 'bullet' )
           .html( $j.jqote( Reflect.templates.bullet, template_vars ) );
-
-        this.update_badge_gallery();
         
         if ( this.user == logged_in_user ) {
           this.$elem.addClass( 'self' );
         } else if ( this.options.commenter == logged_in_user ) {
           this.$elem.addClass( 'responder_viewing' );
-        }
-
-        if ( this.id ) {
-          this.set_id( this.id, this.rev );
-          this.$elem.addClass( 'full_bullet' )
         }
 
         this.elements = {
@@ -888,6 +894,12 @@ Reflect = {
           bullet_eval : this.$elem.find( '.rf_evaluation' ),
           bullet_wrap : this.$elem.find( '.bullet_text' )
         };
+
+        if ( this.id ) {
+          this.set_id( this.id, this.rev );
+          this.$elem.addClass( 'full_bullet' );
+          this.update_badge_gallery();
+        }
         
       },
       _build_prompt : function () {
@@ -1042,7 +1054,7 @@ Reflect = {
 
         this.$elem.find( '.rf_gallery_container' ).qtip(qtip_settings);
         if ( this.id && !this.added_this_session ) {
-                    
+
           var template_vars = {
              bullet_author : Reflect.utils.first_name(this.user),
              bullet_id : this.id,
@@ -1115,7 +1127,7 @@ Reflect = {
              
         } else if ( tag == '1' ) {
           this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' 
-            + this.text + ' <a class="user">by ' + first_name + '</a></div>')
+            + this.text + ' <a class="user"> ' + first_name + '</a></div>')
         }
         
         this.$elem.addClass( 'rf_response' );
@@ -1174,19 +1186,17 @@ Reflect = {
   utils : {
     /* escape the string */
     escape : function (str) {
-      if ( str ) {
-        return $j('<div/>')
+      return str 
+        ? $j('<div/>')
           .text(str.replace(/\\"/g, '"').replace(/\\'/g, "'"))
-          .html();
-      } else {
-        return '';
-      }
+          .html()
+        : '';
     },
     
     first_name : function ( full_name ) {
       if (full_name.indexOf(' ') > -1){
         full_name = full_name.substring(0, full_name.indexOf(' '));
-      }      
+      }
       return full_name;
     },
     
