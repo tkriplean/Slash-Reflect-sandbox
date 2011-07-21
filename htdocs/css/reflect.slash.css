@@ -3,7 +3,7 @@
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
-  width: 305px;
+  width: 320px;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .rf_clarification {
@@ -19,7 +19,7 @@
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary .rf_evaluation {
-  width: 25px;
+  width: 40px;
   float: right;
 }
 

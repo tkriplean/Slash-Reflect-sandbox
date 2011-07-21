@@ -217,7 +217,7 @@
     #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container {
       height: 20px;
       width: 23px;
-      opacity: 0.6; }
+      opacity: 0.4; }
       #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container.zen div, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container.gold div, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container.graffiti div, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container.sun div, #reflected .bullet .rf_evaluation .badges .rf_rating .rf_gallery_container.troll div {
         margin-top: inherit;
         margin: 3px auto; }
@@ -237,12 +237,12 @@
         height: 16px;
         background-position: 20px 20px;
         margin: 5px 0 0 3px;
-        color: #888888;
+        color: #414141;
         letter-spacing: 8px;
         font-family: symbol; }
     #reflected .bullet .rf_evaluation .badges .rf_rating .rf_selector_container {
       height: 20px;
-      width: 16px;
+      width: 10px;
       cursor: pointer;
       opacity: 0;
       position: absolute;

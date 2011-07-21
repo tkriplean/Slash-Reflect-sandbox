@@ -5,4 +5,4 @@ INSERT INTO css (rel, type, media, file, title, skin, page, admin, theme, ctid, 
 
 INSERT INTO message_codes (code, type, seclev, send, subscribe, delivery_bvalue) VALUES (100, 'Reflect summary', 1, 'now', 0, 3);
 
-INSERT INTO string_param (type, code, name) VALUES ('commentcodes_extended','reflect_enabled','Enable Reflect');
+INSERT INTO string_param (type, code, name) VALUES ('commentcodes_extended','reflect_enabled','Reflect enabled');
