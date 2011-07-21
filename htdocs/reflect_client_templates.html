@@ -7,7 +7,7 @@
       <span class="rf_bullet_text">
         <%= this.bullet_text %> 
       </span>
-      <a class="user"> - <%= this.user %></a>
+      <a class="user"> <%= this.user %></a>
     </div> 
     <% if (this.enable_actions) { %>      
       <ul class="bullet_meta">
@@ -42,27 +42,31 @@
  </div>
  <div class="rf_evaluation">
    <ul class="badges">
-     <% if (this.enable_rating) { %>
-       <li class="rf_rating">
-         <ul>
-           <li class="rf_gallery_container <%= this.rating %>">
-             <div></div>
-           </li>
-           <% if (this.allow_rating) { %>
-           <li class="rf_selector_container">
-             
-               <div class="rf_selector"></div>
-           </li>
-           <% } %>
-
-         </ul>
-         <div class="cl"></div>
-       </li>
-     <% } %>
      <div class="cl"></div>
    </ul>
  </div>     
  <div class="cl"></div>
+]]>
+</script>
+
+<script type="text/html" id="reflect_template_ratings_gallery">
+<![CDATA[
+  <% if (this.enable_rating) { %>
+    <li class="rf_rating">
+      <ul>
+        <li class="rf_gallery_container <%= this.rating %>">
+          <div><% if (this.allow_rating && !this.rating) %>[]</div>
+        </li>
+        <% if (this.allow_rating) { %>
+        <li class="rf_selector_container">
+          <div class="rf_selector"></div>
+        </li>
+        <% } %>
+
+      </ul>
+      <div class="cl"></div>
+    </li>
+  <% } %>
 ]]>
 </script>
 
@@ -83,11 +87,11 @@
 
 <script type="text/html" id="reflect_template_bullet_rating">
 <![CDATA[
-  <div class="rate_bullet">
+  <div class="rate_bullet <% if (this.logged_in_user == 'Anonymous') { %> anon <% } else { %> not_anon <% } %>">
     <form name="rate_bullet" class="rate_bullet_dialog">
       <div class="rate_header">
         Does <%= this.bullet_author %>&#39;s summary...
-      </div>                    
+      </div>
       <div name="zen" class="flag <% if(this.rating == 'zen'){ %> selected <% } %>">
         <div class="label">
           elegantly distill meaning? 
@@ -129,7 +133,9 @@
         <div class="cl"></div>     
       </div>
                                                              
-    </form>      
+    </form>
+    <div class="bullet_id hide"><%= this.bullet_id %></div>
+    <% if (this.logged_in_user == 'Anonymous') %> <div class="anon_restrict">Log in to rate this summary</div>
   </div>
 ]]>
 </script>

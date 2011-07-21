@@ -297,7 +297,8 @@ Reflect = {
         bullet_highlight : $j.jqotec( '#reflect_template_bullet_highlight' ),
         response : $j.jqotec( '#reflect_template_response' ),
         response_dialog : $j.jqotec( '#reflect_template_response_prompt' ),
-        bullet_rating : $j.jqotec( '#reflect_template_bullet_rating')
+        bullet_rating : $j.jqotec( '#reflect_template_bullet_rating'),
+        bullet_badge_gallery : $j.jqotec( '#reflect_template_ratings_gallery')
       } );      
     }
   },
@@ -473,12 +474,7 @@ Reflect = {
 
       function ajax_callback ( data ){
         bullet_obj.ratings.rating = data.rating;
-        bullet_obj.$elem.find('.rf_gallery_container')
-          .qtip('api').updateContent(Reflect.utils.badge_tooltip(bullet_obj) )
-        bullet_obj.$elem.find('.rf_gallery_container')
-          .attr({
-            'class': data.rating + ' rf_gallery_container'
-          });        
+        bullet_obj.update_badge_gallery();  
       }
       
       var params = {
@@ -573,13 +569,11 @@ Reflect = {
       $j('.bullet.connect .submit .cancel_bullet')
         .live('click', function(event) { 
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
-          bullet_obj.exit_highlight_state( true );});
-
-      $j('.bullet.connect .submit .cancel_bullet')
-        .live('click', function(event) {
-          var comment = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' ).comment; 
-          comment.add_bullet_prompt();
-      });
+          bullet_obj.exit_highlight_state( true );
+          bullet.comment.add_bullet_prompt(); });
+          
+      $j('.rate_bullet.not_anon .flag')
+        .live( 'click', function(event) { Reflect.handle.bullet_flag(event); });          
 
       // responses
       $j('.bullet.full_bullet .response_prompt')
@@ -590,8 +584,7 @@ Reflect = {
 
       $j('.bullet.full_bullet .response_prompt .response_maybe')
         .live('click', function( event ) { 
-          $j( this ).siblings('.response_dialog').find('.new_response_text')
-            .focus();
+          $j( this ).siblings('.response_dialog').find('.new_response_text').focus();
         });
 
       $j('.bullet.full_bullet .response_prompt .bullet_submit')
@@ -630,21 +623,21 @@ Reflect = {
       }      
     },
 
-    bullet_flag : function ( event, bullet_obj ) {
-      var flag = $j( event.currentTarget ).attr('name'),
-          is_delete = flag in bullet_obj.flags && flags[flag] > 0;
+    bullet_flag : function ( event ) {
+      var flag_el = $j( event.target ).hasClass('flag') ? $j( event.target ) : $j( event.target ).parents('.flag');
+      var flag = flag_el.attr('name'),
+          bullet_obj = $j.data( $j( '#bullet-'+flag_el.parents('.rate_bullet')
+            .find('.bullet_id').text())[0], 'bullet' ),
+          is_delete = flag == bullet_obj.my_rating;          
       
-      if ( !is_delete ) {
-        bullet_obj.my_rating = flag;
-        $j( event.currentTarget )
-          .siblings('.selected').removeClass('selected');
-      }
+      bullet_obj.my_rating = is_delete ? null : flag;
+      
+      flag_el
+        .toggleClass('selected')
+        .siblings('.selected').removeClass('selected');
 
-      $j( event.currentTarget )
-        .toggleClass('selected');
-
-      bullet_obj.flags[flag] = is_delete ? -1 : 1;
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
+      bullet_obj.$elem.find( '.rf_rating .rf_selector_container').qtip('hide');      
     },
 
     negative_count : function ( t_obj, char_area, c_settings, char_rem ) {
@@ -819,7 +812,8 @@ Reflect = {
           var hidden = this.bullets.length - i - 1,
             summary = hidden == 1 ? 'summary' : 'summaries';
           this.$elem.find('.reflect_header')
-            .append('<div class="rf_toggle_paginate">' + hidden + ' ' + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
+            .append('<div class="rf_toggle_paginate">' + hidden + ' ' 
+                    + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
           this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top')) - 20);
         }
        }
@@ -835,12 +829,10 @@ Reflect = {
 
         this.set_attributes();
         this.response = null;
-        this.flags = {};
         this.ratings = this.options.ratings;
         
         if ( this.options.my_rating && this.options.my_rating != 'undefined' ) {
           this.my_rating = this.options.my_rating;
-          this.flags[this.my_rating] = 1;
         }
         // Build the dom initial structure
         if ( options.is_prompt ) {
@@ -863,20 +855,20 @@ Reflect = {
             template_vars = {
           bullet_text : Reflect.utils.escape( this.text ),
           user : Reflect.utils.escape( this.user ),
+          logged_in_user : logged_in_user,
+          commenter : this.comment.user,
           listener_pic : this.options.u_pic,
           uses_profile_pic : Reflect.config.view.uses_profile_pic,
-          rating : this.ratings ? this.ratings.rating : null,
-          enable_rating : Reflect.config.view.enable_rating,
-          allow_rating : logged_in_user != this.comment.user
-            && logged_in_user != this.user,
           enable_actions : Reflect.api.server.is_admin()
             || (logged_in_user != 'Anonymous' && logged_in_user == this.user && !this.response)
             || (logged_in_user == 'Anonymous' && logged_in_user == this.user && this.added_this_session)
         };
 
         this.$elem
-            .addClass( 'bullet' )
-            .html( $j.jqote( Reflect.templates.bullet, template_vars ) );
+          .addClass( 'bullet' )
+          .html( $j.jqote( Reflect.templates.bullet, template_vars ) );
+
+        this.update_badge_gallery();
         
         if ( this.user == logged_in_user ) {
           this.$elem.addClass( 'self' );
@@ -893,46 +885,10 @@ Reflect = {
           bullet_text : this.$elem.find( '.rf_bullet_text' ),
           bullet_main : this.$elem.find( '.bullet_main' ),
           bullet_meta : this.$elem.find( '.bullet_meta' ),
-          bullet_eval : this.$elem.find( '.rf_evaluation' )
+          bullet_eval : this.$elem.find( '.rf_evaluation' ),
+          bullet_wrap : this.$elem.find( '.bullet_text' )
         };
         
-        if ( this.id && !this.added_this_session ) {
-          var me = this,
-            qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(35), {
-              content : Reflect.utils.badge_tooltip(this),
-              api : {
-                beforeShow: function(){
-                  return !!me.ratings.rating;
-                }                
-              }
-            });
-
-          this.elements.bullet_eval.find( '.rf_gallery_container' ).qtip(qtip_settings);
-                    
-          var template_vars = {
-             bullet_author : Reflect.utils.first_name(this.user),
-             rating : this.my_rating,
-             ratings : this.ratings
-          }, selector_container = this.elements.bullet_eval.find( '.rf_rating .rf_selector_container' );
-
-          qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
-            content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
-            position: { adjust: { y: 0, x: 10}},
-            hide: { fixed : true },
-            style: { padding : 0 },
-            api: {
-              onRender: function(){
-                this.elements.tooltip.find( '.flag' )
-                  .bind( 'click', function(event){
-                    Reflect.handle.bullet_flag(event, me) ;
-                    selector_container.qtip('hide');
-                  });
-              }
-            }
-          });
-
-          selector_container.qtip(qtip_settings);
-        }
       },
       _build_prompt : function () {
         var commenter = this.comment.user;
@@ -1039,8 +995,10 @@ Reflect = {
             .removeClass( 'highlight' );
       },
       _add_response : function ( params ) {
-        var response = $j( '<li />' ).response( params );
-        this.elements.bullet_eval.find('.rf_rating').after( response );
+        //var response = $j( '<li />' ).response( params );
+        //this.elements.bullet_eval.find('.rf_rating').after( response );
+        var response = $j( '<span />' ).response( params );
+        this.elements.bullet_wrap.append( response );
         this.response = response;
         this.$elem.addClass('has_response');
         return $j.data( response[0], 'response' );
@@ -1059,6 +1017,50 @@ Reflect = {
           is_prompt : true,
           bullet : this
         } );
+      },
+      update_badge_gallery : function() {
+        var logged_in_user = Reflect.utils.get_logged_in_user(),
+            template_vars = {
+          rating : this.ratings ? this.ratings.rating : null,
+          enable_rating : Reflect.config.view.enable_rating,
+          allow_rating : logged_in_user != this.comment.user
+            && logged_in_user != this.user
+        };
+        this.$elem.find('.rf_rating').remove();
+        this.$elem.find('.badges')
+          .prepend($j.jqote( Reflect.templates.bullet_badge_gallery, template_vars ));
+        var me = this,
+          qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(35), {
+            content : Reflect.utils.badge_tooltip(this),
+            position: { adjust: { y: 10, x: 0}},
+            api : {
+              beforeShow: function(){
+                return !!me.ratings.rating;
+              }                
+            }
+          });
+
+        this.$elem.find( '.rf_gallery_container' ).qtip(qtip_settings);
+        if ( this.id && !this.added_this_session ) {
+                    
+          var template_vars = {
+             bullet_author : Reflect.utils.first_name(this.user),
+             bullet_id : this.id,
+             rating : this.my_rating,
+             ratings : this.ratings,
+             logged_in_user : Reflect.utils.first_name(logged_in_user)
+          }, selector_container = this.$elem.find( '.rf_rating .rf_selector_container' );
+
+          qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
+            content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
+            position: { adjust: { y: 0, x: 10}},
+            hide: { fixed : true },
+            style: { padding : 0 }
+          });
+
+          selector_container.qtip(qtip_settings);
+        }          
+          
       }
     },
 
@@ -1100,7 +1102,8 @@ Reflect = {
           }
           var qtip_settings = $j.extend(true, Reflect.default_third_party_settings.qtip(140), {
             content : tip,
-            style : { width : 140 }
+            style : { width : 140 },
+            position: { adjust: { y: 10, x: 0}},
           });
           
           this.$elem
@@ -1111,7 +1114,8 @@ Reflect = {
             .qtip(qtip_settings);
              
         } else if ( tag == '1' ) {
-          this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' + this.text + ' - ' + first_name + '</div>')
+          this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' 
+            + this.text + ' <a class="user">by ' + first_name + '</a></div>')
         }
         
         this.$elem.addClass( 'rf_response' );

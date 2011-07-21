@@ -3,20 +3,23 @@
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary {
-  width: 340px;
+  width: 305px;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .rf_clarification {
- width: 268px; 
+ width: 247px; 
 }
+
 #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
   width: 275px;
 }
 
-
+#reflected .response_prompt {
+  width: 215px;
+}
 
 #reflected .rf_comment_wrapper .rf_comment_summary .rf_evaluation {
-  width: 57px;
+  width: 25px;
   float: right;
 }
 
@@ -72,7 +75,6 @@
 }
 
 #reflected a.user {
-  color: black;
   text-transform: lowercase;
 }
 
