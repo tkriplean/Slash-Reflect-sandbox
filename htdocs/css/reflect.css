@@ -245,8 +245,6 @@
       width: 10px;
       cursor: pointer;
       opacity: 0;
-      position: absolute;
-      right: -17px;
       padding: 3px; }
       #reflected .bullet .rf_evaluation .badges .rf_rating .rf_selector_container:hover {
         opacity: 0.6; }
