@@ -381,7 +381,7 @@ sub create_bullet_rating {
 	#server side permission check for this operation...
 	my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
 	my $summarizer = $slashdb->sqlSelect('user_id', 'reflect_bullet_revision', "id = $bullet_rev");
-	if($commenter == $uid 
+	if($commenter == $uid
 	   || $user_info->{is_anon}
 	   || ($uid != 0 && $summarizer == $uid) ) {
 	  return "{}";
@@ -438,7 +438,8 @@ sub create_bullet_rating {
   );
 
   ### determine if we should deactivate this bullet  
-	if( $rating == 'troll' || $rating == 'graffiti') {	  
+  my $deactivate = 'false';
+	if( !$is_delete && ( $rating == 'troll' || $rating == 'graffiti' ) ) {	  
 
 	  my $good_ratings = $update_obj->{'rating_zen'} + $update_obj->{'rating_gold'} + $update_obj->{'rating_sun'};
 	  my $bad_ratings = $update_obj->{'rating_troll'} + $update_obj->{'rating_graffiti'};
@@ -455,10 +456,11 @@ sub create_bullet_rating {
   	    {'active' => 0},
   	    "bullet_id=$bullet_id AND active=1"
   	  );
+  	  $deactivate = 'true';
     }
 	}
 
-	return "{\"rating\":\"$high_rating\"}";
+	return "{\"rating\":\"$high_rating\",\"deactivate\":$deactivate}";
 
 }
 
@@ -504,7 +506,42 @@ sub create_response {
 	);
 	my $response_rev_id = $slashdb->getLastInsertId();
 	my $name = $user_info->{name};	 
-	return "{\"insert_id\":$response_id,\"u\":\"$name\",\"rev_id\":$response_rev_id,\"sig\":$signal}";
+	
+  ### determine if we should deactivate this bullet
+  my $deactivate = 'false';
+	if( $signal == '0' ) {	  
+  	my $update_obj = {
+  	  'rating_zen' => 0,
+  	  'rating_gold' => 0,
+  	  'rating_sun' => 0,
+  	  'rating_troll' => 0,
+  	  'rating_graffiti' => 0
+  	};
+  	my $ratings = $slashdb->sqlSelectAll( 
+  		'rating, count(*)', 
+  		'reflect_bullet_rating', 
+  		"bullet_id=$bullet_id",
+  		'GROUP BY rating'
+  	);  	
+  	foreach my $row (@$ratings) {
+  	  my $row_rating = @$row[0];
+  	  $update_obj->{"rating_$row_rating"} = @$row[1];
+  	}
+
+	  my $good_ratings = $update_obj->{'rating_zen'} + $update_obj->{'rating_gold'} + $update_obj->{'rating_sun'};
+	  my $bad_ratings = $update_obj->{'rating_troll'} + $update_obj->{'rating_graffiti'};
+    
+    if ( $good_ratings < $bad_ratings ) {
+  	  $slashdb->sqlUpdate(
+  	    'reflect_bullet_revision',
+  	    {'active' => 0},
+  	    "bullet_id=$bullet_id AND active=1"
+  	  );
+  	  $deactivate = 'true';
+    }
+	}
+	
+	return "{\"insert_id\":$response_id,\"u\":\"$name\",\"rev_id\":$response_rev_id,\"sig\":$signal,\"deactivate\":$deactivate}";
 	
 }
 

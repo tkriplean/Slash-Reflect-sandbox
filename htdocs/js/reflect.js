@@ -424,13 +424,15 @@ Reflect = {
 
       function ajax_callback ( data ) {
         response_obj.set_id( data.insert_id, data.rev_id );
+        if ( data.deactivate ) {
+          response_obj.bullet.$elem.fadeOut();
+        }
       }
       
       var bullet_obj = response_obj.bullet, 
         text = response_obj.elements.new_response_text.val(), 
         user = Reflect.utils.get_logged_in_user(),
-        input_sel = "input[name='accurate-"
-          + response_obj.bullet.id + "']:checked",
+        input_sel = ".response_prompt input:checked",
         signal = bullet_obj.$elem.find( input_sel ).val(),
         params = {
           bullet_id : bullet_obj.id,
@@ -472,6 +474,9 @@ Reflect = {
       function ajax_callback ( data ){
         bullet_obj.ratings.rating = data.rating;
         bullet_obj.update_badge_gallery();  
+        if ( data.deactivate ) {
+          bullet_obj.$elem.fadeOut();
+        }        
       }
       
       var params = {
@@ -588,7 +593,7 @@ Reflect = {
         .live('click', function( event ) { 
           var response_obj = $j.data( $j( event.target )
               .parents( '.bullet' ).find('.rf_response')[0], 'response' );
-          if ( response_obj.$elem.find('input:checked').length > 0 ) {
+          if ( response_obj.bullet.$elem.find('.response_prompt input:checked').length > 0 ) {
             Reflect.api.post_response( response_obj );
             response_obj.exit_dialog( false );
           }
@@ -1168,13 +1173,13 @@ Reflect = {
         var accurate_sel = "input[name='accurate-" + this.bullet.id + "']:checked";
         
         $j.extend( this.options, {
-            user : Reflect.utils.get_logged_in_user(),
+            u : Reflect.utils.get_logged_in_user(),
             txt : this.elements.new_response_text.val(),
             sig : this.elements.prompt.find( accurate_sel ).val()            
           });
+        this.set_attributes();          
         this.elements.prompt.remove();
         this._build();
-        this.set_attributes();
         this.$elem.removeClass('new');
       }
     }
