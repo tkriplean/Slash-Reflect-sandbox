@@ -1,0 +1,144 @@
+Reflect testing protocol
+
+client-side
+	
+	comment
+	  - comment text broke up by sentence
+	    - links are broken properly (can we prevent splitter from splitting <a>'s?)
+	
+	bullet list
+	  - bullet header shown at top
+	  - if bullet list taller than comment, hide the extra
+	    - "show more" appears and works
+	
+	full bullet
+	  - user name tacked on after bullet text
+	    - italicized
+	  - eval block floating right
+	    - has bracket if no badge
+	    - has dominant badge if there has been rating
+	  - if summarizer logged in, edit/delete shown below bullet
+	    - unless a commenter has responded
+	    - if delete clicked, are you sure pops up
+	      - cancel closes dialog
+	      - delete deletes bullet, hides the bullet
+	    - edit bullet transitions to edit state
+
+	hovering over bullet...
+	  - highlights proper sentences in commment
+	    - even after a bullet has been edited and the highlights changed
+	  - changes color of bullet point
+	  - does nothing if in edit/highlight state because of a different bullet
+
+	bullet prompt
+	  - prompt appears, unless commenter logged in
+	  - clicking transitions to edit state
+	
+	bullet edit state
+	  - count works
+	  - done button disabled & grayed out if text not > 0 and <= 140
+	  - done button transitions to highlight state
+	  - cancel button transitions properly
+	    - if modifying, bullet restored to prior state
+	    - else bullet prompt restored
+	  - if modifying, proper text shown in edit box with count properly set
+	  - test modifying same bullet multiple times in same session
+	  - test modifying a bullet added the same session
+
+	bullet highlight state
+	  - clicking on sentences highlights & unhighlights them
+	  - done...
+	    - posts bullet
+	      - id set properly in callback
+	    - transitions to full bullet state
+	  - cancel button transitions properly
+	    - if modifying, bullet restored to prior state
+	    - else bullet prompt restored
+	    - highlights removed, as well as ability to click on sentences
+	  - test modifying same bullet multiple times in session
+	
+	response
+	  - if commenter, response prompt shows under bullet if no response already submitted
+	    - prompt has summarizer's name
+	    - click on prompt unfurls prompt, cancel button refurls
+	    - click on done fails if there is no response signal selected
+	    - done button is grayed out unless active
+	    - if sig=1, text area selected
+	      - 140 char works 
+	    - text is only submitted if sig=1
+	  - if sig in (0, 2), response shows after bullet text
+	    - even immediately after commenter responds
+	  - if sig=1, clarification text shown below bullet text
+	    - user signature tacked on
+
+	hovering over response
+	  - explains the symbol
+	    - even immediately after commenter responds
+	
+	hovering over evaluation block
+	  - shows the selector for bullet rating
+	    - if not logged in, say you have to be logged in to rate
+	    - if summarizer, say you can't rate your own point
+	      - and under these conditions, disable rating submission
+	    - if user already rated, highlights column with vote
+	      - should be marked as n-1 + 1
+	    - clicking a rating submits that rating
+	      - if rating was previously selected, rating is deleted
+	      - selected rating should be updated appropriately, as well as count
+	      - dominant badge should be updated; the count should be updated appropriately
+	      - test multiple rating iterations:
+	        => no rating 
+	          => rate
+	            => delete
+	              => rate
+				=> rate
+				  => delete 
+
+	hovering over gallery
+	  - explains the badge if it exists
+	    - has an "i agree" if the viewer voted
+	    - lists how many other people agree
+	  - if no badge exists, no tooltip
+	
+	check across browsers
+	
+server-side
+
+   get data
+     only active bullets and responses are returned
+
+   bullets
+     adding/editing stored properly in three tables, with highlights
+     adding/editing with no highlights rejected
+     adding/editing while commenter rejected
+     adding/editing duplicate text rejected (only for active)
+     adding/editing bullet with 0 or > 140 chars rejected
+	 adding bullet triggers web message 
+	 editing bullet does not trigger web message
+	 editing bullet after response not allowed
+     deleting bullet deactivates bullet in rev table
+	 deleting bullet removes web message
+	 only summarizer can delete bullet
+	 cannot edit or delete a bullet if a response exists
+
+   responses
+	 only the commenter can response
+	 only three possible signals accepted
+	 if signal is a clarification, txt must be between 0 and 140 chars
+	 if signal is not clarification, txt not stored
+     adding response properly stored in two tables
+	 adding stored properly across two tables
+	 bullet deactivation takes place if signal is 0 and there exists a negative rating
+
+   ratings
+     summarizer cannot rate their own bullet
+     commenter cannot rate the bullet
+     anons cannot rate the bullet
+	 only one rating per bullet per user maintained
+	 deleting rating clears all rating for that bullet, and only that bullet
+	 bullet deactivation executed only when a negative rating received and
+	    - 2 or more other ratings exist, where negative ratings are the majority
+	    - OR a bullet has been declared not a summary by the commenter
+	bullet object is properly updated to reflect score distribution
+	bullet deactivation not evaluated when a delete rating received (what about if its a delete rating of a positive rating?)
+	if bullet deactivated, web messages about bullet deleted

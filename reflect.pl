@@ -252,7 +252,7 @@ sub create_bullet {
 	$slashdb->sqlInsert(
 		'reflect_bullet', { 'comment_id' => $comment_id }
 	);
-	
+
 	my $bullet_id = $slashdb->getLastInsertId();
 
 	my $bullet_revision_params = { 
@@ -395,7 +395,7 @@ sub create_bullet_rating {
 		'reflect_bullet_rating', 
 		"user_id=$uid AND bullet_id=$bullet_id"
 	);
-	
+
 	if(!$is_delete) {
     $slashdb->sqlInsert(
     	'reflect_bullet_rating', { 
@@ -424,8 +424,9 @@ sub create_bullet_rating {
 	};
 	my $high_cnt = 0;
 	my $high_rating;
+	my $row_rating;
 	foreach my $row (@$ratings) {
-	  my $row_rating = @$row[0];
+	  $row_rating = @$row[0];
 	  $update_obj->{"rating_$row_rating"} = @$row[1];
 	  if(@$row[1] > $high_cnt){
 	    $high_cnt = @$row[1];
@@ -488,13 +489,13 @@ sub create_response {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id
 	};
-	
+
 	$slashdb->sqlInsert(
 		'reflect_response',
 		$response_params
 	);
 	my $response_id = $slashdb->getLastInsertId();
-	
+
 	my $response_revision_params = {
 		'comment_id' => $comment_id,
 		'bullet_id' => $bullet_id,
@@ -533,10 +534,9 @@ sub create_response {
   	  $update_obj->{"rating_$row_rating"} = @$row[1];
   	}
 
-	  my $good_ratings = $update_obj->{'rating_zen'} + $update_obj->{'rating_gold'} + $update_obj->{'rating_sun'};
 	  my $bad_ratings = $update_obj->{'rating_troll'} + $update_obj->{'rating_graffiti'};
     
-    if ( $good_ratings < $bad_ratings ) {
+    if ( $bad_ratings > 0 ) {
   	  $slashdb->sqlUpdate(
   	    'reflect_bullet_revision',
   	    {'active' => 0},
@@ -551,6 +551,7 @@ sub create_response {
 }
 
 sub update_response {
+  return '{}'; # disabled for now...
 	my($comment_id, $bullet_id, $response_id, $text, $signal ) = @_;
 	my $user_info = __get_user_info();
 	my $slashdb = getCurrentDB();	
@@ -591,6 +592,7 @@ sub update_response {
 }
 
 sub delete_response {
+  return '{}'; # disabled for now...
 	my ($response_id) = @_;
 	my $slashdb = getCurrentDB();		
 	my $user_info = __get_user_info();
