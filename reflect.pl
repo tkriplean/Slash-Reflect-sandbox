@@ -58,6 +58,29 @@ sub set_summary_message {
   }
 }
 
+sub _remove_messages_about_bullet {
+  # attempt to remove any web-messages alerting the commenter that this bullet was created	
+  my $slashdb = getCurrentDB();
+  my($bullet_id) = @_;
+  my $message_code = $slashdb->sqlSelect('code', "type = 'Reflect summary'");
+	my $bullet_txt = $slashdb->sqlSelect(
+	  'txt', 'reflect_bullet_revision', 
+	  "bullet_id = $bullet_id AND active = 1");
+	my $message_id = $slashdb->sqlSelect(
+	  't.id', 'message_web_text as t, message_web as m',
+	  "m.code=$message_code AND m.id=t.id AND t.message like '\%$bullet_txt\%'"
+	);
+	if ($message_id) {
+    $slashdb->sqlDelete('message_web', "id=$message_id");
+    $slashdb->sqlDelete('message_web_text', "id=$message_id");
+	} else {
+	  # if it wasn't in web_messages, notifications might not have been sent yet...
+	  $slashdb->sqlDelete('message_drop', 
+	    "code=$message_code AND message like '\%$bullet_txt\%"
+	  );
+	}  
+}
+
 ####
 # Handles all requests
 
@@ -344,26 +367,7 @@ sub delete_bullet {
 	  return "{}";
 	}
 
-  # attempt to remove any web-messages alerting the commenter that this bullet was created	
-  my $message_code = $slashdb->sqlSelect('code', "type = 'Reflect summary'");
-	my $bullet_txt = $slashdb->sqlSelect(
-	  'txt', 'reflect_bullet_revision', 
-	  "bullet_id = $bullet_id AND active = 1");
-	my $message_id = $slashdb->sqlSelect(
-	  't.id', 'message_web_text as t, message_web as m',
-	  "m.code=$message_code AND m.id=t.id AND t.message like '\%$bullet_txt\%'"
-	);
-	if ($message_id) {
-    $slashdb->sqlDelete('message_web', "id=$message_id");
-    $slashdb->sqlDelete('message_web_text', "id=$message_id");
-	} else {
-	  # if it wasn't in web_messages, notifications might not have been sent yet...
-	  $slashdb->sqlDelete('message_drop', 
-	    "code=$message_code AND message like '\%$bullet_txt\%"
-	  );
-	}
-  ##############
-  
+  _remove_messages_about_bullet($bullet_id);
 	$slashdb->sqlUpdate(
 		'reflect_bullet_revision',
 		{'active' => 0},
@@ -457,6 +461,7 @@ sub create_bullet_rating {
   	    "bullet_id=$bullet_id AND active=1"
   	  );
   	  $deactivate = 'true';
+  	  _remove_messages_about_bullet($bullet_id);
     }
 	}
 
@@ -573,7 +578,7 @@ sub update_response {
 		'user_id' => $user_info->{id},
 		'signal' => $signal,
 		'active' => 1
-	};	
+	};
 	$slashdb->sqlInsert(
 		'reflect_response_revision',
 		$response_revision_params
