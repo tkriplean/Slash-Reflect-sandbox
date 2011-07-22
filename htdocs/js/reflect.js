@@ -1052,7 +1052,7 @@ Reflect = {
             api : {
               beforeShow: function(){
                 return !!me.ratings.rating;
-              }                
+              }
             }
           });
 
@@ -1065,7 +1065,7 @@ Reflect = {
              rating : this.my_rating,
              ratings : this.ratings,
              logged_in_user : Reflect.utils.first_name(logged_in_user)
-          }, selector_container = this.$elem.find( '.rf_rating .rf_selector_container' );
+          };
 
           qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
             content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
@@ -1074,7 +1074,7 @@ Reflect = {
             style: { padding : 0 }
           });
 
-          selector_container.qtip(qtip_settings);
+          this.$elem.find( '.rf_rating .rf_selector_container div' ).qtip(qtip_settings);
         }          
           
       }

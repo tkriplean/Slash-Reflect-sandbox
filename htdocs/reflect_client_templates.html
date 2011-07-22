@@ -55,14 +55,13 @@
     <li class="rf_rating">
       <ul>
         <li class="rf_gallery_container <%= this.rating %>">
-          <div><% if (this.allow_rating && !this.rating) %>[]</div>
+          <div><% if (this.allow_rating && !this.rating) { %>[]<% } %></div>
         </li>
-        <% if (this.allow_rating) { %>
-          <li class="rf_selector_container">
+        <li class="rf_selector_container">
+          <% if (this.allow_rating) { %>            
             <div class="rf_selector"></div>
-          </li>
-        <% } %>
-
+          <% } %>
+        </li>
       </ul>
       <div class="cl"></div>
     </li>
