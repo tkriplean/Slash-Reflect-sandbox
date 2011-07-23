@@ -181,7 +181,7 @@ Reflect = {
       if ( Reflect.config.study ) {
         Reflect.study.load_surveys();
         Reflect.study.instrument_mousehovers();
-      }      
+      }
     }
 
     function get_templates_callback ( data ) {      
@@ -263,14 +263,16 @@ Reflect = {
             });
             comment.hide_excessive_bullets();
           }
-          
+
           // segment sentences we can index them during highlighting
           comment.elements.comment_text.wrap_sentences();
           comment.elements.comment_text.find( '.sentence' )
               .each( function ( index ) {
                 $j( this ).attr( 'id', 'sentence-' + index );
               } );
-                        
+          //so that we don't try to break apart urls into different sentences...
+          comment.elements.comment_text.find('a').addClass('exclude_from_reflect');
+
           comment.add_bullet_prompt();
 
         } );
@@ -609,7 +611,7 @@ Reflect = {
     bullet_mouseover : function ( event ) {
       var bullet_obj = $j.data( $j( this )[0], 'bullet' );
 
-      bullet_obj.comment.$elem.not('highlight_state').not('bullet_state')
+      bullet_obj.comment.$elem.not('.highlight_state').not('.bullet_state')
         .find( jQuery.map(bullet_obj.highlights, function(n, i){return '#sentence-' + n;}).join(',') )
         .addClass('highlight');
     },
@@ -753,15 +755,15 @@ Reflect = {
         wrapper.append( author_block );
         
         comment_text
-            .wrapInner( wrapper )
-            .append( summary_block )
-            .wrapInner( $j( '<tr/>' ) )        
-            .wrapInner( $j( '<table id="rf_comment_wrapper-' 
-                + this.id + '" class="rf_comment_wrapper" />' ) );
-        
+          .wrapInner( wrapper )
+          .append( summary_block )
+          .wrapInner( $j( '<tr/>' ) )        
+          .wrapInner( $j( '<table id="rf_comment_wrapper-' 
+              + this.id + '" class="rf_comment_wrapper" />' ) );
+
         //so that we don't try to break apart urls into different sentences...
-        comment_text.find('a').addClass('exclude_from_reflect');
-                  
+        comment_text.find('a').addClass('sentence');
+
         this.elements = {
           bullet_list : comment_text.find( '.bullet_list:first' ),
           comment_text : this.$elem.find( '.rf_comment_text:first' ),
@@ -1038,9 +1040,7 @@ Reflect = {
         var logged_in_user = Reflect.utils.get_logged_in_user(),
             template_vars = {
           rating : this.ratings ? this.ratings.rating : null,
-          enable_rating : Reflect.config.view.enable_rating,
-          allow_rating : logged_in_user != this.comment.user
-            && logged_in_user != this.user
+          enable_rating : Reflect.config.view.enable_rating
         };
         this.$elem.find('.rf_rating').remove();
         this.$elem.find('.badges')
@@ -1057,25 +1057,23 @@ Reflect = {
           });
 
         this.$elem.find( '.rf_gallery_container' ).qtip(qtip_settings);
-        if ( this.id && !this.added_this_session ) {
 
-          var template_vars = {
-             bullet_author : Reflect.utils.first_name(this.user),
-             bullet_id : this.id,
-             rating : this.my_rating,
-             ratings : this.ratings,
-             logged_in_user : Reflect.utils.first_name(logged_in_user)
-          };
+        var template_vars = {
+           bullet_author : Reflect.utils.first_name(this.user),
+           bullet_id : this.id,
+           rating : this.my_rating,
+           ratings : this.ratings,
+           logged_in_user : Reflect.utils.first_name(logged_in_user)
+        };
 
-          qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
-            content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
-            position: { adjust: { y: 0, x: 10}},
-            hide: { fixed : true },
-            style: { padding : 0 }
-          });
+        qtip_settings = $j.extend( true, Reflect.default_third_party_settings.qtip(50), {
+          content: $j.jqote( Reflect.templates.bullet_rating, template_vars ),
+          position: { adjust: { y: 0, x: 10}},
+          hide: { fixed : true },
+          style: { padding : 0 }
+        });
 
-          this.$elem.find( '.rf_rating .rf_selector_container div' ).qtip(qtip_settings);
-        }          
+        this.$elem.find( '.rf_rating .rf_selector_container div' ).qtip(qtip_settings);
           
       }
     },
@@ -1110,16 +1108,16 @@ Reflect = {
         if ( tag == '2' || tag == '0' ) {
           switch ( tag ) {
             case '2':
-              var tip = this.user + ' confirms that this summary is accurate.';
+              var tip = 'accuracy confirmed by ' + this.user;
               break;
             case '0':
-              var tip = this.user + ' does not think this is a summary.';
+              var tip = 'not a summary according to ' + this.user;
               break;
           }
           var qtip_settings = $j.extend(true, Reflect.default_third_party_settings.qtip(140), {
             content : tip,
             style : { width : 140 },
-            position: { adjust: { y: 10, x: 0}},
+            position: { adjust: { y: 0, x: 0}},
           });
           
           this.$elem
@@ -1218,19 +1216,19 @@ Reflect = {
       if ( bullet_obj.ratings ) {
         switch ( rating ) {
           case 'zen':
-            tip += 'This summary is an elegant, zen-like distillation of meaning.';
+            tip += 'Captures the essence of the comment.';
             break;
           case 'sun':
-            tip +=  'This summary helps shed light on what the commenter was trying to say.';
+            tip +=  'Helps shed light on what the commenter was trying to say.';
             break;
           case 'gold':
-            tip +=  'This summary uncovers an important point that could easily be missed.';
+            tip +=  'Uncovers an important point that could easily be missed.';
             break;
           case 'graffiti':
-            tip +=  'This does not appear to be a summary.';
+            tip +=  'Not a summary.';
             break;
           case 'troll':
-            tip +=  'Readers believe this summary is antagonizing...nitpicky...sarcastic. In short, trolling.'; 
+            tip +=  'Antagonizing. Suspected trolling.'; 
             break;
         }
       }
@@ -1263,14 +1261,14 @@ Reflect = {
             target: 'bottomRight',
             tooltip: 'topRight'
           },
-        },              
+        },
         style: {
-          background: '#e1e1e1',
-          color: '#4d4d4d',
+          background: 'white',
+          color: 'black',
           border: {
-            width: 3,
+            width: 1,
             radius: 0,
-            color: '#066'
+            color: '#ccc'
           }
         }
       }

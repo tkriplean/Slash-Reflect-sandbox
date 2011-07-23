@@ -55,12 +55,10 @@
     <li class="rf_rating">
       <ul>
         <li class="rf_gallery_container <%= this.rating %>">
-          <div><% if (this.allow_rating && !this.rating) { %>[]<% } %></div>
+          <div><% if (!this.rating) { %>[]<% } %></div>
         </li>
         <li class="rf_selector_container">
-          <% if (this.allow_rating) { %>            
-            <div class="rf_selector"></div>
-          <% } %>
+          <div class="rf_selector"></div>
         </li>
       </ul>
       <div class="cl"></div>
@@ -92,49 +90,50 @@
         Does <%= this.bullet_author %>&#39;s summary...
       </div>
       <div name="zen" class="flag <% if(this.rating == 'zen'){ %> selected <% } %>">
+        <div class="rating_class zen"></div>
         <div class="label">
           elegantly distill meaning? 
         </div>
-        <div class="rating_class zen"></div>
         <div class="rating_votes"><span class="others"><%= this.ratings.zen %></span><span class="me">+1</span></div> 
         <div class="cl"></div>            
       </div>
       <div name="gold" class="flag <% if(this.rating == 'gold'){ %> selected <% } %>">
+        <div class="rating_class gold"></div>
         <div class="label">
           uncover a good point?
         </div>
-        <div class="rating_class gold"></div>
         <div class="rating_votes"><span class="others"><%= this.ratings.gold %></span><span class="me">+1</span></div>
         <div class="cl"></div>     
       </div>
       <div name="sun" class="flag <% if(this.rating == 'sun'){ %> selected <% } %>">
+        <div class="rating_class sun"></div>
         <div class="label">                          
           clarify the message?
         </div>
-        <div class="rating_class sun"></div>
         <div class="rating_votes"><span class="others"><%= this.ratings.sun %></span><span class="me">+1</span></div>
         <div class="cl"></div>     
       </div>
       <div name="troll" class="flag <% if(this.rating == 'troll'){ %> selected <% } %>">
+        <div class="rating_class troll"></div>
         <div class="label">
           provoke unnecessarily? 
         </div>
-        <div class="rating_class troll"></div>
         <div class="rating_votes"><span class="others"><%= this.ratings.troll %></span><span class="me">+1</span></div>
         <div class="cl"></div>     
       </div>
       <div name="graffiti" class="flag <% if(this.rating == 'graffiti'){ %> selected <% } %>">
+        <div class="rating_class graffiti"></div>
         <div class="label">
           umm, its not a summary 
         </div>
-        <div class="rating_class graffiti"></div>
         <div class="rating_votes"><span class="others"><%= this.ratings.graffiti %></span><span class="me">+1</span></div>
         <div class="cl"></div>     
       </div>
                                                              
     </form>
     <div class="bullet_id hide"><%= this.bullet_id %></div>
-    <% if (this.logged_in_user == 'Anonymous') %> <div class="anon_restrict">Log in to rate this summary</div>
+    <% if (this.logged_in_user == 'Anonymous') { %> <div class="anon_restrict">Log in to rate this summary</div> <% } %>
+    <% if (this.logged_in_user == this.bullet_author) { %> <div class="anon_restrict">Sorry, you can&#39;t rate your own!</div> <% } %>    
   </div>
 ]]>
 </script>

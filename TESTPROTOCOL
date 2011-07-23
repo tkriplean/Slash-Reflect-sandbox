@@ -1,10 +1,10 @@
-Reflect testing protocol
+REFLECT TESTING PROTOCOL
 
 client-side
 	
 	comment
 	  - comment text broke up by sentence
-	    - links are broken properly (can we prevent splitter from splitting <a>'s?)
+	    - links are not broken
 	
 	bullet list
 	  - bullet header shown at top
@@ -19,7 +19,7 @@ client-side
 	    - has dominant badge if there has been rating
 	  - if summarizer logged in, edit/delete shown below bullet
 	    - unless a commenter has responded
-	    - if delete clicked, are you sure pops up
+	    - if delete clicked, "are you sure?" pops up
 	      - cancel closes dialog
 	      - delete deletes bullet, hides the bullet
 	    - edit bullet transitions to edit state
@@ -47,6 +47,7 @@ client-side
 
 	bullet highlight state
 	  - clicking on sentences highlights & unhighlights them
+	    - clicking on link does not exit the page
 	  - done...
 	    - posts bullet
 	      - id set properly in callback

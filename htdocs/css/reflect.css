@@ -70,11 +70,9 @@
   #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header {
     margin-bottom: 10px; }
     #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_title {
-      font-variant: small-caps;
       border-bottom: 1px dotted #777777;
       width: 100%;
-      font-size: 15px;
-      text-transform: lowercase; }
+      color: #7d7d7d; }
     #reflected .rf_comment_wrapper .rf_comment_summary .reflect_header .rf_toggle_paginate {
       color: #7d7d7d;
       font-size: 70%;
@@ -180,6 +178,8 @@
               font-size: 250%; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit {
             padding: 0 0 5px 5px; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit[disabled=true] {
+              opacity: 0.3; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect:hover {
         background-color: inherit; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer {
@@ -194,6 +194,8 @@
           display: inline-block; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.submit a, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.submit a {
             padding-right: 15px; }
+            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.submit a[disabled=true], #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.submit a[disabled=true] {
+              opacity: 0.3; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.count, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.count {
             padding: 0 20px 0 0px;
             color: #7d7d7d; }
@@ -265,9 +267,9 @@
   #reflected .bullet .rf_response .rf_response_symbol {
     opacity: 1; }
     #reflected .bullet .rf_response .rf_response_symbol.confirmed {
-      color: #88aa88; }
+      color: #666666; }
     #reflected .bullet .rf_response .rf_response_symbol.not {
-      color: #aa8888; }
+      color: #666666; }
 
 .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_votes .me {
   display: none; }
@@ -279,12 +281,12 @@
   padding-top: 5px; }
 .rate_bullet .rate_bullet_dialog .rate_header {
   padding: 5px 10px 5px 10px;
-  font-weight: bold; }
+  color: #777777; }
 .rate_bullet .rate_bullet_dialog .flag {
-  border-top: 1px solid #006666;
   width: 100%;
   padding: 5px 10px 5px 10px;
-  cursor: pointer; }
+  cursor: pointer;
+  color: black; }
   .rate_bullet .rate_bullet_dialog .flag.selected, .rate_bullet .rate_bullet_dialog .flag:hover {
     color: white;
     background-color: #006666; }
@@ -305,12 +307,11 @@
     float: left; }
   .rate_bullet .rate_bullet_dialog .flag .label {
     display: inline;
-    font-weight: normal;
+    font-weight: bold;
     cursor: pointer;
-    width: 160px;
-    padding-left: 10px; }
+    width: 190px; }
   .rate_bullet .rate_bullet_dialog .flag .rating_class {
-    margin-right: 18px;
+    margin-right: 12px;
     font-weight: bold;
     background-image: url("/media/reflect_sprite.png");
     width: 20px;
@@ -326,7 +327,8 @@
     .rate_bullet .rate_bullet_dialog .flag .rating_class.graffiti {
       background-position: -40px -80px; }
   .rate_bullet .rate_bullet_dialog .flag .rating_votes {
-    width: 20px; }
+    width: 20px;
+    display: none; }
     .rate_bullet .rate_bullet_dialog .flag .rating_votes .me {
       display: none; }
 
@@ -355,6 +357,8 @@
     top: -14px;
     left: 25%;
     color: #006666; }
+  #reflected .response_prompt .action_call {
+    text-decoration: underline; }
   #reflected .response_prompt label.prompt {
     font-weight: bold;
     padding-bottom: 3px;
@@ -391,6 +395,8 @@
         display: inline-block; }
         #reflected .response_prompt .rf_dialog .submit_footer li.submit {
           padding-right: 15px; }
+          #reflected .response_prompt .rf_dialog .submit_footer li.submit[disabled=true] {
+            opacity: 0.3; }
 
 #reflected .response {
   margin: 0px 0 0 2px;

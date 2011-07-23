@@ -15,21 +15,20 @@ RegExp.escape = function(str){
 jQuery.extend({
     _wrap_sentences: function (node, re, nodeName, className) {
         if (!node ){ return 0;}
-		  
+
         if (node.nodeType === 3) {
             var match = node.data.match(re);
             if (match) {
 	            var wordNode = node.splitText(match.index);
 	            wordNode.splitText(match[0].length);
-			   
-				} else if(jQuery.trim(node.nodeValue).length == 0){
-					return 0;
-				}else{
-	            var wordNode = node.splitText(0);
+    				} else if(jQuery.trim(node.nodeValue).length == 0){
+    					return 0;
+    				} else{
+    	          var wordNode = node.splitText(0);
             }
 			
             var highlight = document.createElement(nodeName || 'span');
-            highlight.className = className || 'highlight';
+            highlight.className = className;
             
             var wordClone = wordNode.cloneNode(true);
             highlight.appendChild(wordClone);
@@ -39,7 +38,7 @@ jQuery.extend({
             
         } else if ((node.nodeType === 1 && node.childNodes) && // only element nodes that have children
                 !/(script|style)/i.test(node.tagName) && // ignore script and style nodes
-                !(node.tagName === nodeName.toUpperCase() && node.className === className)) { // skip if already highlighted
+                !(node.className === className)) { // skip if already highlighted
             for (var i = 0; i < node.childNodes.length; i++) {
                i += jQuery._wrap_sentences(node.childNodes[i], re, nodeName, className);
             }
