@@ -58,7 +58,7 @@
           <div><% if (!this.rating) { %>[]<% } %></div>
         </li>
         <li class="rf_selector_container">
-          <div class="rf_selector"></div>
+          <% if (this.commenter!=this.logged_in_user) { %> <div class="rf_selector"></div> <% } %>
         </li>
       </ul>
       <div class="cl"></div>
@@ -84,7 +84,7 @@
 
 <script type="text/html" id="reflect_template_bullet_rating">
 <![CDATA[
-  <div class="rate_bullet <% if (this.logged_in_user == 'Anonymous') { %> anon <% } else { %> not_anon <% } %>">
+  <div class="rate_bullet <% if (this.logged_in_user == 'Anonymous') { %> anon <% } else if (this.logged_in_user == this.bullet_author) { %>self<% } else { %> not_anon <% } %>">
     <form name="rate_bullet" class="rate_bullet_dialog">
       <div class="rate_header">
         Does <%= this.bullet_author %>&#39;s summary...
@@ -133,7 +133,7 @@
     </form>
     <div class="bullet_id hide"><%= this.bullet_id %></div>
     <% if (this.logged_in_user == 'Anonymous') { %> <div class="anon_restrict">Log in to rate this summary</div> <% } %>
-    <% if (this.logged_in_user == this.bullet_author) { %> <div class="anon_restrict">Sorry, you can&#39;t rate your own!</div> <% } %>    
+    <% if (this.logged_in_user == this.bullet_author) { %> <div class="anon_restrict">Sorry, you can&#39;t judge your own!</div> <% } %>    
   </div>
 ]]>
 </script>

@@ -12,17 +12,16 @@
 .hide {
   display: none; }
 
+a.user {
+  cursor: default;
+  white-space: nowrap;
+  font-style: italic;
+  font-size: 90%;
+  color: inherit; }
+
 #reflected li {
   background: none;
   list-style-type: none; }
-#reflected a {
-  cursor: pointer; }
-  #reflected a.user {
-    cursor: default;
-    white-space: nowrap;
-    font-style: italic;
-    font-size: 90%;
-    color: inherit; }
 
 #reflected .rf_comment.highlight_state .rf_comment_wrapper .rf_comment_text_wrapper .sentence {
   cursor: pointer;
@@ -156,11 +155,12 @@
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap {
             padding-bottom: 3px; }
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .bullet_main .rf_dialog .new_bullet_text_wrap textarea.new_bullet_text {
-              height: 55px;
+              height: 60px;
               padding: 3px 2px;
               width: 100%;
               overflow: auto;
-              margin: -5px 0 0 -2px; }
+              margin: -4px 0 0 -2px;
+              line-height: 1.2em; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main {
         width: 95%; }
         #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog {
@@ -274,6 +274,25 @@
 .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_votes .me {
   display: none; }
 
+.rate_bullet.anon .rate_bullet_dialog .flag, .rate_bullet.self .rate_bullet_dialog .flag {
+  color: #777777;
+  cursor: default; }
+  .rate_bullet.anon .rate_bullet_dialog .flag:hover, .rate_bullet.self .rate_bullet_dialog .flag:hover {
+    color: #777777;
+    background-color: #efefef;
+    cursor: default; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .label, .rate_bullet.self .rate_bullet_dialog .flag:hover .label {
+      cursor: default; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_class.zen, .rate_bullet.self .rate_bullet_dialog .flag:hover .rating_class.zen {
+      background-position: 0px -80px; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_class.gold, .rate_bullet.self .rate_bullet_dialog .flag:hover .rating_class.gold {
+      background-position: -20px -80px; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_class.sun, .rate_bullet.self .rate_bullet_dialog .flag:hover .rating_class.sun {
+      background-position: -60px -80px; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_class.troll, .rate_bullet.self .rate_bullet_dialog .flag:hover .rating_class.troll {
+      background-position: -80px -80px; }
+    .rate_bullet.anon .rate_bullet_dialog .flag:hover .rating_class.graffiti, .rate_bullet.self .rate_bullet_dialog .flag:hover .rating_class.graffiti {
+      background-position: -40px -80px; }
 .rate_bullet .anon_restrict {
   text-align: center;
   color: #660000;
@@ -281,9 +300,9 @@
   padding-top: 5px; }
 .rate_bullet .rate_bullet_dialog .rate_header {
   padding: 5px 10px 5px 10px;
-  color: #777777; }
+  color: #777777;
+  font-weight: bold; }
 .rate_bullet .rate_bullet_dialog .flag {
-  width: 100%;
   padding: 5px 10px 5px 10px;
   cursor: pointer;
   color: black; }
@@ -300,9 +319,6 @@
       background-position: -80px -100px; }
     .rate_bullet .rate_bullet_dialog .flag.selected .rating_class.graffiti, .rate_bullet .rate_bullet_dialog .flag:hover .rating_class.graffiti {
       background-position: -40px -100px; }
-    .rate_bullet .rate_bullet_dialog .flag.selected .rating_votes .me, .rate_bullet .rate_bullet_dialog .flag:hover .rating_votes .me {
-      padding-left: 2px;
-      display: inline; }
   .rate_bullet .rate_bullet_dialog .flag .label, .rate_bullet .rate_bullet_dialog .flag .rating_class, .rate_bullet .rate_bullet_dialog .flag .rating_votes {
     float: left; }
   .rate_bullet .rate_bullet_dialog .flag .label {
@@ -382,7 +398,8 @@
         height: 60px;
         padding: 4px 2px;
         width: 100%;
-        overflow: auto; }
+        overflow: auto;
+        line-height: 1.2em; }
     #reflected .response_prompt .rf_dialog .submit_footer {
       width: 100%;
       padding-top: 5px; }

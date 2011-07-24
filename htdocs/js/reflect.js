@@ -96,7 +96,8 @@ Reflect = {
          //bullet_prompt: 'What point is {{COMMENTER}} making?',            
          bullet_prompt: 'What do you hear {{COMMENTER}} saying?',
          response_prompt: 'Did {{LISTENER}} understand your point?',
-         bullet_prompt_header: 'Points readers hear {{COMMENTER}} making'
+         //bullet_prompt_header: 'Points readers hear {{COMMENTER}} making',
+         bullet_prompt_header: 'Points <a class="user">{{COMMENTER}}</a> makes'         
        }
              
      },
@@ -586,7 +587,7 @@ Reflect = {
         });
 
       $j('.bullet.full_bullet .response_prompt .response_maybe')
-        .live('click', function( event ) { 
+        .live('click', function( event ) {
           $j( this ).siblings('.response_dialog').find('.new_response_text').focus();
         });
 
@@ -1040,7 +1041,9 @@ Reflect = {
         var logged_in_user = Reflect.utils.get_logged_in_user(),
             template_vars = {
           rating : this.ratings ? this.ratings.rating : null,
-          enable_rating : Reflect.config.view.enable_rating
+          enable_rating : Reflect.config.view.enable_rating,
+          commenter : this.comment.user,
+          logged_in_user : logged_in_user
         };
         this.$elem.find('.rf_rating').remove();
         this.$elem.find('.badges')
@@ -1108,10 +1111,10 @@ Reflect = {
         if ( tag == '2' || tag == '0' ) {
           switch ( tag ) {
             case '2':
-              var tip = 'accuracy confirmed by ' + this.user;
+              var tip = 'Accuracy confirmed <div><a class="user">- ' + this.user + '</a></div>';
               break;
             case '0':
-              var tip = 'not a summary according to ' + this.user;
+              var tip = 'This is not a summary<div><a class="user">- ' + this.user + '</a></div>';
               break;
           }
           var qtip_settings = $j.extend(true, Reflect.default_third_party_settings.qtip(140), {
@@ -1263,7 +1266,7 @@ Reflect = {
           },
         },
         style: {
-          background: 'white',
+          background: '#efefef',
           color: 'black',
           border: {
             width: 1,

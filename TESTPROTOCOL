@@ -82,7 +82,6 @@ client-side
 	    - if summarizer, say you can't rate your own point
 	      - and under these conditions, disable rating submission
 	    - if user already rated, highlights column with vote
-	      - should be marked as n-1 + 1
 	    - clicking a rating submits that rating
 	      - if rating was previously selected, rating is deleted
 	      - selected rating should be updated appropriately, as well as count
@@ -114,32 +113,30 @@ server-side
      adding/editing while commenter rejected
      adding/editing duplicate text rejected (only for active)
      adding/editing bullet with 0 or > 140 chars rejected
-	 adding bullet triggers web message 
-	 editing bullet does not trigger web message
-	 editing bullet after response not allowed
-     deleting bullet deactivates bullet in rev table
-	 deleting bullet removes web message
-	 only summarizer can delete bullet
-	 cannot edit or delete a bullet if a response exists
+		 adding bullet triggers web message 
+		 editing bullet does not trigger web message
+	   deleting bullet deactivates bullet in rev table
+		 deleting bullet removes web message
+		 only summarizer can delete bullet
+		 cannot edit or delete a bullet if a response exists
+		    - but delete allowed if signal=0
 
    responses
-	 only the commenter can response
-	 only three possible signals accepted
-	 if signal is a clarification, txt must be between 0 and 140 chars
-	 if signal is not clarification, txt not stored
-     adding response properly stored in two tables
-	 adding stored properly across two tables
-	 bullet deactivation takes place if signal is 0 and there exists a negative rating
+		 only the commenter can response
+		 only three possible signals accepted
+		 if signal is a clarification, txt must be between 0 and 140 chars
+	   adding response properly stored in two tables
+		 adding stored properly across two tables
+		 bullet deactivation takes place if signal is 0 and there exists a negative rating
 
    ratings
      summarizer cannot rate their own bullet
      commenter cannot rate the bullet
      anons cannot rate the bullet
-	 only one rating per bullet per user maintained
-	 deleting rating clears all rating for that bullet, and only that bullet
-	 bullet deactivation executed only when a negative rating received and
-	    - 2 or more other ratings exist, where negative ratings are the majority
-	    - OR a bullet has been declared not a summary by the commenter
-	bullet object is properly updated to reflect score distribution
-	bullet deactivation not evaluated when a delete rating received (what about if its a delete rating of a positive rating?)
-	if bullet deactivated, web messages about bullet deleted
+		 only one rating per bullet per user maintained
+		 deleting rating clears all rating for that bullet, and only that bullet
+		 bullet deactivation executed only when a negative rating received and
+		    - 2 or more other ratings exist, where negative ratings are the majority
+		    - OR a bullet has been declared not a summary by the commenter
+		bullet object is properly updated to reflect score distribution
+		if bullet deactivated, web messages about bullet deleted
