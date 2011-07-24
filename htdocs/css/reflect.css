@@ -209,9 +209,7 @@ a.user {
 #reflected .bullet .rf_evaluation {
   font-size: 90%;
   position: relative;
-  top: -4px;
-  padding-bottom: 100%;
-  margin-bottom: -100%; }
+  top: -4px; }
   #reflected .bullet .rf_evaluation .badges .rf_rating {
     height: 22px;
     float: right; }
