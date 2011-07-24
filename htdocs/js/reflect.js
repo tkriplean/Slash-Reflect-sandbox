@@ -1245,9 +1245,9 @@ Reflect = {
       } else if ( bullet_obj.my_rating === rating ) {
         var others = '';
         if ( bullet_obj.ratings[rating] === 1 ) { 
-          others = ' one other';
+          others = ' and one other';
         } else if ( bullet_obj.ratings[rating] > 1 ) {
-          others = ' ' + bullet_obj.ratings[rating] + ' others';
+          others = ' and ' + bullet_obj.ratings[rating] + ' others';
         }
         tip  +=  '<div class="according_to">You' + others + ' agree</div>';
       } else {
