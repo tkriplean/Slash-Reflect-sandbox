@@ -52,12 +52,15 @@ client-side
 	    - posts bullet
 	      - id set properly in callback
 	    - transitions to full bullet state
+	    - done grayed out unless highlights added
+	       - when editing and not changing highlights, done should be active
 	  - cancel button transitions properly
 	    - if modifying, bullet restored to prior state
 	    - else bullet prompt restored
 	    - highlights removed, as well as ability to click on sentences
 	  - test modifying same bullet multiple times in session
-	
+	  - bullet prompt should be disabled 
+	  
 	response
 	  - if commenter, response prompt shows under bullet if no response already submitted
 	    - prompt has summarizer's name

@@ -501,7 +501,7 @@ sub create_response {
   #server side permission check for this operation...
   my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
   if($commenter != $user_info->{id} 
-    || ($signal != '0' && $signal != '1' && $signal != '2')
+    || !($signal == '0' || $signal == '1' || $signal == '2')
     || ($signal == '1' && ($text eq '' || length($text) > 140))) {
     return 'rejected';
   }

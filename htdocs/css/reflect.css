@@ -19,6 +19,14 @@ a.user {
   font-size: 90%;
   color: inherit; }
 
+.submit a {
+  cursor: pointer; }
+  .submit a[disabled=true] {
+    cursor: default; }
+
+[disabled=true] {
+  opacity: 0.3; }
+
 #reflected li {
   background: none;
   list-style-type: none; }
@@ -111,10 +119,8 @@ a.user {
         left: -4px;
         font-size: 135%;
         color: #777777; }
-      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet {
-        overflow: hidden; }
-        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main {
-          float: left; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main {
+        float: left; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
         width: 100%;
         position: relative; }
@@ -180,8 +186,6 @@ a.user {
               font-size: 250%; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit {
             padding: 0 0 5px 5px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .bullet_main .rf_dialog .submit[disabled=true] {
-              opacity: 0.3; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect:hover {
         background-color: inherit; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer {
@@ -196,8 +200,6 @@ a.user {
           display: inline-block; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.submit a, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.submit a {
             padding-right: 15px; }
-            #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.submit a[disabled=true], #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.submit a[disabled=true] {
-              opacity: 0.3; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.count, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.count {
             padding: 0 20px 0 0px;
             color: #7d7d7d; }
@@ -411,8 +413,6 @@ a.user {
         display: inline-block; }
         #reflected .response_prompt .rf_dialog .submit_footer li.submit {
           padding-right: 15px; }
-          #reflected .response_prompt .rf_dialog .submit_footer li.submit[disabled=true] {
-            opacity: 0.3; }
 
 #reflected .response {
   margin: 0px 0 0 2px;

@@ -26,7 +26,7 @@
  *    chrome : good      
  *    opera : ?
  *    IE6 : ?
- *    IE7 : ugly
+ *    IE7 : usable
  *    IE8 : good
  * 
  * global Class, jQuery
@@ -427,12 +427,13 @@ Reflect = {
           response_obj.bullet.$elem.fadeOut();
         }
       }
+
       
       var bullet_obj = response_obj.bullet, 
-        text = response_obj.elements.new_response_text.val(), 
         user = Reflect.utils.get_logged_in_user(),
         input_sel = ".response_prompt input:checked",
         signal = bullet_obj.$elem.find( input_sel ).val(),
+        text = signal === '1' ? response_obj.elements.new_response_text.val() : '',         
         params = {
           bullet_id : bullet_obj.id,
           comment_id : bullet_obj.comment.id,
@@ -525,12 +526,12 @@ Reflect = {
         .live('click',  function( event ) { $j( this ).siblings( '.verification' ).show(); });
 
       $j('.bullet.full_bullet .bullet_meta .delete_nope')
-        .live('click',  function( event ) { $j( this ).parents( '.verification' ).hide(); });      
+        .live('click',  function( event ) { $j( this ).parents( '.verification' ).hide(); });
 
       $j('.bullet.full_bullet .bullet_meta .delete_for_sure')
         .live('click',  function( event ) {
           var bullet_obj = $j.data( $j( event.target )
-              .parents( '.bullet' )[0], 'bullet' );        
+              .parents( '.bullet' )[0], 'bullet' );
           Reflect.api.post_delete_bullet( bullet_obj );
         });
 
@@ -538,10 +539,13 @@ Reflect = {
         .live('click',  function(event) {
           var bullet_obj = $j.data( $j( event.target )
               .parents( '.bullet' )[0], 'bullet' );
-          bullet_obj.enter_edit_state();        
+          if ( !bullet_obj.comment.$elem.hasClass('highlight_state') 
+            && !bullet_obj.comment.$elem.hasClass('bullet_state')){
+            bullet_obj.enter_edit_state();
+          }
         });
 
-      $j('.bullet.new_bullet .add_bullet')
+      $j('.bullet.new_bullet .add_bullet[disabled="false"]')
         .live('click', function(event) {
           var bullet_obj = $j.data( $j( event.target )
               .parents( '.bullet' )[0], 'bullet' );
@@ -553,16 +557,16 @@ Reflect = {
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
           bullet_obj.exit_edit_state( false );
           bullet_obj.enter_highlight_state();
-          if ( bullet_obj.comment.elements.comment_text.find( '.highlight' ).length === 0 ) {
-            bullet_obj.elements.submit_button.attr( 'disabled', true );
-          }
+          bullet_obj.elements.submit_button.attr( 'disabled', 
+            bullet_obj.comment.elements.comment_text.find( '.highlight' ).length === 0 );
+          bullet_obj.comment.elements.bullet_list.find('.add_bullet').attr('disabled', true);
         });
 
       $j('.bullet.modify .cancel_bullet')
         .live('click', function(event) { 
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
           bullet_obj.exit_edit_state( true );
-        });      
+        });
 
       $j('.bullet.connect .submit .bullet_submit[disabled="false"]')
         .live('click', Reflect.api.post_bullet);
@@ -572,9 +576,9 @@ Reflect = {
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
           bullet_obj.exit_highlight_state( true );
           bullet_obj.comment.add_bullet_prompt(); });
-          
+
       $j('.rate_bullet.not_anon .flag')
-        .live( 'click', function(event) { Reflect.handle.bullet_flag(event); });          
+        .live( 'click', function(event) { Reflect.handle.bullet_flag(event); });
 
       // responses
       $j('.bullet.full_bullet .response_prompt')
@@ -605,7 +609,7 @@ Reflect = {
           return false;
         } );
 
-    },        
+    },
     bullet_mouseover : function ( event ) {
       var bullet_obj = $j.data( $j( this )[0], 'bullet' );
 
@@ -613,7 +617,7 @@ Reflect = {
         .find( jQuery.map(bullet_obj.highlights, function(n, i){return '#sentence-' + n;}).join(',') )
         .addClass('highlight');
     },
-    
+
     bullet_mouseout : function ( event ) {      
       var comment = $j
         .data( $j( event.target ).parents( '.rf_comment' )[0], 'comment' );
@@ -621,7 +625,7 @@ Reflect = {
       if ( !comment.$elem.hasClass( 'highlight_state' )
           && !comment.$elem.hasClass( 'bullet_state' ) ) {
         comment.$elem.find( '.highlight' ).removeClass( 'highlight' );
-      }      
+      }
     },
 
     bullet_flag : function ( event ) {
@@ -629,16 +633,16 @@ Reflect = {
       var flag = flag_el.attr('name'),
           bullet_obj = $j.data( $j( '#bullet-'+flag_el.parents('.rate_bullet')
             .find('.bullet_id').text())[0], 'bullet' ),
-          is_delete = flag === bullet_obj.my_rating;          
-      
+          is_delete = flag === bullet_obj.my_rating;
+
       bullet_obj.my_rating = is_delete ? null : flag;
-      
+
       flag_el
         .toggleClass('selected')
         .siblings('.selected').removeClass('selected');
 
       Reflect.api.post_rating( bullet_obj, flag, is_delete );
-      bullet_obj.$elem.find( '.rf_rating .rf_selector_container').qtip('hide');      
+      bullet_obj.$elem.find( '.rf_rating .rf_selector_container div').qtip('hide');
     },
 
     negative_count : function ( t_obj, char_area, c_settings, char_rem ) {
@@ -828,7 +832,6 @@ Reflect = {
           this.$elem.find('.reflect_header')
             .append('<div class="rf_toggle_paginate">' + hidden + ' ' 
                     + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
-          //this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top'), 10) - 20);
         }
        }
     },
@@ -915,7 +918,8 @@ Reflect = {
         
         this.$elem
             .addClass( 'bullet new_bullet' )
-            .html( $j.jqote( template, template_vars ) );
+            .html( $j.jqote( template, template_vars ) )
+            .find('.add_bullet').attr( 'disabled', false );
       },
       set_id : function ( id, rev ) {
         this.id = this.options.id = parseInt(id, 10);
@@ -1006,6 +1010,7 @@ Reflect = {
         }
         this.comment.elements.text_wrapper.find( '.highlight' )
             .removeClass( 'highlight' );
+        this.comment.elements.bullet_list.find('.add_bullet').attr('disabled', false);
       },
       _add_response : function ( params ) {
         //var response = $j( '<li />' ).response( params );
@@ -1231,11 +1236,8 @@ Reflect = {
           case 'troll':
             tip  +=   'Antagonizing. Suspected trolling.'; 
             break;
-          case undefined:
-            break;
           default:
-            console.log(rating);
-            throw 'unexpected rating';
+            break;
         }
       }
       if ( !bullet_obj.my_rating ) {

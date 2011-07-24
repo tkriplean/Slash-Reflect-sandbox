@@ -23,7 +23,7 @@
   float: right;
 }
 
-
+#reflected .bullet_author img, 
 #reflected .bullet_author.rf_listener_pic {
 	display: none;
 }
