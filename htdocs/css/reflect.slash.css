@@ -75,7 +75,6 @@
 }
 
 #reflected a.user {
-  text-transform: lowercase;
 }
 
 #reflected .rf_comment_wrapper .rf_comment_text_wrapper .rf_comment_text .sentence.highlight {

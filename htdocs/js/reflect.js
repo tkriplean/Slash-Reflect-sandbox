@@ -1,3 +1,6 @@
+/* global Class, jQuery */
+
+
 /* Copyright (c) 2010 Travis Kriplean (http://www.cs.washington.edu/homes/travis/)
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
@@ -26,6 +29,7 @@
  *    IE7 : ugly
  *    IE8 : good
  * 
+ * global Class, jQuery
  */
 
 var Reflect;
@@ -45,13 +49,6 @@ var Reflect;
 *    .init : fetches data from server, downloads templates, enforces contract, other init-y things
 *    .utils : misc methods used throughout
 */    
-
-$j( document ).ready( function () {
-  $j.ajaxSetup({ cache: false });
-  Reflect.init();
-} );
-
-
 Reflect = {
     
   /**
@@ -139,6 +136,8 @@ Reflect = {
   * Fetches data and templates from the server, enforces the contract. 
   */    
   init : function () {
+    $j.ajaxSetup({ cache: false });
+
     // register the bridges
     $j.plugin( 'bullet', Reflect.entities.Bullet );
     $j.plugin( 'comment', Reflect.entities.Comment );
@@ -162,12 +161,12 @@ Reflect = {
     //////////
     // figure out which comments are present on the page so that we
     // can ask the server for the respective bullets
-    var loaded_comments = [];
-    for (i = 0; i < Reflect.contract.components.length; i++) {
-      var component = Reflect.contract.components[i];
+    var loaded_comments = [], component, i;
+    for (i = 0; i < Reflect.contract.components.length; i += 1) {
+      component = Reflect.contract.components[i];
       $j( component.comment_identifier ).each( function () {
         var comment_id = $j( this ).attr( 'id' )
-            .substring( component.comment_offset );
+          .substring( component.comment_offset );
         loaded_comments.push( comment_id );
       } );
     }
@@ -190,8 +189,7 @@ Reflect = {
       Reflect.api.server.get_data( {
           comments : loaded_comments
         },
-        get_data_callback
-      );
+        get_data_callback);
     }
 
     // check if templates.html has already been loaded...
@@ -211,18 +209,17 @@ Reflect = {
     $j( Reflect.contract.get_comment_thread() )
         .wrapInner( '<div id="reflected" />' );
 
-    var user = typeof Reflect.contract.user_name_selector == 'function'
+    var user = typeof Reflect.contract.user_name_selector === 'function'
       ? Reflect.contract.user_name_selector()
-      : $j(Reflect.contract.user_name_selector).text();
+      : $j(Reflect.contract.user_name_selector).text(), i;
 
-    if ( !user || user == '' || user == null || user == 'undefined' ) {
+    if ( !user || user === '' || user == 'undefined' ) {
       user = Reflect.api.server.get_current_user();
     }
     
-    var user_el = '<span id="rf_user_name">' + user + '</span>';
-    $j( '#reflected' ).append( user_el );
+    $j( '#reflected' ).append( '<span id="rf_user_name">' + user + '</span>' );
 
-    for (i = 0; i < Reflect.contract.components.length; i++) {
+    for (i = 0; i < Reflect.contract.components.length; i += 1) {
       var component = Reflect.contract.components[i];
 
       $j( component.comment_identifier )
@@ -236,16 +233,16 @@ Reflect = {
             var bullets = [];
             $j.each( Reflect.data[comment.id], function(key, val){
               bullets.push( val );      
-            })
+            });
 
             // rank order of bullets in list
             bullets = bullets.sort( function ( a, b ) {
-              var a_tot = 0.0, b_tot = 0.0;
-              for (var j in a.highlights) {
-                a_tot += parseFloat(a.highlights[j]);
+              var a_tot = 0.0, b_tot = 0.0, j;
+              for (j = 0; j < a.highlights.length; j += 1) {
+                a_tot  +=  parseFloat(a.highlights[j]);
               }
-               for ( var j in b.highlights) {
-                b_tot += parseFloat( b.highlights[j] );
+              for (j = 0; j < b.highlights.length; j += 1) {
+                b_tot  +=  parseFloat( b.highlights[j] );
               }
               var a_score = a_tot / a.highlights.length,
                 b_score = b_tot / b.highlights.length;
@@ -258,7 +255,7 @@ Reflect = {
                 response = bullet_info.response;
               if ( response ) {
                 bullet.add_response( response );
-              } else if ( !bullet.response && comment.user == user ) {
+              } else if ( !bullet.response && comment.user === user ) {
                 bullet.add_response_dialog();
               }
             });
@@ -356,11 +353,11 @@ Reflect = {
       var bullet_obj = $j.data( $j( event.target )
           .parents( '.bullet' )[0], 'bullet' ), 
         text = $j.trim(bullet_obj.elements.bullet_text.html()), 
-        highlights = new Array(),
+        highlights = [],
         modify = bullet_obj.id;
 
       if ( !modify ) {
-        bullet_obj.added_this_session = true
+        bullet_obj.added_this_session = true;
       }
 
       bullet_obj.comment.elements.comment_text.find( '.highlight' )
@@ -556,7 +553,7 @@ Reflect = {
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
           bullet_obj.exit_edit_state( false );
           bullet_obj.enter_highlight_state();
-          if ( bullet_obj.comment.elements.comment_text.find( '.highlight' ).length == 0 ) {
+          if ( bullet_obj.comment.elements.comment_text.find( '.highlight' ).length === 0 ) {
             bullet_obj.elements.submit_button.attr( 'disabled', true );
           }
         });
@@ -574,7 +571,7 @@ Reflect = {
         .live('click', function(event) { 
           var bullet_obj = $j.data( $j( event.target ).parents( '.bullet' )[0], 'bullet' );
           bullet_obj.exit_highlight_state( true );
-          bullet.comment.add_bullet_prompt(); });
+          bullet_obj.comment.add_bullet_prompt(); });
           
       $j('.rate_bullet.not_anon .flag')
         .live( 'click', function(event) { Reflect.handle.bullet_flag(event); });          
@@ -597,7 +594,7 @@ Reflect = {
               .parents( '.bullet' ).find('.rf_response')[0], 'response' );
           if ( response_obj.bullet.$elem.find('.response_prompt input:checked').length > 0 ) {
             Reflect.api.post_response( response_obj );
-            response_obj.exit_dialog( false );
+            response_obj.exit_dialog( );
           }
         });
 
@@ -632,7 +629,7 @@ Reflect = {
       var flag = flag_el.attr('name'),
           bullet_obj = $j.data( $j( '#bullet-'+flag_el.parents('.rate_bullet')
             .find('.bullet_id').text())[0], 'bullet' ),
-          is_delete = flag == bullet_obj.my_rating;          
+          is_delete = flag === bullet_obj.my_rating;          
       
       bullet_obj.my_rating = is_delete ? null : flag;
       
@@ -650,7 +647,7 @@ Reflect = {
 
         t_obj.parents( '.rf_dialog' ).find( '.bullet_submit' )
             .animate( {
-              opacity : .25,
+              opacity : 0.25,
               duration : 50
             } ).attr( 'disabled', true ).css( 'cursor', 'default' );
         t_obj.data( 'disabled', true );
@@ -671,7 +668,7 @@ Reflect = {
         t_obj.data( 'disabled', false );
         t_obj.parents( 'li' ).find( '.submit .bullet_submit' )
             .attr( 'disabled', false );
-      } else if ( char_rem == 140 && t_obj.parents('.response_dialog').length == 0 ) {
+      } else if ( char_rem === 140 && t_obj.parents('.response_dialog').length === 0 ) {
         t_obj.data( 'disabled', true );
         t_obj.parents( 'li' ).find( '.submit .bullet_submit' )
             .attr( 'disabled', true );
@@ -679,13 +676,12 @@ Reflect = {
     },
     sentence_click : function ( event ) {
       var parent = $j( event.target ).parents( '.rf_comment' ), 
-          comment = $j.data( parent[0], 'comment' );
           bullet = parent.find( '.connect_directions' )
             .parents( '.bullet' ).data( 'bullet' ), 
           submit = bullet.elements.submit_button;
 
       submit.attr( 'disabled', $j( event.target ).hasClass( 'highlight' ) 
-             && parent.find( '.rf_comment_text .highlight' ).length == 1 );
+             && parent.find( '.rf_comment_text .highlight' ).length === 1 );
       $j( event.target ).toggleClass( 'highlight' );
     }
 
@@ -722,7 +718,7 @@ Reflect = {
             .substring( this.options.initializer.comment_offset );
       
         this.user = this.options.initializer.get_commenter_name( this.id );
-        if ( this.user == '' || this.user == null ) {
+        if ( !this.user || this.user === '' ) {
           this.user = 'Anonymous';
         }
         this.user_short = Reflect.utils.first_name( this.user );
@@ -736,13 +732,11 @@ Reflect = {
             .find( this.options.initializer.comment_text + ':first' );
         this.$elem.addClass( 'rf_comment' );
 
-        var wrapper = $j( '' 
-            + '<td id="rf_comment_text_wrapper-'
+        var wrapper = $j( '<td id="rf_comment_text_wrapper-'
             + this.id + '" class="rf_comment_text_wrapper">'
             + '<div class=rf_comment_text />' + '</td>' );
 
-        var summary_block = $j( '' 
-            + '<td id="rf_comment_summary-'
+        var summary_block = $j( '<td id="rf_comment_summary-'
             + this.id + '" class="rf_comment_summary">'
             + '<div class="summary" id="summary-' + this.id + '">'
             + '<div class="reflect_header"><div class="rf_title">'
@@ -790,7 +784,7 @@ Reflect = {
         } );
       },
       add_bullet_prompt : function () {
-        if ( this.user == Reflect.utils.get_logged_in_user()
+        if ( this.user === Reflect.utils.get_logged_in_user()
             || this.elements.bullet_list.find( '.new_bullet' ).length > 0) {
           return;
         }
@@ -801,7 +795,8 @@ Reflect = {
         } );
       },
       hide_excessive_bullets : function() {
-        function hide_loop( bullet_obj, hide_only_deviants, hide_only_response_no ) {
+        var HIDE_FACTOR = 150;
+        function hide_loop( comment_text_height, bullet_obj, hide_only_deviants, hide_only_response_no ) {
           var i = bullet_obj.bullets.length - 1, hidden = 0,
             subset = hide_only_response_no ? '.rf_response_symbol.not' : '.graffiti, .troll';
           
@@ -812,7 +807,7 @@ Reflect = {
                  || bullet_obj.bullets[i].$elem.find(subset).length > 0 )
                  && bullet_obj.bullets[i].$elem.is(':visible') ) {
               bullet_obj.bullets[i].$elem.hide();
-              hidden += 1;
+              hidden  +=  1;
             }
             i -= 1;
           }
@@ -820,21 +815,20 @@ Reflect = {
         }
 
         if ( this.bullets.length < 2 ) { return; }
-        var HIDE_FACTOR = 150,
-          comment_text_height = this.elements.comment_text.height();
+        var comment_text_height = this.elements.comment_text.height();
         if ( this.elements.bullet_list.height() > comment_text_height + HIDE_FACTOR ) {
           // first hide all bullets marked by commenter as not a summary
-          var hidden = hide_loop( this, true, true );
+          var hidden = hide_loop( comment_text_height, this, true, true );
           // hide all suspected non-summaries
-          hidden += hide_loop( this, true, false );
+          hidden  +=  hide_loop( comment_text_height, this, true, false );
           // now just select from remaining
-          hidden += hide_loop( this, false );
+          hidden  +=  hide_loop( comment_text_height, this, false );
         
-          var summary = hidden == 1 ? 'summary' : 'summaries';
+          var summary = hidden === 1 ? 'summary' : 'summaries';
           this.$elem.find('.reflect_header')
             .append('<div class="rf_toggle_paginate">' + hidden + ' ' 
                     + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
-          this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top')) - 20);
+          this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top'), 10) - 20);
         }
        }
     },
@@ -863,11 +857,11 @@ Reflect = {
         return this;
       },
       set_attributes : function () {
-        this.id = this.options.id ? this.options.id : null;
-        this.rev = this.options.rev ? this.options.rev : null;
-        this.user = this.options.u ? this.options.u : null;
-        this.highlights = this.options.highlights ? this.options.highlights : null;
-        this.text = this.options.txt ? this.options.txt : null;
+        this.id = this.options.id || null;
+        this.rev = this.options.rev || null;
+        this.user = this.options.u || null;
+        this.highlights = this.options.highlights || null;
+        this.text = this.options.txt || null;
       },
       options : {},
       _build : function () {
@@ -880,17 +874,17 @@ Reflect = {
           listener_pic : this.options.u_pic,
           uses_profile_pic : Reflect.config.view.uses_profile_pic,
           enable_actions : Reflect.api.server.is_admin()
-            || (logged_in_user != 'Anonymous' && logged_in_user == this.user && !this.response)
-            || (logged_in_user == 'Anonymous' && logged_in_user == this.user && this.added_this_session)
+            || (logged_in_user !== 'Anonymous' && logged_in_user === this.user && !this.response)
+            || (logged_in_user === 'Anonymous' && logged_in_user === this.user && this.added_this_session)
         };
 
         this.$elem
           .addClass( 'bullet' )
           .html( $j.jqote( Reflect.templates.bullet, template_vars ) );
         
-        if ( this.user == logged_in_user ) {
+        if ( this.user === logged_in_user ) {
           this.$elem.addClass( 'self' );
-        } else if ( this.options.commenter == logged_in_user ) {
+        } else if ( this.options.commenter === logged_in_user ) {
           this.$elem.addClass( 'responder_viewing' );
         }
 
@@ -924,8 +918,8 @@ Reflect = {
             .html( $j.jqote( template, template_vars ) );
       },
       set_id : function ( id, rev ) {
-        this.id = this.options.id = parseInt(id);
-        this.rev = this.options.rev = parseInt(rev);
+        this.id = this.options.id = parseInt(id, 10);
+        this.rev = this.options.rev = parseInt(rev, 10);
         this.$elem.attr( 'id', 'bullet-' + this.id );
       },
       set_highlights : function (highlights) {
@@ -937,7 +931,7 @@ Reflect = {
           media_dir : Reflect.api.server.media_dir,
           bullet_id : this.id,
           txt : Reflect.utils.escape( text ),
-          commenter : this.comment.user_short,
+          commenter : this.comment.user_short
         };
         this.$elem
           .addClass( 'modify' )
@@ -992,7 +986,7 @@ Reflect = {
       exit_highlight_state : function ( canceled ) {
         this.comment.$elem.removeClass( 'highlight_state' );
         
-        if ( canceled & !this.id ) {
+        if ( canceled && !this.id ) {
           this._build_prompt();
           this.$elem.removeClass( 'connect' );
         } else {
@@ -1061,7 +1055,7 @@ Reflect = {
 
         this.$elem.find( '.rf_gallery_container' ).qtip(qtip_settings);
 
-        var template_vars = {
+        template_vars = {
            bullet_author : Reflect.utils.first_name(this.user),
            bullet_id : this.id,
            rating : this.my_rating,
@@ -1099,8 +1093,8 @@ Reflect = {
       },
       options : {},
       set_attributes : function () {
-        this.id = parseInt(this.options.id);
-        this.rev = parseInt(this.options.response_rev);
+        this.id = parseInt(this.options.id, 10);
+        this.rev = parseInt(this.options.response_rev, 10);
         this.user = this.options.u;
         this.text = Reflect.utils.escape( this.options.txt );
       },
@@ -1108,19 +1102,22 @@ Reflect = {
         var first_name = Reflect.utils.first_name(this.user),
           tag = Reflect.utils.escape( String(this.options.sig) );
         
-        if ( tag == '2' || tag == '0' ) {
+        if ( tag === '2' || tag === '0' ) {
+          var tip;
           switch ( tag ) {
             case '2':
-              var tip = 'Accuracy confirmed <div><a class="user">- ' + this.user + '</a></div>';
+              tip = 'Accuracy confirmed <div><a class="user">- ' + this.user + '</a></div>';
               break;
             case '0':
-              var tip = 'This is not a summary<div><a class="user">- ' + this.user + '</a></div>';
+              tip = 'This is not a summary<div><a class="user">- ' + this.user + '</a></div>';
               break;
+            default:
+              throw 'Bad signal';
           }
           var qtip_settings = $j.extend(true, Reflect.default_third_party_settings.qtip(140), {
             content : tip,
             style : { width : 140 },
-            position: { adjust: { y: 0, x: 0}},
+            position: { adjust: { y: 0, x: 0}}
           });
           
           this.$elem
@@ -1130,9 +1127,9 @@ Reflect = {
             }))
             .qtip(qtip_settings);
              
-        } else if ( tag == '1' ) {
+        } else if ( tag === '1' ) {
           this.bullet.$elem.append('<div class="rf_clarification"><span>clarification:</span>' 
-            + this.text + ' <a class="user"> ' + first_name + '</a></div>')
+            + this.text + ' <a class="user"> ' + first_name + '</a></div>');
         }
         
         this.$elem.addClass( 'rf_response' );
@@ -1169,7 +1166,7 @@ Reflect = {
         this.rev = rev;
         this.$elem.attr( 'id', 'response-' + this.id );
       },
-      exit_dialog : function ( canceled ) {   
+      exit_dialog : function ( ) {   
         var accurate_sel = "input[name='accurate-" + this.bullet.id + "']:checked";
         
         $j.extend( this.options, {
@@ -1214,40 +1211,45 @@ Reflect = {
 
     badge_tooltip : function ( bullet_obj ) {
       var tip = '<div class="badge_tooltip">',
-          rating = bullet_obj.ratings.rating;
+          rating = bullet_obj.ratings.rating,
+          person_str = bullet_obj.ratings[rating] === 1 ? 'person' : 'people';
           
       if ( bullet_obj.ratings ) {
         switch ( rating ) {
           case 'zen':
-            tip += 'Captures the essence of the comment.';
+            tip  +=  'Captures the essence of the comment.';
             break;
           case 'sun':
-            tip +=  'Helps shed light on what the commenter was trying to say.';
+            tip  +=   'Helps shed light on what the commenter was trying to say.';
             break;
           case 'gold':
-            tip +=  'Uncovers an important point that could easily be missed.';
+            tip  +=   'Uncovers an important point that could easily be missed.';
             break;
           case 'graffiti':
-            tip +=  'Not a summary.';
+            tip  +=   'Not a summary.';
             break;
           case 'troll':
-            tip +=  'Antagonizing. Suspected trolling.'; 
+            tip  +=   'Antagonizing. Suspected trolling.'; 
             break;
+          case undefined:
+            break;
+          default:
+            console.log(rating);
+            throw 'unexpected rating';
         }
       }
       if ( !bullet_obj.my_rating ) {
-        var person_str = bullet_obj.ratings[rating] == 1 ? 'person' : 'people';
-        tip += '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '</div>';        
-      } else if ( bullet_obj.my_rating == rating ) {
+        tip  +=  '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '</div>';        
+      } else if ( bullet_obj.my_rating === rating ) {
         var others = '';
-        if ( bullet_obj.ratings[rating] == 1 ) { 
+        if ( bullet_obj.ratings[rating] === 1 ) { 
           others = ' one other';
         } else if ( bullet_obj.ratings[rating] > 1 ) {
-          others = ' ' + bullet_obj.ratings[rating] + ' others'
+          others = ' ' + bullet_obj.ratings[rating] + ' others';
         }
-        tip += '<div class="according_to">You' + others + ' agree</div>';
+        tip  +=  '<div class="according_to">You' + others + ' agree</div>';
       } else {
-        tip += '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '. You disagree</div>';        
+        tip  +=  '<div class="according_to">' + bullet_obj.ratings[rating] + ' ' + person_str + '. You disagree</div>';        
       }
 
       return tip + '</div>';
@@ -1263,7 +1265,7 @@ Reflect = {
           corner: {
             target: 'bottomRight',
             tooltip: 'topRight'
-          },
+          }
         },
         style: {
           background: '#efefef',
@@ -1274,17 +1276,18 @@ Reflect = {
             color: '#ccc'
           }
         }
-      }
+      };
     },
     noblecount: function () {
       return {
         on_negative : Reflect.handle.negative_count,
         on_positive : Reflect.handle.positive_count,
         max_chars : 140
-      }
+      };
     }
   }
 };
-  
 
-})(jQuery);
+$j( document ).ready( Reflect.init );
+  
+}(jQuery));

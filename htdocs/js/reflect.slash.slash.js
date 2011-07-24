@@ -50,11 +50,11 @@ old_slash = {
       
       
 $j.extend(Reflect.config.contract, {
-	components: [is_new_slash ? new_slash : old_slash]});
+  components: [is_new_slash ? new_slash : old_slash]});
 
 Reflect.Contract = Reflect.Contract.extend({
-	user_name_selector : is_new_slash ? '#userbio_self-title a:first' : '#user-info-content > a:first',
-	modifier: function(){
+  user_name_selector : is_new_slash ? '#userbio_self-title a:first' : '#user-info-content > a:first',
+  modifier: function(){
     $j('.full .commentBody').each(function(){
         $j(this).children('div:first').addClass('rf-comment');
     });
@@ -76,32 +76,32 @@ Reflect.Contract = Reflect.Contract.extend({
           $('.rf_toggle').text("hide the summaries");              
         }
       });    
-	},
-	get_comment_thread: function(){
-	    return $j('#commentlisting');
-	}
+  },
+  get_comment_thread: function(){
+      return $j('#commentlisting');
+  }
 });
 
 $j.extend(Reflect.config.api, {
    domain : 'slash',
-	server_loc: 'http://localhost',
-	media_dir: '/media'
+  server_loc: 'http://localhost',
+  media_dir: '/media'
 });
 
 Reflect.api.DataInterface = Reflect.api.DataInterface.extend({
 
-	init: function(config){
-		this._super(config);
-		this.api_loc = this.server_loc + '/reflect.pl';
-	},
-   	get_templates: function(callback){
-   		$j.get(this.server_loc + '/reflect_client_templates.html',callback);
-   	},
-   	get_current_user: function(){
-		  return 'Anonymous coward';
-   	},	
-	post_bullet: function(settings){
-	      settings.params.op = 'bullet';
+  init: function(config){
+    this._super(config);
+    this.api_loc = this.server_loc + '/reflect.pl';
+  },
+     get_templates: function(callback){
+       $j.get(this.server_loc + '/reflect_client_templates.html',callback);
+     },
+     get_current_user: function(){
+      return 'Anonymous coward';
+     },  
+  post_bullet: function(settings){
+        settings.params.op = 'bullet';
         $j.ajax({url:this.api_loc,
                 type:'POST',
                 data: settings.params,
@@ -115,9 +115,9 @@ Reflect.api.DataInterface = Reflect.api.DataInterface.extend({
                 }
         });
     },
-	post_response: function(settings){
-	    settings.params.op = 'response';
-    	$j.ajax({url:this.api_loc,
+  post_response: function(settings){
+      settings.params.op = 'response';
+      $j.ajax({url:this.api_loc,
             type:'POST',
             data: settings.params,
             error: function(data){
@@ -128,12 +128,12 @@ Reflect.api.DataInterface = Reflect.api.DataInterface.extend({
                 var json_data = JSON.parse(data);
                 settings.success(json_data);
             }
-    	});
+      });
     },
-  	post_rating: function(settings){
-  	  settings.params.op = 'bullet_rating';
+    post_rating: function(settings){
+      settings.params.op = 'bullet_rating';
 
-      	$j.ajax({url:this.api_loc,
+        $j.ajax({url:this.api_loc,
               type:'POST',
               data: settings.params,
               async: true,
@@ -145,10 +145,10 @@ Reflect.api.DataInterface = Reflect.api.DataInterface.extend({
                   var json_data = JSON.parse(data);
                   settings.success(json_data);
               }
-      	});	  
-  	},	
-	get_data: function(params, callback){
-	    params.op = 'data'; 
+        });    
+    },  
+  get_data: function(params, callback){
+      params.op = 'data'; 
       $j.getJSON(this.api_loc, params, callback);
-	}
+  }
 });

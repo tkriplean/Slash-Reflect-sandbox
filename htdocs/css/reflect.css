@@ -200,7 +200,6 @@ a.user {
             padding: 0 20px 0 0px;
             color: #7d7d7d; }
           #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.be_neutral, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.be_neutral {
-            float: right;
             font-size: 90%; }
             #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.connect .submit_footer li.be_neutral .big_word, #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.modify .submit_footer li.be_neutral .big_word {
               text-decoration: underline; }
