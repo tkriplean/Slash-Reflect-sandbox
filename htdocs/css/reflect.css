@@ -111,8 +111,10 @@ a.user {
         left: -4px;
         font-size: 135%;
         color: #777777; }
-      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main {
-        float: left; }
+      #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet {
+        overflow: hidden; }
+        #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet.full_bullet .bullet_main {
+          float: left; }
       #reflected .rf_comment_wrapper .rf_comment_summary ul.bullet_list li.bullet .bullet_main {
         width: 100%;
         position: relative; }

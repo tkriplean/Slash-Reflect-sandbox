@@ -29,7 +29,7 @@
 }
 
 #reflected .response.new ul.response_def li.response_dialog .rf_dialog, 
-#reflected ..response.modify ul.response_def li.response_dialog {
+#reflected .response.modify ul.response_def li.response_dialog {
   width: 90%;  
 }
 
