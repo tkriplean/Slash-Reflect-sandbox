@@ -132,8 +132,8 @@
                                                              
     </form>
     <div class="bullet_id hide"><%= this.bullet_id %></div>
-    <% if (this.logged_in_user == 'Anonymous') { %> <div class="anon_restrict">Log in to rate this summary</div> <% } %>
-    <% if (this.logged_in_user == this.bullet_author) { %> <div class="anon_restrict">Sorry, you can&#39;t judge your own!</div> <% } %>    
+    <% if (this.logged_in_user == 'Anonymous') { %> <div class="anon_restrict">Log in to rate this summary</div> <% }
+    else if (this.logged_in_user == this.bullet_author) { %> <div class="anon_restrict">Sorry, you can&#39;t judge your own!</div> <% } %>    
   </div>
 ]]>
 </script>

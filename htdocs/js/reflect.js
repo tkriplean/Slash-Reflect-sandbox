@@ -828,7 +828,7 @@ Reflect = {
           this.$elem.find('.reflect_header')
             .append('<div class="rf_toggle_paginate">' + hidden + ' ' 
                     + summary + ' hidden. <a>show all</a></div><div class="cl"></div>');
-          this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top'), 10) - 20);
+          //this.elements.summary.css('padding-top', parseInt(this.elements.summary.css('padding-top'), 10) - 20);
         }
        }
     },
