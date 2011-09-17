@@ -33,14 +33,17 @@
   width: 90%;  
 }
 
+#reflected .bullet .rf_evaluation .badges .rf_rating .rf_selector_container {
+  clear: none;
+}
 
 #reflected .rf_trial_notification {
   padding: 10px;
   font-size: 100%;
   background-color: #066;
   color: white;
-  float: right;
-  position: relative;
+  border-top: 10px solid white;
+  margin: 10px 10px;
 }
   #reflected .rf_toggle {
     font-weight: bold;

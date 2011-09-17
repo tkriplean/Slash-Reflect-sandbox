@@ -15,9 +15,13 @@ new_slash = {
           comment_offset:8,
           comment_text:'.commentBody > div:first',
           get_commenter_name: function(comment_id){
-                      var name = $j('#comment_top_'+comment_id+ ' .by a:first').text();
-                    if (name=='' || name=="undefined"){
-                        name = 'Anonymous coward';
+                    var name = $j('#comment_top_'+comment_id+ ' .by a:first')
+                      .contents().filter(function(){ return(this.nodeType == 3); });
+
+                    if (name.length == 0 || name[0]=='' || name[0]=="undefined"){
+                      name = 'Anonymous coward';
+                    } else {
+                      name = name[0];
                     }
                     return name;}
       };
