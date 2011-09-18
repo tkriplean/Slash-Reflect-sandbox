@@ -58,7 +58,7 @@ Reflect.Contract = Reflect.Contract.extend({
           $j(this).children('div:first').addClass('rf-comment');
       });
     }
-    $j('.full .commentBody').each(function(){
+    $j('.comment .commentBody').each(function(){
         $j(this).parent().addClass('rf-comment-head');
     });
         
