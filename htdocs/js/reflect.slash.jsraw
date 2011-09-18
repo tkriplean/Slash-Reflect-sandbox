@@ -18,10 +18,10 @@ new_slash = {
                     var name = $j('#comment_top_'+comment_id+ ' .by a:first')
                       .contents().filter(function(){ return(this.nodeType == 3); });
 
-                    if (name.length == 0 || name[0]=='' || name[0]=="undefined"){
+                    if ( name.length == 0 ){
                       name = 'Anonymous coward';
                     } else {
-                      name = name[0];
+                      name = name[0].data;
                     }
                     return name;}
       };
