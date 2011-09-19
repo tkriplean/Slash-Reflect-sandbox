@@ -1,10 +1,13 @@
 body #reflected .response_prompt label.prompt {
   display: inline-block;
 }
+
+
 #reflected .rf-comment-head.rf_comment .rf_comment_summary{
   display: none !important;
 }
 
+.d1 #reflected .rf-comment-head.rf_comment .rf_comment_summary,
 #reflected .rf-comment-head.rf_comment.currcomment .rf_comment_summary{
   display: table-cell !important;
 }
