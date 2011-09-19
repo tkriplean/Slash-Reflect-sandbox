@@ -45,7 +45,7 @@ old_slash = {
             };
       
       
-Reflect.config.view.text.response.response_prompt = 'Is this accurate?';
+Reflect.config.view.text.response_prompt = 'Is this accurate?';
       
 $j.extend(Reflect.config.contract, {
 	components: [is_new_slash ? new_slash : old_slash]});
