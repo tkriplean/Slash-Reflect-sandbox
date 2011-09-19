@@ -6,7 +6,7 @@ body #reflected .response_prompt label.prompt {
 }
 
 #reflected .rf-comment-head.rf_comment.currcomment .rf_comment_summary{
-  display: table-cell;
+  display: table-cell !important;
 }
 
 
