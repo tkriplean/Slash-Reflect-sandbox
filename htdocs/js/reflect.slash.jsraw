@@ -9,7 +9,6 @@ Reflect.config.view.enable_rating = true;
 
 var is_new_slash = true;
 
-
 new_slash = {
           comment_identifier: '.rf-comment-head',
           comment_offset:8,
@@ -21,7 +20,7 @@ new_slash = {
                     if ( name.length == 0 ){
                       name = 'Anonymous coward';
                     } else {
-                      name = name[0].data;
+                      name = $j.trim(name[0].data);
                     }
                     return name;}
       };
@@ -46,12 +45,13 @@ old_slash = {
             };
       
       
+Reflect.view.text.response.response_prompt = 'Is this accurate?';
       
 $j.extend(Reflect.config.contract, {
 	components: [is_new_slash ? new_slash : old_slash]});
 
 Reflect.Contract = Reflect.Contract.extend({
-	user_name_selector : is_new_slash ? '#userbio_self-title a:first' : '#user-info-content > a:first',
+	user_name_selector : is_new_slash ? 'a.btn.link[title="Your page, this is all about you"]': '#user-info-content > a:first',
 	modifier: function(){
     if(old_slash) {
       $j('.full .commentBody').each(function(){

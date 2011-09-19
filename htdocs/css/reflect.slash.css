@@ -1,5 +1,8 @@
+body #reflected .response_prompt label.prompt {
+  display: inline-block;
+}
 #reflected .rf-comment-head.rf_comment .rf_comment_summary{
-  display: none;
+  display: none !important;
 }
 
 #reflected .rf-comment-head.rf_comment.currcomment .rf_comment_summary{
@@ -38,7 +41,7 @@
 
 #reflected .bullet_author img, 
 #reflected .bullet_author.rf_listener_pic {
-	display: none;
+	display: none !important;
 }
 
 #reflected .response.new ul.response_def li.response_dialog .rf_dialog, 
