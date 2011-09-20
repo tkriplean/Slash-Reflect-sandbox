@@ -67,17 +67,15 @@ Reflect.Contract = Reflect.Contract.extend({
     
     $j('.rf_toggle')
       .click( function() {
-        if ( $(this).hasClass('state_on') ) {
-          $('.rf_comment_summary').hide();
-          $('.rf_comment_text_wrapper').css('width', '100%');
-          $('.rf_toggle').addClass('state_off').removeClass('state_on');
-          $('.rf_toggle').text("show the summaries");              
+        if ( $j(this).hasClass('state_on') ) {
+          $j('.rf_comment_text_wrapper').css('width', '100%');
+          $j(this).text("show the summaries");              
         } else {
-          $('.rf_comment_summary').show();
-          $('.rf_comment_text_wrapper').css('width', 'inherit');
-          $('.rf_toggle').addClass('state_on').removeClass('state_off');
-          $('.rf_toggle').text("hide the summaries");              
+          $j('.rf_comment_text_wrapper').css('width', 'inherit');
+          $j(this).text("hide the summaries");              
         }
+        $j('.rf_comment_summary').toggleClass('hide_me');
+        $j(this).toggleClass('state_off state_on');
       });    
 	},
 	get_comment_thread: function(){
