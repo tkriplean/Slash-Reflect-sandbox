@@ -3,7 +3,7 @@ body #reflected .response_prompt label.prompt {
 }
 
 .d1 #reflected .rf-comment-head.rf_comment .rf_comment_summary.hide_me,
-#reflected .rf-comment-head.rf_comment.currcomment .rf_comment_summary.hide_me,
+#reflected .rf-comment-head.rf_comment .rf_comment_summary.hide_me,
 #reflected .oneline > .rf-comment-head.rf_comment .rf_comment_summary,
 #reflected .hidden > .rf-comment-head.rf_comment .rf_comment_summary{
   display: none !important;
