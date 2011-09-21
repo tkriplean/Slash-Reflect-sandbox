@@ -247,10 +247,17 @@ sub create_bullet {
   my $commenter = $slashdb->sqlSelect('uid', 'comments', "cid = $comment_id");
   my @highlights = ($str_highlights =~ /\d+/g); 
 
+  my $db_text = $slashdb->sqlSelect( 
+    'bullet_id', 
+    'reflect_bullet_revision', 
+    "txt=\'$text\'"
+  );
+
   if($commenter == $user_info->{id} 
-    || $text eq '' || length($text) > 140 || scalar(@highlights) == 0 ) {
+    || $text eq '' || $db_text > 0 || length($text) > 140 || scalar(@highlights) == 0 ) {
     return 'rejected';
   }
+
   
   $slashdb->sqlInsert(
     'reflect_bullet', { 'comment_id' => $comment_id }
